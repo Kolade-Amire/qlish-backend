@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: qlish-api
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/qlish-db-dev
+server:
+  port: 8080
+
+logging:
+  level:
+    org:
+      springframework: DEBUG
+

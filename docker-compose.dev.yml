@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  qlish-backend:
+    image: qlish-api:dev
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+      - "5005:5005"  # Port for remote debugging
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+      MONGO_URI: mongodb://mongo:27017/qlish-db-dev
+    volumes:
+      - ./src:/app/src  # Bind-mount source code for live-reload
+    depends_on:
+      - mongo
+
+  mongo:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data-dev:/data/db
+
+volumes:
+  mongo-data-dev:
