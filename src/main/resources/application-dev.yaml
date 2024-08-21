@@ -3,12 +3,18 @@ spring:
     name: qlish-api
   data:
     mongodb:
-      uri: mongodb://localhost:27017/qlish-db-dev
+      uri: ${mongodb_url}
+      database: ${db_name}
+
 server:
-  port: 8080
+  port: 8081
+  error:
+    include-message: always
 
 logging:
   level:
     org:
       springframework: DEBUG
+      springframework.security: TRACE
+
 

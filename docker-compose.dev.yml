@@ -11,7 +11,7 @@ services:
       - "5005:5005"  # Port for remote debugging
     environment:
       SPRING_PROFILES_ACTIVE: dev
-      MONGO_URI: mongodb://mongo:27017/qlish-db-dev
+      MONGO_URI: ${mongodb_url}
     volumes:
       - ./src:/app/src  # Bind-mount source code for live-reload
     depends_on:

@@ -10,7 +10,7 @@ services:
       - "8080:8080"
     environment:
       SPRING_PROFILES_ACTIVE: prod
-      MONGO_URI: mongodb://mongo:27017/qlish-db
+      MONGO_URI: ${mongodb_url}
     depends_on:
       - mongo
 
