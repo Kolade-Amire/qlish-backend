@@ -5,6 +5,10 @@ spring:
     mongodb:
       uri: ${mongodb_url}
       database: ${db_name}
+  liquibase:
+    enabled: true
+    change-log: classpath:/db/changelog/db.changelog-master.yaml
+    user: Kolade Amire
 
 server:
   port: 8081
@@ -16,5 +20,6 @@ logging:
     org:
       springframework: DEBUG
       springframework.security: TRACE
+
 
 
