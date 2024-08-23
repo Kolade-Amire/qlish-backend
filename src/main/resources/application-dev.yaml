@@ -7,6 +7,10 @@ spring:
       database: ${db_name}
       password: ${mongodb_password}
       username: ${mongodb_username}
+    redis:
+      host: ${REDIS_HOST}
+      port: 6379
+      timeout: 6000
 
 server:
   port: 8081
