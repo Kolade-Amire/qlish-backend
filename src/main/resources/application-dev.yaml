@@ -23,6 +23,14 @@ logging:
       springframework: DEBUG
       springframework.security: TRACE
       liquibase: DEBUG
+mongock:
+  mongo-db:
+    write-concern:
+      w: majority
+      wTimeoutMs: 1000
+      journal: true
 
+    read-concern: majority
+    read-preference: primary
 
 
