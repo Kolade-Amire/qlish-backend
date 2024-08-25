@@ -2,6 +2,7 @@ package com.qlish.qlish_api.user;
 
 import com.qlish.qlish_api.test.TestEntity;
 import lombok.*;
+import org.apache.el.parser.Token;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
@@ -32,8 +33,8 @@ public class UserEntity {
     private String profileName;
     private String password;
 
-    @DocumentReference
-    private Set<String> tokens;
+
+    private Set<Token> tokens;
     private Set<Role> roles;
     private String authProvider;
     private boolean isEmailVerified;
