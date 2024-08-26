@@ -18,6 +18,7 @@ import java.util.function.Function;
 @Service
 public class JwtService {
 
+    //uses generics to extract any type of claims possible from token
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = extractAllClaims(token);
         return claimsResolver.apply(claims);
@@ -37,7 +38,7 @@ public class JwtService {
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
-
+    //calls the generics method to extract specific claim(username)
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
     }
@@ -75,8 +76,7 @@ public class JwtService {
         return buildToken(claims, userDetails, jwtExpiration);
     }
 
-
-
+    // generate token in the case of absent claims (first time user)
     public String generateToken(UserDetails userDetails) {
         return generateToken(new HashMap<>(), userDetails);
     }

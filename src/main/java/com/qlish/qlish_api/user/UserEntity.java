@@ -5,7 +5,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
-import org.apache.el.parser.Token;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
@@ -13,6 +12,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.DocumentReference;
 import org.springframework.data.mongodb.core.mapping.Field;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Set;
 
@@ -32,8 +32,11 @@ public class UserEntity {
     @Indexed(unique = true)
     private String profileName;
     private String password;
-    private Set<Role> roles;
+    private Role role;
     private String authProvider;
+    private LocalDate passwordLastChangedDate;
+    private boolean isBlocked;
+    private boolean isAccountExpired;
     private boolean isEmailVerified;
     private LocalDateTime createdAt;
     private LocalDateTime lastLoginAt;
@@ -48,7 +51,7 @@ public class UserEntity {
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
                 ", username='" + profileName + '\'' +
-                ", role='" + roles.toString() + '\'' +
+                ", role='" + role.toString() + '\'' +
                 ", authProvider='" + authProvider + '\'' +
                 ", isEmailVerified='" + isEmailVerified + '\'' +
                 ", createdAt='" + createdAt + '\'' +
