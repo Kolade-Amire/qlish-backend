@@ -24,7 +24,6 @@ spring:
             token-uri: ${GOOGLE_CLIENT_TOKEN_URI}
             user-info-uri: ${USER_INFO_URI}
             user-name-attribute: sub
-
   data:
     mongodb:
       uri: ${MONGO_URL}
