@@ -16,7 +16,9 @@ public class SecurityConstants {
     public static final String REGISTERED_MESSAGE = "User registered successfully!";
 
     public static final String[] PUBLIC_URLS = {
-            AppConstants.BASE_URL + "/auth/**"
+            AppConstants.BASE_URL + "/auth/**",
+            "/oauth2/**",
+            AppConstants.BASE_URL + "/oauth2/**"
     };
     public static String JWT_SECRET_KEY = System.getenv("JWT_SECRET_KEY");
 }

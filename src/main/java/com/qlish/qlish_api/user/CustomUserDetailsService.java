@@ -1,26 +1,23 @@
 package com.qlish.qlish_api.user;
 
-import com.qlish.qlish_api.util.AppConstants;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-
 import java.util.Collection;
 
 @Service
 @AllArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {
 
-    private UserRepository userRepository;
+    private UserService userService;
 
 
     @Override //in this context a user's email is their username
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-       UserEntity user = userRepository.findByEmail(username)
-               .orElseThrow(() -> new UsernameNotFoundException(AppConstants.USER_NOT_FOUND));
+       UserEntity user = userService.getUserByEmail(username);
 
        return new UserDetails() {
            @Override
