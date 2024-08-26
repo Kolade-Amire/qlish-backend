@@ -32,7 +32,6 @@ public class UserEntity {
     @Indexed(unique = true)
     private String profileName;
     private String password;
-    private Set<Token> tokens;
     private Set<Role> roles;
     private String authProvider;
     private boolean isEmailVerified;

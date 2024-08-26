@@ -71,7 +71,7 @@
 			<scope>runtime</scope>
 		</dependency>
 
-		<!-- Spring Boot OAuth2 for Google Sign-In -->
+		<!-- OAuth2 for Google Sign-In -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-oauth2-client</artifactId>
