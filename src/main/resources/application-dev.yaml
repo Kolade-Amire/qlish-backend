@@ -1,6 +1,9 @@
 spring:
   application:
     name: qlish-api
+  docker:
+    compose:
+      enabled: false
   data:
     mongodb:
       uri: ${mongodb_url}
@@ -13,7 +16,7 @@ spring:
       timeout: 6000
 
 server:
-  port: 8081
+  port: 8080
   error:
     include-message: always
 

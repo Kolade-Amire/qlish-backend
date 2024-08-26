@@ -16,7 +16,7 @@ public enum Role {
 
     USER(Set.of(
             USER_DEFAULT
-    )
+        )
     ),
     ADMIN(
             Set.of(
@@ -25,6 +25,10 @@ public enum Role {
                     ADMIN_DELETE,
                     ADMIN_UPDATE
             )
+    ),
+    DEV(Set.of(
+                DEV_DEFAULT
+        )
     );
     private final Set<Permissions> permissions;
 
