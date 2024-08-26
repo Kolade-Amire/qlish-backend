@@ -10,30 +10,26 @@ services:
       - "5005:5005"
     environment:
       SPRING_PROFILES_ACTIVE: dev
-      MONGO_URI: ${mongodb_url}
+      MONGO_URI: ${MONGO_URL}
+      REDIS_HOST: ${REDIS_HOST}
+      REDIS_PORT: 6379
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
       AVA_TOOL_OPTIONS: "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005"
     volumes:
       - ./src:/app/src  # Bind-mount source code for live-reload
       - ./target/classes:/app/target/classes # Bind-mount compiled classes for live-reload
     depends_on:
-      - mongo
       - redis
     env_file:
       - .env
-
-  mongo:
-    image: mongo:latest
-    ports:
-      - "27017:27017"
-    volumes:
-      - mongo-data-dev:/data/db
 
   redis:
     image: redis:latest
     ports:
       - "6379:6379"
+    environment:
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
 
 
 volumes:
-  mongo-data-dev:
   redis-data-dev:

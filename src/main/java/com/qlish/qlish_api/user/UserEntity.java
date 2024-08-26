@@ -1,12 +1,14 @@
 package com.qlish.qlish_api.user;
 
 import com.qlish.qlish_api.test.TestEntity;
-import lombok.*;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
 import org.apache.el.parser.Token;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.DocumentReference;
 import org.springframework.data.mongodb.core.mapping.Field;
@@ -17,8 +19,6 @@ import java.util.Set;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
-@Setter
 @Data
 @Document(collection = "users")
 public class UserEntity {
@@ -32,8 +32,6 @@ public class UserEntity {
     @Indexed(unique = true)
     private String profileName;
     private String password;
-
-
     private Set<Token> tokens;
     private Set<Role> roles;
     private String authProvider;

@@ -4,19 +4,29 @@ spring:
   docker:
     compose:
       enabled: false
+  session:
+    redis:
+      flush-mode: on-save
+
   data:
     mongodb:
-      uri: ${mongodb_url}
-      database: ${db_name}
-      password: ${mongodb_password}
-      username: ${mongodb_username}
+      uri: ${MONGO_URL}
+      database: ${DB_NAME}
+      password: ${MONGO_PASSWORD}
+      username: ${MONGO_USERNAME}
     redis:
       host: ${REDIS_HOST}
       port: 6379
-      timeout: 6000
+      password: ${REDIS_PASSWORD}
 
 server:
   port: 8080
+  servlet:
+    session:
+      cookie:
+        http-only: true
+        secure: true
+        same-site: none
   error:
     include-message: always
 
