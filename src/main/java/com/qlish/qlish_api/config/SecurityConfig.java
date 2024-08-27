@@ -1,6 +1,6 @@
 package com.qlish.qlish_api.config;
 
-import com.qlish.qlish_api.user.CustomUserDetailsService;
+import com.qlish.qlish_api.user.UserService;
 import com.qlish.qlish_api.util.SecurityConstants;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -15,6 +15,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -25,13 +26,18 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 
-    private final CustomUserDetailsService userDetailsService;
     private JwtAccessDeniedHandler jwtAccessDeniedHandler;
+    private final UserService userService;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
+    @Bean
+    public UserDetailsService userDetailsService() {
+        return   }
+
 
     @Bean
     public AuthenticationProvider authenticationProvider() {
@@ -60,7 +66,7 @@ public class SecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .oauth2Login(Customizer.withDefaults())
-                .userDetailsService(userDetailsService)
+                .formLogin(Customizer.withDefaults())
                 .authenticationProvider(authenticationProvider())
                 .exceptionHandling(exc -> exc
                         .accessDeniedHandler(jwtAccessDeniedHandler)

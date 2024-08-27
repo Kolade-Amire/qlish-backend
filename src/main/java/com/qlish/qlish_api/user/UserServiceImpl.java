@@ -18,6 +18,7 @@ public class UserServiceImpl implements  UserService {
         return userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException(AppConstants.USER_NOT_FOUND));
     }
 
+
     @Override
     public UserEntity saveUser(UserEntity user) {
         return null;
