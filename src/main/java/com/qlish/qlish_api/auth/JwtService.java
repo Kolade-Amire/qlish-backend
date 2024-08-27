@@ -11,11 +11,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.security.Key;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 public class JwtService {
@@ -74,17 +72,25 @@ public class JwtService {
 
 
     public String generateToken(Map<String, Object> claims, UserDetails userDetails) {
-        long jwtExpiration = SecurityConstants.ACCESS_TOKEN_EXPIRATION;
-        return buildToken(claims, userDetails, jwtExpiration);
+        long accessTokenExpiration = SecurityConstants.ACCESS_TOKEN_EXPIRATION;
+        return buildToken(claims, userDetails, accessTokenExpiration);
     }
 
     public String generateToken(UserDetails userDetails) {
         return generateToken(new HashMap<>(), userDetails);
     }
 
+//    public String generateRefreshToken(UserDetails userDetails) {
+//        long refreshTokenExpiration = SecurityConstants.REFRESH_TOKEN_EXPIRATION;
+//        var userClaims = extractClaimsFromUser(userDetails);
+//        return buildToken(userClaims, userDetails, refreshTokenExpiration);
+//    }
+
     //TODO: ????
-    public Collection<? extends GrantedAuthority> extractClaimsFromUser(UserDetails userDetails){
-        return userDetails.getAuthorities();
-    }
+//    public String[] extractClaimsFromUser(UserDetails userDetails){
+//        return userDetails.getAuthorities().stream().map(
+//                Objects::toString
+//        ).collect(Collectors.toCollection());
+//    }
 
 }

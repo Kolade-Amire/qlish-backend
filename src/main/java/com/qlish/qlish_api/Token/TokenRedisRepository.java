@@ -9,7 +9,7 @@ import java.util.Optional;
 @Repository
 public interface TokenRedisRepository extends ListCrudRepository<TokenEntity, Integer> {
 
-    Optional<TokenEntity> findByToken(String userId);
+    Optional<TokenEntity> findByToken(String token);
 
     Optional<List<TokenEntity>> findAllByUserId(String userId);
 
