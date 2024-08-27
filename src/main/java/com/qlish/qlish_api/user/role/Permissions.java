@@ -1,4 +1,4 @@
-package com.qlish.qlish_api.user;
+package com.qlish.qlish_api.user.role;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

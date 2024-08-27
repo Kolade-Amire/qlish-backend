@@ -1,6 +1,7 @@
 package com.qlish.qlish_api.user;
 
 import com.qlish.qlish_api.test.TestEntity;
+import com.qlish.qlish_api.user.role.Role;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;

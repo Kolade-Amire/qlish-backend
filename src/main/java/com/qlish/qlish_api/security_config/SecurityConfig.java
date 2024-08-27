@@ -1,5 +1,6 @@
 package com.qlish.qlish_api.security_config;
 
+import com.qlish.qlish_api.user.UserPrincipal;
 import com.qlish.qlish_api.user.UserService;
 import com.qlish.qlish_api.util.SecurityConstants;
 import lombok.RequiredArgsConstructor;
@@ -28,15 +29,14 @@ public class SecurityConfig {
 
     private JwtAccessDeniedHandler jwtAccessDeniedHandler;
     private final UserService userService;
+    private final UserDetailsService userDetailsService;;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
-    @Bean
-    public UserDetailsService userDetailsService() {
-        return   }
+
 
 
     @Bean
