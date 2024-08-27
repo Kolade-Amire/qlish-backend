@@ -6,7 +6,6 @@ public class SecurityConstants {
     public static final String TOKEN_PREFIX = "Bearer ";
     public static final String JWT_TOKEN_HEADER = "Jwt-Token";
     public static final String JWT_ISSUER = "qlish";
-    public static final String AUTHORIZATION = "Authorization";
     public static final String AUTHORITIES = "authorities";
     public static final String AUDIENCE = "qlish-api";
     public static final String OPTIONS_HTTP_METHOD = "OPTIONS";

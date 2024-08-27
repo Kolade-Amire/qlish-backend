@@ -1,4 +1,4 @@
-package com.qlish.qlish_api.config;
+package com.qlish.qlish_api.security_config;
 
 import com.qlish.qlish_api.user.UserService;
 import com.qlish.qlish_api.util.SecurityConstants;

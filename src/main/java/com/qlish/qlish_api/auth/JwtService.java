@@ -6,14 +6,14 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.security.Key;
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 @Service
 public class JwtService {
@@ -71,26 +71,30 @@ public class JwtService {
     }
 
 
-    public String generateToken(Map<String, Object> claims, UserDetails userDetails) {
+    public String generateAccessToken(Map<String, Object> claims, UserDetails userDetails) {
         long accessTokenExpiration = SecurityConstants.ACCESS_TOKEN_EXPIRATION;
         return buildToken(claims, userDetails, accessTokenExpiration);
     }
 
-    public String generateToken(UserDetails userDetails) {
-        return generateToken(new HashMap<>(), userDetails);
+    public String generateAccessToken(UserDetails userDetails) {
+        var claims = extractClaimsFromUser(userDetails);
+        return generateAccessToken(claims, userDetails);
     }
 
-//    public String generateRefreshToken(UserDetails userDetails) {
-//        long refreshTokenExpiration = SecurityConstants.REFRESH_TOKEN_EXPIRATION;
-//        var userClaims = extractClaimsFromUser(userDetails);
-//        return buildToken(userClaims, userDetails, refreshTokenExpiration);
-//    }
+    public String generateRefreshToken(UserDetails userDetails) {
+        long refreshTokenExpiration = SecurityConstants.REFRESH_TOKEN_EXPIRATION;
+        var userClaims = extractClaimsFromUser(userDetails);
+        return buildToken(userClaims, userDetails, refreshTokenExpiration);
+    }
 
-    //TODO: ????
-//    public String[] extractClaimsFromUser(UserDetails userDetails){
-//        return userDetails.getAuthorities().stream().map(
-//                Objects::toString
-//        ).collect(Collectors.toCollection());
-//    }
+
+    public Map<String, Object> extractClaimsFromUser(UserDetails userDetails){
+        var claims = new HashMap<String, Object>();
+        var authorities = userDetails.getAuthorities().stream().toList();
+        claims.put("authorities", authorities);
+        claims.put("email", userDetails.getUsername());
+        return claims;
+
+    }
 
 }

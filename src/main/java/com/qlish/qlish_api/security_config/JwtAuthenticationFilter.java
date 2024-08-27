@@ -1,8 +1,7 @@
-package com.qlish.qlish_api.config;
+package com.qlish.qlish_api.security_config;
 
 import com.qlish.qlish_api.Token.TokenRedisRepository;
 import com.qlish.qlish_api.auth.JwtService;
-import com.qlish.qlish_api.user.UserPrincipal;
 import com.qlish.qlish_api.util.AppConstants;
 import com.qlish.qlish_api.util.SecurityConstants;
 import jakarta.servlet.FilterChain;
@@ -10,6 +9,8 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
+import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -30,9 +31,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(
-            HttpServletRequest request,
-            HttpServletResponse response,
-            FilterChain filterChain
+            @NonNull HttpServletRequest request,
+            @NonNull HttpServletResponse response,
+            @NonNull FilterChain filterChain
     ) throws ServletException, IOException {
 
         if (request.getServletPath().contains(AppConstants.BASE_URL + "/auth")) {
@@ -40,11 +41,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             return;
         }
 
-        final String authHeader = request.getHeader(SecurityConstants.AUTHORIZATION);
+        final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
         final String token;
         final String userEmail;
 
-        if (authHeader == null || authHeader.startsWith("Bearer ")) {
+        if (authHeader == null || authHeader.startsWith(SecurityConstants.TOKEN_PREFIX)) {
             filterChain.doFilter(request, response);
             return;
         }
@@ -52,7 +53,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         userEmail = jwtService.extractUsername(token);
         if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userPrincipal = this.userDetailsService.loadUserByUsername(userEmail);
-            if (jwtService.isTokenValid(token, userPrincipal) && isTokenValid(token)) {
+            if (jwtService.isTokenValid(token, userPrincipal) && isTokenExpired(token)) {
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                         userPrincipal,
                         null,
@@ -62,6 +63,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authToken);
             }
+            else SecurityContextHolder.clearContext();
         }
 
         filterChain.doFilter(request, response);
@@ -69,7 +71,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     }
 
-    protected boolean isTokenValid(String token) {
+    protected boolean isTokenExpired(String token) {
         return tokenRepository.findByToken(token)
                 .map(t -> !t.isExpired() && !t.isRevoked())
                 .orElse(false);
