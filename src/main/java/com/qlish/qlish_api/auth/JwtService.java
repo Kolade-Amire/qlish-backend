@@ -92,7 +92,7 @@ public class JwtService {
         var claims = new HashMap<String, Object>();
         var authorities = userDetails.getAuthorities().stream().toList();
         claims.put("authorities", authorities);
-        claims.put("email", userDetails.getUsername());
+        claims.put("username", userDetails.getUsername());
         return claims;
 
     }

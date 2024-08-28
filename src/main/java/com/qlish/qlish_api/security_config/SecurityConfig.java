@@ -1,7 +1,5 @@
 package com.qlish.qlish_api.security_config;
 
-import com.qlish.qlish_api.user.UserPrincipal;
-import com.qlish.qlish_api.user.UserService;
 import com.qlish.qlish_api.util.AppConstants;
 import com.qlish.qlish_api.util.SecurityConstants;
 import lombok.RequiredArgsConstructor;
