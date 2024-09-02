@@ -1,6 +1,12 @@
 package com.qlish.qlish_api.security.configuration;
 
+import com.qlish.qlish_api.security.Token.TokenService;
+import com.qlish.qlish_api.security.authenticaton.JwtService;
+import com.qlish.qlish_api.security.authenticaton.oauth2.CustomAuthenticationFailureHandler;
+import com.qlish.qlish_api.security.authenticaton.oauth2.CustomOAuth2UserService;
+import com.qlish.qlish_api.security.authenticaton.oauth2.OAuth2AuthenticationSuccessHandler;
 import com.qlish.qlish_api.user.CustomUserDetailsService;
+import com.qlish.qlish_api.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,6 +27,11 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 public class SecurityUtils {
 
     private final CustomUserDetailsService userDetailsService;
+    private final UserService userService;
+    private final JwtService jwtService;
+    private final TokenService tokenService;
+
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -40,15 +51,6 @@ public class SecurityUtils {
         return configuration.getAuthenticationManager();
     }
 
-    @Bean
-    public OAuth2UserService<OAuth2UserRequest, OAuth2User> customOAuth2Service () {
-        return new CustomOAuth2UserService(userService);
-    }
-
-    @Bean
-    public AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler() {
-        return new OAuth2AuthenticationSuccessHandler(jwtService,  tokenRepository);
-    }
 
     @Bean
     public AuthenticationFailureHandler oAuth2AuthenticationFailureHandler() {

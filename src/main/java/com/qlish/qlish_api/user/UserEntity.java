@@ -34,7 +34,7 @@ public class UserEntity {
     private String profileName;
     private String password;
     private Role role;
-    private String authProvider;
+    private AuthProvider authProvider;
     private LocalDate passwordLastChangedDate;
     private boolean isBlocked;
     private boolean isAccountExpired;

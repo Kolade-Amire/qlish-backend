@@ -45,7 +45,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         final String token;
         final String userEmail;
 
-        if (authHeader == null || authHeader.startsWith(SecurityConstants.TOKEN_PREFIX)) {
+        if (authHeader == null || !authHeader.startsWith(SecurityConstants.TOKEN_PREFIX)) {
             filterChain.doFilter(request, response);
             return;
         }
@@ -53,7 +53,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         userEmail = jwtService.extractUsername(token);
         if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userPrincipal = this.userDetailsService.loadUserByUsername(userEmail);
-            if (jwtService.isTokenValid(token, userPrincipal) && isTokenExpired(token)) {
+            if (jwtService.isTokenValid(token, userPrincipal) && !isTokenExpired(token)) {
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                         userPrincipal,
                         null,
@@ -73,7 +73,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     protected boolean isTokenExpired(String token) {
         return tokenRepository.findByToken(token)
-                .map(t -> !t.isExpired() && !t.isRevoked())
+                .map(t -> t.isExpired() && t.isRevoked())
                 .orElse(false);
     }
 }
