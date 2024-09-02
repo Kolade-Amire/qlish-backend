@@ -1,4 +1,4 @@
-package com.qlish.qlish_api.auth;
+package com.qlish.qlish_api.security.authenticaton;
 
 import com.qlish.qlish_api.util.SecurityConstants;
 import io.jsonwebtoken.Claims;
@@ -83,8 +83,15 @@ public class JwtService {
 
     public String generateRefreshToken(UserDetails userDetails) {
         long refreshTokenExpiration = SecurityConstants.REFRESH_TOKEN_EXPIRATION;
-        var userClaims = extractClaimsFromUser(userDetails);
-        return buildToken(userClaims, userDetails, refreshTokenExpiration);
+        return Jwts
+                .builder()
+                .setSubject(userDetails.getUsername())
+                .setIssuer(SecurityConstants.JWT_ISSUER)
+                .setAudience(SecurityConstants.AUDIENCE)
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + refreshTokenExpiration))
+                .signWith(getSignKey(), SignatureAlgorithm.HS256)
+                .compact();
     }
 
 
