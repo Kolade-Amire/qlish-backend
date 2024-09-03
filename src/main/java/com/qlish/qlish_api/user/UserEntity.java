@@ -25,6 +25,7 @@ import java.util.Set;
 public class UserEntity {
 
     @Id
+    @Indexed(unique = true)
     private ObjectId _id;
     @Indexed(unique = true)
     private String email;

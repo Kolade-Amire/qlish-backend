@@ -20,8 +20,8 @@ public class JwtService {
 
     private final String JWT_SECRET = SecurityConstants.JWT_SECRET_KEY;
 
-    //uses generics to extract any type of claims possible from token
-    public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
+    //uses generics to extract any type of claims from token
+    public <T> T extractAnyClaim(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = extractAllClaims(token);
         return claimsResolver.apply(claims);
     }
@@ -42,11 +42,11 @@ public class JwtService {
 
     //calls the generics method to extract specific claim(username)
     public String extractUsername(String token) {
-        return extractClaim(token, Claims::getSubject);
+        return extractAnyClaim(token, Claims::getSubject);
     }
 
     private Date extractExpiration(String token) {
-        return extractClaim(token, Claims::getExpiration);
+        return extractAnyClaim(token, Claims::getExpiration);
     }
 
     private String buildToken(Map<String, Object> claims, UserDetails userDetails, long expiration) {
@@ -103,7 +103,6 @@ public class JwtService {
         claims.put("authorities", authorities);
         claims.put("username", userDetails.getUsername());
         return claims;
-
     }
 
 }
