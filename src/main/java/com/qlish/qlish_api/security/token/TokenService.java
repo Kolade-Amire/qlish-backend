@@ -1,4 +1,4 @@
-package com.qlish.qlish_api.security.Token;
+package com.qlish.qlish_api.security.token;
 
 import com.qlish.qlish_api.exception.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;

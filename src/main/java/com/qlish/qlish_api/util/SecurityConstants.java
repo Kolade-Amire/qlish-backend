@@ -14,6 +14,9 @@ public class SecurityConstants {
     public static final String ACCESS_DENIED = "You do not have permission to access this page";
     public static final String AUTHENTICATED_MESSAGE = "User authenticated successfully!";
     public static final String REGISTERED_MESSAGE = "User registered successfully!";
+    public static final String REFRESHED_MESSAGE = "Access token refreshed successfully!";
+
+
 
     public static final String[] PUBLIC_URLS = {
             AppConstants.BASE_URL + "/auth/**",

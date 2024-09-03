@@ -1,4 +1,4 @@
-package com.qlish.qlish_api.security.authenticaton.oauth2;
+package com.qlish.qlish_api.user.oauth2;
 
 
 import com.qlish.qlish_api.user.AuthProvider;
@@ -53,20 +53,41 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
 
     public UserEntity registerUser(OAuth2UserRequest userRequest, OAuth2UserInfo oAuth2UserInfo) throws OAuth2AuthenticationException {
-        var user = UserEntity.builder()
-                .name(oAuth2UserInfo.getName())
-                .email(oAuth2UserInfo.getEmail())
-                .authProvider(AuthProvider.valueOf(userRequest.getClientRegistration().getRegistrationId().toUpperCase()))
-                .role(Role.USER)
-                .createdAt(LocalDateTime.now())
-                .isEmailVerified(true)
-                .build();
 
+        var user = buildUserFromOAuth2UserInfo(userRequest, oAuth2UserInfo);
         return userService.saveUser(user);
     }
 
     private UserEntity updateExistingUser(UserEntity existingUser, OAuth2UserInfo oAuth2UserInfo) {
-        existingUser.setName(oAuth2UserInfo.getName());
+        var name = oAuth2UserInfo.getName().split(" ");
+        var firstname = name[0];
+        var lastname = name[1];
+
+        existingUser.setFirstname(firstname);
+        existingUser.setLastname(lastname);
         return  userService.saveUser(existingUser);
+    }
+
+    private UserEntity buildUserFromOAuth2UserInfo(OAuth2UserRequest userRequest, OAuth2UserInfo userInfo){
+
+        var name = userInfo.getName().split(" ");
+        var firstname = name[0];
+        var lastname = name[1];
+
+        var emailSplit = userInfo.getEmail().split("@");
+
+        return UserEntity.builder()
+                .firstname(firstname)
+                .lastname(lastname)
+                .profileName(emailSplit[0])
+                .email(userInfo.getEmail())
+                .authProvider(AuthProvider.valueOf(userRequest.getClientRegistration().getRegistrationId().toUpperCase()))
+                .role(Role.USER)
+                .isBlocked(false)
+                .isAccountExpired(false)
+                .isEmailVerified(true)
+                .createdAt(LocalDateTime.now())
+                .lastLoginAt(LocalDateTime.now())
+                .build();
     }
 }

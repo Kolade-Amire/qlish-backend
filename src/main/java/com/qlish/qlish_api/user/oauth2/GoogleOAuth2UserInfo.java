@@ -1,4 +1,4 @@
-package com.qlish.qlish_api.security.authenticaton.oauth2;
+package com.qlish.qlish_api.user.oauth2;
 
 import lombok.RequiredArgsConstructor;
 

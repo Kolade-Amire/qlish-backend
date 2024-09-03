@@ -1,4 +1,4 @@
-package com.qlish.qlish_api.security.authenticaton.oauth2;
+package com.qlish.qlish_api.user.oauth2;
 
 import com.qlish.qlish_api.user.AuthProvider;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;

@@ -1,10 +1,8 @@
 package com.qlish.qlish_api.security.configuration;
 
-import com.qlish.qlish_api.security.Token.TokenService;
+import com.qlish.qlish_api.security.token.TokenService;
 import com.qlish.qlish_api.security.authenticaton.JwtService;
-import com.qlish.qlish_api.security.authenticaton.oauth2.CustomAuthenticationFailureHandler;
-import com.qlish.qlish_api.security.authenticaton.oauth2.CustomOAuth2UserService;
-import com.qlish.qlish_api.security.authenticaton.oauth2.OAuth2AuthenticationSuccessHandler;
+import com.qlish.qlish_api.user.oauth2.CustomAuthenticationFailureHandler;
 import com.qlish.qlish_api.user.CustomUserDetailsService;
 import com.qlish.qlish_api.user.UserService;
 import lombok.RequiredArgsConstructor;
@@ -16,11 +14,7 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
-import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
-import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 @Configuration
 @RequiredArgsConstructor

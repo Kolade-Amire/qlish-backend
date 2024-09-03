@@ -28,7 +28,8 @@ public class UserEntity {
     private ObjectId _id;
     @Indexed(unique = true)
     private String email;
-    private String name;
+    private String firstname;
+    private String lastname;
     @Field("username")
     @Indexed(unique = true)
     private String profileName;
@@ -49,7 +50,8 @@ public class UserEntity {
     public String toString(){
         return "User{" +
                 "_id=" + _id +
-                ", name='" + name + '\'' +
+                ", firstname='" + firstname + '\'' +
+                ", lastname='" + lastname + '\'' +
                 ", email='" + email + '\'' +
                 ", username='" + profileName + '\'' +
                 ", role='" + role.toString() + '\'' +

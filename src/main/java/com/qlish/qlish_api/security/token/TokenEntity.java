@@ -1,8 +1,9 @@
-package com.qlish.qlish_api.security.Token;
+package com.qlish.qlish_api.security.token;
 
-import lombok.*;
-import org.bson.types.ObjectId;
-import org.hibernate.validator.constraints.UniqueElements;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
 import org.springframework.data.redis.core.index.Indexed;
@@ -17,9 +18,8 @@ public class TokenEntity {
 
     @Id
     private Integer id;
-    @Indexed // Creates an index on this field for faster lookups
-    private ObjectId userId;
-    @NonNull
+    @Indexed// Creates an index on this field for faster lookups
+    private String userId;
     @Indexed
     private String token;
     private String tokenType = TokenType.BEARER.name();

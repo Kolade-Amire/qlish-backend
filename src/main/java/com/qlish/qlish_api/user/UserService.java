@@ -11,4 +11,6 @@ public interface UserService {
     UserEntity getUserByEmail(String email) throws UsernameNotFoundException;
 
     UserEntity saveUser(UserEntity user);
+
+    boolean userExists(String email);
 }

@@ -18,6 +18,8 @@ import java.util.function.Function;
 @Service
 public class JwtService {
 
+    private final String JWT_SECRET = SecurityConstants.JWT_SECRET_KEY;
+
     //uses generics to extract any type of claims possible from token
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = extractAllClaims(token);
@@ -34,7 +36,7 @@ public class JwtService {
     }
 
     private Key getSignKey() {
-        byte[] keyBytes = Decoders.BASE64.decode(System.getenv("JWT_SECRET_KEY"));
+        byte[] keyBytes = Decoders.BASE64.decode(JWT_SECRET);
         return Keys.hmacShaKeyFor(keyBytes);
     }
 

@@ -1,6 +1,6 @@
 package com.qlish.qlish_api.security.configuration;
 
-import com.qlish.qlish_api.security.authenticaton.oauth2.CustomOAuth2UserService;
+import com.qlish.qlish_api.user.oauth2.CustomOAuth2UserService;
 import com.qlish.qlish_api.util.AppConstants;
 import com.qlish.qlish_api.util.SecurityConstants;
 import lombok.RequiredArgsConstructor;

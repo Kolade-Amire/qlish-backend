@@ -21,6 +21,11 @@ public class UserServiceImpl implements  UserService {
 
     @Override
     public UserEntity saveUser(UserEntity user) {
-        return null;
+        return userRepository.save(user);
+    }
+
+    @Override
+    public boolean userExists(String email) {
+        return userRepository.findByEmail(email).isPresent();
     }
 }

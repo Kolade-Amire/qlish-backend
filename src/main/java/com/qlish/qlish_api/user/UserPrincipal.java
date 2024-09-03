@@ -73,6 +73,6 @@ public class UserPrincipal implements OAuth2User, UserDetails {
 
     @Override
     public String getName() {
-        return this.user.getName();
+        return this.user.getFirstname() + " " + this.user.getLastname();
     }
 }
