@@ -80,7 +80,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
     private void saveRefreshToken(ObjectId userId, String refreshToken) {
         var newTokenEntity = TokenEntity.builder()
-                .userId(userId)
+                .userId(userId.toString())
                 .token(refreshToken)
                 .tokenType(OAuth2AccessToken.TokenType.BEARER.getValue())
                 .isExpired(false)

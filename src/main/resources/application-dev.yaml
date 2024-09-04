@@ -1,4 +1,7 @@
 spring:
+  devtools:
+    livereload:
+      enabled: true
   application:
     name: qlish-api
   docker:
@@ -43,6 +46,5 @@ server:
 logging:
   level:
     org:
-      springframework: DEBUG
-      springframework.security: TRACE
-      liquibase: DEBUG
+      springframework: WARN
+      springframework.security: DEBUG

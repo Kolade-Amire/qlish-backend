@@ -22,6 +22,7 @@ public class TokenEntity {
     private String userId;
     @Indexed
     private String token;
+    @Builder.Default
     private String tokenType = TokenType.BEARER.name();
     private boolean isExpired;
     private boolean isRevoked;
