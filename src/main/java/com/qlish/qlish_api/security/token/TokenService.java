@@ -4,6 +4,8 @@ import com.qlish.qlish_api.exception.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class TokenService {
@@ -16,14 +18,16 @@ public class TokenService {
         );
     }
 
-    public TokenEntity findTokenByUserId(String userId) {
-        return tokenRepository.findByUserId(userId).orElseThrow(
-                () -> new EntityNotFoundException("Token not found.")
-        );
+    public Optional<TokenEntity> findTokenByUserId(String userId) {
+        return tokenRepository.findByUserId(userId);
     }
 
     public void saveToken(TokenEntity token) {
         tokenRepository.save(token);
+    }
+
+    public void deleteTokenByUserId(String userId) {
+        findTokenByUserId(userId).ifPresent(tokenRepository::delete);
     }
 
 }

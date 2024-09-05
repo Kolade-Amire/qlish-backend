@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.qlish.qlish_api.exception.EntityAlreadyExistException;
 import com.qlish.qlish_api.exception.EntityNotFoundException;
 import com.qlish.qlish_api.security.token.TokenEntity;
-import com.qlish.qlish_api.security.token.TokenRedisRepository;
+import com.qlish.qlish_api.security.token.TokenService;
 import com.qlish.qlish_api.user.AuthProvider;
 import com.qlish.qlish_api.user.UserEntity;
 import com.qlish.qlish_api.user.UserPrincipal;
@@ -33,10 +33,10 @@ import java.time.LocalDateTime;
 public class AuthenticationService {
 
     private final UserService userService;
-    private final TokenRedisRepository tokenRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
+    private final TokenService tokenService;
 
 
     //TODO: implement a regex checker for a strong password
@@ -77,17 +77,7 @@ public class AuthenticationService {
         var savedUser = userService.saveUser(user);
         var userDto = UserAuthenticationDtoMapper.mapUserToUserAuthDto(savedUser);
 
-        var userPrincipal = new UserPrincipal(user);
-        var refreshToken = jwtService.generateRefreshToken(userPrincipal);
 
-        var newToken = TokenEntity.builder()
-                .userId(user.get_id().toString())
-                .token(refreshToken)
-                .isExpired(false)
-                .isRevoked(false)
-                .build();
-
-        tokenRepository.save(newToken);
 
         var httpResponse = HttpResponse.builder()
                 .httpStatus(HttpStatus.CREATED)
@@ -113,16 +103,17 @@ public class AuthenticationService {
 
         var user = userService.getUserByEmail(request.getEmail());
 
-        tokenRepository.findByUserId(user.get_id().toString()).ifPresent(tokenRepository::delete);
+        user.setLastLoginAt(LocalDateTime.now());
+        tokenService.deleteTokenByUserId(user.get_id().toString());
+
+
 
         var userPrincipal = new UserPrincipal(user);
 
         var accessToken = jwtService.generateAccessToken(userPrincipal);
         var refreshToken = jwtService.generateRefreshToken(userPrincipal);
 
-
         saveUserRefreshToken(user, refreshToken);
-
 
         var response = HttpResponse.builder()
                 .httpStatusCode(HttpStatus.OK.value())
@@ -132,7 +123,6 @@ public class AuthenticationService {
                 .build();
 
         var userDto = UserAuthenticationDtoMapper.mapUserToUserAuthDto(user);
-
 
         return AuthenticationResponse.builder()
                 .accessToken(accessToken)
@@ -153,7 +143,7 @@ public class AuthenticationService {
                 .isRevoked(false)
                 .build();
 
-        tokenRepository.save(newTokenEntity);
+        tokenService.saveToken(newTokenEntity);
     }
 
 
@@ -172,7 +162,8 @@ public class AuthenticationService {
         if (userEmail != null) {
             var user = this.userService.getUserByEmail(userEmail);
             var userPrincipal = new UserPrincipal(user);
-            var refreshToken = tokenRepository.findByUserId(user.get_id().toString()).orElseThrow(() -> new EntityNotFoundException("Unknown user or token"));
+            var refreshToken = tokenService.findTokenByUserId(user.get_id().toString()).orElseThrow(() -> new EntityNotFoundException("Unknown user or token"));
+
             if (jwtService.isTokenValid(refreshToken.getToken(), userPrincipal)) {
                 var newAccessToken = jwtService.generateAccessToken(userPrincipal);
 

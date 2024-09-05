@@ -65,6 +65,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
         existingUser.setFirstname(firstname);
         existingUser.setLastname(lastname);
+        existingUser.setLastLoginAt(LocalDateTime.now());
         return  userService.saveUser(existingUser);
     }
 

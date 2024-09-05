@@ -1,9 +1,8 @@
-package com.qlish.qlish_api.user.oauth2;
+package com.qlish.qlish_api.security.authenticaton;
 
 
 import com.qlish.qlish_api.security.token.TokenEntity;
 import com.qlish.qlish_api.security.token.TokenService;
-import com.qlish.qlish_api.security.authenticaton.JwtService;
 import com.qlish.qlish_api.user.UserPrincipal;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -40,12 +39,17 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
 
             UserPrincipal userPrincipal = (UserPrincipal) oAuth2User;
+
+            tokenService.deleteTokenByUserId(userPrincipal.getUserId().toString());
+
             //generate tokens
             String accessToken = jwtService.generateAccessToken(userPrincipal);
             String refreshToken = jwtService.generateRefreshToken(userPrincipal);
 
             //Save refresh token
             saveRefreshToken(userPrincipal.getUserId(), refreshToken);
+
+
 
 
             String html = """
