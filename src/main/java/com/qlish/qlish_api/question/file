@@ -1,6 +1,6 @@
 Take a test by:
 
-    all attributes:
+    all attributes (topic, class, level):
         antonyms
         paragraph
         phrasal-verb
@@ -37,7 +37,13 @@ Take a test by:
 
     class:
         grammar
+            advanced
+            intermediate
+            elementary
         vocabulary
+            advanced
+            intermediate
+            elementary
 
     topic:
         antonyms
