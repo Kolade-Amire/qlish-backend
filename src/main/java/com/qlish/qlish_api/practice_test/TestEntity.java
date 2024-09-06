@@ -1,4 +1,4 @@
-package com.qlish.qlish_api.test;
+package com.qlish.qlish_api.practice_test;
 
 import com.qlish.qlish_api.question.QuestionEntity;
 import lombok.AllArgsConstructor;

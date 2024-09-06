@@ -1,4 +1,5 @@
-{
+[
+  {
   "question": "The driver ___ have taken a side road.",
   "options": {
     "A": " shall ",
@@ -11,4 +12,42 @@
   "questionLevel": "advanced",
   "questionTopic": "parts-of-speech",
   "answer": "C"
-}
+},
+
+
+{
+  "_id": {
+    "$oid": "643d6e307440d739251319f2"
+  },
+  "question": "Leslie comes from a big city. During the holiday she went to spend a week on her uncle’s farm. It was her first visit there. Her uncle, who was very pleased to see his niece, did his best to make her stay an enjoyable one. On the farm she rode a horse, fed chickens ran in the fields and ate fruit fresh from the trees. She enjoyed her holiday so much that, when the day for her to return to the city came, she was very sad to leave.                                                                  Leslie _____. ",
+  "options": {
+    "A": " hated the animals on the farm. ",
+    "B": " visited her uncle’s farm once a week. ",
+    "C": " thought life on the farm was extremely hard. ",
+    "D": " thoroughly enjoyed her holiday on the farm. ",
+    "E": " worked for her uncle on the farm."
+  },
+  "questionClass": "vocabulary",
+  "questionLevel": "advanced",
+  "questionTopic": "reading-comprehension",
+  "answer": "D"
+},
+
+  {
+    "_id": {
+      "$oid": "643d6e307440d7392513198a"
+    },
+    "question": "Our world seems to be changing too fast to keep up with. In my youth, life was much more simple. Our parents worried about feeding and educating us. We worried about simple things life school and friends. Today however, children have become selfish and materialistic. ",
+    "options": {
+      "A": " Life changes people as they grow. ",
+      "B": " Everyone changes with time. ",
+      "C": " The world makes people selfish as they grow older. ",
+      "D": " Children are, brought up differently these days. ",
+      "E": " Time has changed the needs and attitudes of people. "
+    },
+    "questionClass": "vocabulary",
+    "questionLevel": "advanced",
+    "questionTopic": "paragraph",
+    "answer": "E"
+  }
+  ]

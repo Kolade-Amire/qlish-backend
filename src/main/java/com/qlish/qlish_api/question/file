@@ -1,0 +1,53 @@
+Take a test by:
+
+    all attributes:
+        antonyms
+        paragraph
+        phrasal-verb
+        reading-comprehension
+        sentence-completion
+        synonyms
+        parts-of-speech
+        tenses
+        grammar
+        vocabulary
+        advanced
+        intermediate
+        elementary
+
+    level:
+        advanced
+            paragraph
+            parts-of-speech
+            phrasal-verb
+            reading-comprehension
+            sentence-completion
+            synonyms
+            tenses
+        intermediate
+              'antonyms',
+              'parts-of-speech',
+              'sentence-completion',
+              'synonyms',
+              'tenses'
+        elementary
+            'parts-of-speech',
+            'sentence-completion',
+            'tenses'
+
+    class:
+        grammar
+        vocabulary
+
+    topic:
+        antonyms
+        paragraph
+        phrasal-verb
+        reading-comprehension
+        sentence-completion
+        synonyms
+        parts-of-speech
+        tenses
+
+    quick random test:
+        all (randomized)

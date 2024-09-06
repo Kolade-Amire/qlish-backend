@@ -22,7 +22,7 @@ import javax.security.auth.login.AccountException;
 import java.util.Objects;
 
 @RestControllerAdvice
-public class CustomExceptionHandler implements ErrorController {
+public class GlobalExceptionHandler implements ErrorController {
 
     private static final String ACCOUNT_LOCKED = "Your account has been locked. Please contact administration";
     private static final String METHOD_IS_NOT_ALLOWED = "This request method is not allowed on this endpoint. Please send a '%s' request";
