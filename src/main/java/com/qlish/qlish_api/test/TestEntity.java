@@ -4,7 +4,6 @@ import com.qlish.qlish_api.question.QuestionEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
@@ -17,7 +16,6 @@ import java.util.Set;
 @Data
 @Builder
 @AllArgsConstructor
-@NoArgsConstructor
 @Document(collection = "tests")
 public class TestEntity {
 
@@ -29,6 +27,6 @@ public class TestEntity {
     private Set<QuestionEntity> questionSet;
     private LocalDateTime startedAt;
     private Integer questionCount;
-    private Integer score;
+    private Integer correctAnswerCount;
 
 }
