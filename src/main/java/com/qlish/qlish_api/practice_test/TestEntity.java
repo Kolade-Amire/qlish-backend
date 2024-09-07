@@ -1,6 +1,6 @@
 package com.qlish.qlish_api.practice_test;
 
-import com.qlish.qlish_api.question.QuestionEntity;
+import com.qlish.qlish_api.english_question.EnglishQuestionEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -24,7 +24,7 @@ public class TestEntity {
     private ObjectId _id;
     private ObjectId userId;
     private TestType testType;
-    private Set<QuestionEntity> questionSet;
+    private Set<EnglishQuestionEntity> questionSet;
     private LocalDateTime startedAt;
     private Integer questionCount;
     private Integer correctAnswerCount;

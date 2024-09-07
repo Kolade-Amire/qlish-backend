@@ -1,4 +1,4 @@
-package com.qlish.qlish_api.question;
+package com.qlish.qlish_api.english_question;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

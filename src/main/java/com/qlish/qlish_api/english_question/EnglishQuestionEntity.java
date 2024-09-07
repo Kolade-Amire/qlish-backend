@@ -1,4 +1,4 @@
-package com.qlish.qlish_api.question;
+package com.qlish.qlish_api.english_question;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,8 +13,8 @@ import java.util.Map;
 @Data
 @Builder
 @AllArgsConstructor
-@Document(collection = "questions")
-public class QuestionEntity {
+@Document(collection = "english_questions")
+public class EnglishQuestionEntity {
 
     @Id
     @Indexed
