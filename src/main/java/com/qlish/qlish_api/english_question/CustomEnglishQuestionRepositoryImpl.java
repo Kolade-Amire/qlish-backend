@@ -27,13 +27,13 @@ public class CustomEnglishQuestionRepositoryImpl implements CustomEnglishQuestio
 
             //only applies criteria for non-null fields
             if (questionLevel != null) {
-                criteria.and("questionLevel").regex(questionLevel, "i");
+                criteria.and("questionLevel").regex(questionLevel.getLevelName(), "i");
             }
             if (questionClass != null) {
-                criteria.and("questionClass").regex(questionClass, "i");
+                criteria.and("questionClass").regex(questionClass.getClassName(), "i");
             }
             if (questionTopic != null) {
-                criteria.and("questionTopic").regex(questionTopic, "i");
+                criteria.and("questionTopic").regex(questionTopic.getTopicName(), "i");
             }
 
             //sample of test size
