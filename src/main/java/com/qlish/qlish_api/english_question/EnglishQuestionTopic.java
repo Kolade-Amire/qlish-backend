@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Getter
-public enum Topic {
+public enum EnglishQuestionTopic {
 
     ANTONYMS("antonyms"),
     PARAGRAPH("paragraph"),

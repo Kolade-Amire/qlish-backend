@@ -18,14 +18,14 @@ public class EnglishQuestionServiceImpl implements EnglishQuestionService {
 
 
     @Override
-    public Page<EnglishQuestionEntity> getEnglishQuestions(Pageable pageable, Level questionLevel, QuestionClass questionClass, Topic questionTopic, int testSize) {
+    public Page<EnglishQuestionEntity> getEnglishQuestions(Pageable pageable, EnglishQuestionLevel questionEnglishQuestionLevel, EnglishQuestionClass englishQuestionClass, EnglishQuestionTopic questionEnglishQuestionTopic, int testSize) {
 
         if (testSize < 10) {
             throw new IllegalArgumentException("Test size must be at least 10.");
         }
 
         try {
-            return repository.findQuestionsByCriteria(pageable, questionLevel, questionClass, questionTopic, testSize);
+            return repository.findQuestionsByCriteria(pageable, questionEnglishQuestionLevel, englishQuestionClass, questionEnglishQuestionTopic, testSize);
         } catch (Exception e) {
             logger.error("Error retrieving questions from repository");
             throw new QuestionsRetrievalException(e.getMessage());

@@ -23,7 +23,8 @@ public class TestEntity {
     @Indexed(unique = true)
     private ObjectId _id;
     private ObjectId userId;
-    private TestType testType;
+    private TestSubject testSubject;
+    private TestModifier testModifier;
     private Set<EnglishQuestionEntity> questionSet;
     private LocalDateTime startedAt;
     private Integer questionCount;

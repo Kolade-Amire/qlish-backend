@@ -7,8 +7,6 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.Map;
-
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Document(collection = "english_questions")
@@ -16,11 +14,12 @@ import java.util.Map;
 @RequiredArgsConstructor
 @NoArgsConstructor
 public class EnglishQuestionEntity extends Question {
+
     @Id
     @Indexed
     private ObjectId _id;
-    private QuestionClass questionClass;
-    private Level level;
-    private Topic questionTopic;
+    private EnglishQuestionClass englishQuestionClass;
+    private EnglishQuestionLevel englishQuestionLevel;
+    private EnglishQuestionTopic questionEnglishQuestionTopic;
 
 }

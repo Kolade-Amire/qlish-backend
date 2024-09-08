@@ -8,6 +8,6 @@ import org.bson.types.ObjectId;
 @RequiredArgsConstructor
 public class TestRequest {
     private  ObjectId userId;
-    private TestType testType;
+    private TestSubject testSubject;
     private Integer questionCount;
 }

@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public enum Level {
+public enum EnglishQuestionLevel {
     ADVANCED("advanced"),
     INTERMEDIATE("intermediate"),
     ELEMENTARY("elementary");

@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public enum QuestionClass {
+public enum EnglishQuestionClass {
 
     GRAMMAR("grammar"),
     VOCABULARY("vocabulary");

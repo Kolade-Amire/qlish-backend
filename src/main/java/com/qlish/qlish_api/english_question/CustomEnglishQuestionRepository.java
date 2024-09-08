@@ -6,5 +6,5 @@ import org.springframework.lang.Nullable;
 
 
 public interface CustomEnglishQuestionRepository {
-    Page<EnglishQuestionEntity> findQuestionsByCriteria (Pageable pageable, @Nullable Level questionLevel, @Nullable QuestionClass questionClass, @Nullable Topic questionTopic, int limit);
+    Page<EnglishQuestionEntity> findQuestionsByCriteria (Pageable pageable, @Nullable EnglishQuestionLevel questionEnglishQuestionLevel, @Nullable EnglishQuestionClass englishQuestionClass, @Nullable EnglishQuestionTopic questionEnglishQuestionTopic, int limit);
 }

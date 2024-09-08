@@ -20,20 +20,20 @@ public class CustomEnglishQuestionRepositoryImpl implements CustomEnglishQuestio
     private final MongoTemplate mongoTemplate;
 
     @Override
-    public Page<EnglishQuestionEntity> findQuestionsByCriteria(Pageable pageable, @Nullable Level questionLevel, @Nullable QuestionClass questionClass, @Nullable Topic questionTopic, int testSize) {
+    public Page<EnglishQuestionEntity> findQuestionsByCriteria(Pageable pageable, @Nullable EnglishQuestionLevel questionEnglishQuestionLevel, @Nullable EnglishQuestionClass englishQuestionClass, @Nullable EnglishQuestionTopic questionEnglishQuestionTopic, int testSize) {
 
         try {
             Criteria criteria = new Criteria();
 
             //only applies criteria for non-null fields
-            if (questionLevel != null) {
-                criteria.and("questionLevel").regex(questionLevel.getLevelName(), "i");
+            if (questionEnglishQuestionLevel != null) {
+                criteria.and("questionLevel").regex(questionEnglishQuestionLevel.getLevelName(), "i");
             }
-            if (questionClass != null) {
-                criteria.and("questionClass").regex(questionClass.getClassName(), "i");
+            if (englishQuestionClass != null) {
+                criteria.and("questionClass").regex(englishQuestionClass.getClassName(), "i");
             }
-            if (questionTopic != null) {
-                criteria.and("questionTopic").regex(questionTopic.getTopicName(), "i");
+            if (questionEnglishQuestionTopic != null) {
+                criteria.and("questionTopic").regex(questionEnglishQuestionTopic.getTopicName(), "i");
             }
 
             //sample of test size
