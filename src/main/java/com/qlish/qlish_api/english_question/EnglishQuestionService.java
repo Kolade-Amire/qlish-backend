@@ -6,5 +6,5 @@ import org.springframework.lang.Nullable;
 
 public interface EnglishQuestionService {
 
-    Page<EnglishQuestionEntity> getEnglishQuestions(Pageable pageable, @Nullable EnglishQuestionLevel questionEnglishQuestionLevel, @Nullable EnglishQuestionClass englishQuestionClass, @Nullable EnglishQuestionTopic questionEnglishQuestionTopic, int testSize);
+    Page<EnglishQuestionEntity> getEnglishQuestions(Pageable pageable, @Nullable EnglishQuestionLevel questionLevel, @Nullable EnglishQuestionClass questionClass, @Nullable EnglishQuestionTopic questionTopic, int testSize);
 }

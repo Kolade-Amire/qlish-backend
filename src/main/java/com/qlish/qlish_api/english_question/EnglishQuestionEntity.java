@@ -22,4 +22,5 @@ public class EnglishQuestionEntity extends Question {
     private EnglishQuestionLevel englishQuestionLevel;
     private EnglishQuestionTopic questionEnglishQuestionTopic;
 
+
 }

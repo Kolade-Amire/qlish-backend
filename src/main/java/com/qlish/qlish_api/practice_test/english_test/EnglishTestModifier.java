@@ -1,4 +1,6 @@
-package com.qlish.qlish_api.practice_test;
+package com.qlish.qlish_api.practice_test.english_test;
+
+import com.qlish.qlish_api.practice_test.TestModifier;
 
 public class EnglishTestModifier extends TestModifier {
 
