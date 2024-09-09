@@ -12,4 +12,13 @@ public enum EnglishQuestionClass {
 
     private final String className;
 
+    public static EnglishQuestionClass fromClassName(String className) {
+        for (EnglishQuestionClass item : EnglishQuestionClass.values()) {
+            if (item.getClassName().equalsIgnoreCase(className)) {
+                return item;
+            }
+        }
+        throw new IllegalArgumentException("Invalid class name: " + className);
+    }
+
 }

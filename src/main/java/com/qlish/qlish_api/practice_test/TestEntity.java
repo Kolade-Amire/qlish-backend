@@ -29,5 +29,4 @@ public class TestEntity {
     private LocalDateTime startedAt;
     private Integer questionCount;
     private Integer correctAnswerCount;
-
 }

@@ -17,4 +17,13 @@ public enum EnglishQuestionTopic {
     TENSES("tenses");
 
     private final String topicName;
+
+    public static EnglishQuestionTopic fromTopicName(String topicName) {
+        for (EnglishQuestionTopic topic : EnglishQuestionTopic.values()) {
+            if (topic.getTopicName().equalsIgnoreCase(topicName)) {
+                return topic;
+            }
+        }
+        throw new IllegalArgumentException("Invalid level name: " + topicName);
+    }
 }

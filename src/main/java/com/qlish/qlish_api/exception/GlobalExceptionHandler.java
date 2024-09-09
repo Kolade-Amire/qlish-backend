@@ -110,6 +110,13 @@ public class GlobalExceptionHandler implements ErrorController {
         return createHttpResponse( HttpStatus.INTERNAL_SERVER_ERROR, AppConstants.QUESTIONS_RETRIEVAL_ERROR);
     }
 
+    @ExceptionHandler(CustomDatabaseException.class)
+    public ResponseEntity<HttpResponse> customDatabaseException(CustomDatabaseException exception){
+        LOGGER.error(exception.getMessage());
+        return createHttpResponse( HttpStatus.INTERNAL_SERVER_ERROR, AppConstants.DATABASE_ERROR);
+    }
+
+
     private ResponseEntity<HttpResponse> createHttpResponse(HttpStatus status, String message){
         HttpResponse httpResponse = new HttpResponse(status.value(), status,
                 status.getReasonPhrase(), message);
