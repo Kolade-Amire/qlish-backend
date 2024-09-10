@@ -30,8 +30,8 @@ public class TestController {
     }
 
     @PostMapping
-    public ResponseEntity<HttpStatusCode> saveTest (@RequestBody TestEntity testEntity) {
-        testService.save(testEntity);
+    public ResponseEntity<HttpStatusCode> submitTest (@RequestBody TestSubmissionRequest submissionRequest) {
+        return null;
     }
 
 

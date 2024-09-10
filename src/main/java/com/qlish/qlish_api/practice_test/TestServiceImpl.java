@@ -5,6 +5,8 @@ import com.mongodb.MongoWriteException;
 import com.qlish.qlish_api.english_question.*;
 import com.qlish.qlish_api.exception.CustomDatabaseException;
 import com.qlish.qlish_api.exception.EntityNotFoundException;
+import com.qlish.qlish_api.practice_test.english_test.EnglishQuestionDto;
+import com.qlish.qlish_api.practice_test.english_test.EnglishQuestionMapper;
 import com.qlish.qlish_api.practice_test.english_test.EnglishTestRequest;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
@@ -68,18 +70,20 @@ public class TestServiceImpl implements TestService {
     }
 
     @Override
-    public Page<EnglishQuestionEntity> startNewEnglishTest(EnglishTestRequest englishTestRequest, Pageable pageable) {
+    public Page<EnglishQuestionDto> startNewEnglishTest(EnglishTestRequest englishTestRequest, Pageable pageable) {
         var testModifier = englishTestRequest.getTestModifier();
         var questionClass = testModifier.getModifier(EnglishAttributes.CLASS.getAttributeName());
         var questionLevel = testModifier.getModifier(EnglishAttributes.LEVEL.getAttributeName());
         var questionTopic = testModifier.getModifier(EnglishAttributes.TOPIC.getAttributeName());
 
-       return  englishQuestionService.getEnglishQuestions(
+       var questions =  englishQuestionService.getEnglishQuestions(
                 pageable,
                EnglishQuestionLevel.fromLevelName(questionLevel),
                EnglishQuestionClass.fromClassName(questionClass),
                EnglishQuestionTopic.fromTopicName(questionTopic),
                englishTestRequest.getQuestionCount());
+
+       return EnglishQuestionMapper.mapQuestionPageToDto(questions);
 
     }
 

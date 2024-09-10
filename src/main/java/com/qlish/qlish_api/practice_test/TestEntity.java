@@ -27,6 +27,7 @@ public class TestEntity {
     private TestModifier testModifier;
     private Set<Question> questionSet;
     private LocalDateTime startedAt;
-    private Integer questionCount;
-    private Integer correctAnswerCount;
+    private int totalQuestionCount;
+    private int totalCorrectAnswers;
+    private int totalIncorrectAnswers;
 }

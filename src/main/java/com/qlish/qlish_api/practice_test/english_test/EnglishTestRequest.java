@@ -13,5 +13,5 @@ public class EnglishTestRequest {
     private  ObjectId userId;
     private TestSubject testSubject;
     private EnglishTestModifier testModifier;
-    private Integer questionCount;
+    private int questionCount;
 }

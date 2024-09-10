@@ -18,9 +18,9 @@ public class EnglishQuestionEntity extends Question {
     @Id
     @Indexed
     private ObjectId _id;
-    private EnglishQuestionClass englishQuestionClass;
-    private EnglishQuestionLevel englishQuestionLevel;
-    private EnglishQuestionTopic questionEnglishQuestionTopic;
+    private EnglishQuestionClass questionClass;
+    private EnglishQuestionLevel questionLevel;
+    private EnglishQuestionTopic questionTopic;
 
 
 }

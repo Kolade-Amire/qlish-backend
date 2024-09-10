@@ -1,6 +1,7 @@
 package com.qlish.qlish_api.practice_test;
 
 import com.qlish.qlish_api.english_question.EnglishQuestionEntity;
+import com.qlish.qlish_api.practice_test.english_test.EnglishQuestionDto;
 import com.qlish.qlish_api.practice_test.english_test.EnglishTestRequest;
 import org.bson.types.ObjectId;
 import org.springframework.data.domain.Page;
@@ -18,6 +19,6 @@ public interface TestService {
 
     void delete(TestEntity testEntity);
 
-    Page<EnglishQuestionEntity> startNewEnglishTest(EnglishTestRequest englishTestRequest, Pageable pageable);
+    Page<EnglishQuestionDto> startNewEnglishTest(EnglishTestRequest englishTestRequest, Pageable pageable);
 
 }

@@ -43,7 +43,6 @@ public class UserEntity {
     private boolean isEmailVerified;
     private LocalDateTime createdAt;
     private LocalDateTime lastLoginAt;
-
     @DocumentReference
     private Set<TestEntity> tests;
 
