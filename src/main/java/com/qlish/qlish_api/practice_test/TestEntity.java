@@ -1,16 +1,13 @@
 package com.qlish.qlish_api.practice_test;
 
-import com.qlish.qlish_api.question.Question;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
-import java.util.Set;
+import java.util.List;
 
 
 @Data
@@ -23,11 +20,12 @@ public class TestEntity {
     @Indexed(unique = true)
     private ObjectId _id;
     private ObjectId userId;
-    private TestSubject testSubject;
+    private String testSubject;
     private TestModifier testModifier;
-    private Set<Question> questionSet;
+    private List<QuestionFeedback> questions;
     private LocalDateTime startedAt;
     private int totalQuestionCount;
     private int totalCorrectAnswers;
     private int totalIncorrectAnswers;
+    private boolean isCompleted;
 }

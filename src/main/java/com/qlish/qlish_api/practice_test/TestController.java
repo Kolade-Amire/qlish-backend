@@ -2,6 +2,7 @@ package com.qlish.qlish_api.practice_test;
 
 import com.qlish.qlish_api.english_question.EnglishQuestionEntity;
 import com.qlish.qlish_api.english_question.EnglishQuestionService;
+import com.qlish.qlish_api.practice_test.english_test.EnglishQuestionDto;
 import com.qlish.qlish_api.practice_test.english_test.EnglishTestRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -20,8 +21,8 @@ public class TestController {
     private final EnglishQuestionService englishQuestionService;
 
 
-    @PostMapping("new/english")
-    public ResponseEntity<Page<EnglishQuestionEntity>> getEnglishQuestions(@RequestBody EnglishTestRequest englishTestRequest, @RequestParam int pageNumber, @RequestParam int pageSize) {
+    @PostMapping("english/new")
+    public ResponseEntity<Page<EnglishQuestionDto>> getEnglishQuestions(@RequestBody EnglishTestRequest englishTestRequest, @RequestParam int pageNumber, @RequestParam int pageSize) {
         Pageable page = PageRequest.of(pageNumber, pageSize);
         var questionList = testService.startNewEnglishTest(englishTestRequest, page);
 
@@ -30,7 +31,7 @@ public class TestController {
     }
 
     @PostMapping
-    public ResponseEntity<HttpStatusCode> submitTest (@RequestBody TestSubmissionRequest submissionRequest) {
+    public ResponseEntity<TestResult> submitTest (@RequestBody TestSubmissionRequest submissionRequest) {
         return null;
     }
 

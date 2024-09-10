@@ -5,7 +5,6 @@ import com.mongodb.MongoWriteException;
 import com.qlish.qlish_api.english_question.*;
 import com.qlish.qlish_api.exception.CustomDatabaseException;
 import com.qlish.qlish_api.exception.EntityNotFoundException;
-import com.qlish.qlish_api.practice_test.english_test.EnglishQuestionDto;
 import com.qlish.qlish_api.practice_test.english_test.EnglishQuestionMapper;
 import com.qlish.qlish_api.practice_test.english_test.EnglishTestRequest;
 import lombok.RequiredArgsConstructor;
@@ -13,11 +12,11 @@ import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -46,9 +45,9 @@ public class TestServiceImpl implements TestService {
     }
 
     @Override
-    public void save(TestEntity testEntity) {
+    public ObjectId saveTest(TestEntity testEntity) {
         try {
-            testRepository.save(testEntity);
+            return testRepository.save(testEntity).get_id();
         } catch (MongoWriteException e) {
             logger.error("Mongo write error: {}", e.getMessage());
             throw new CustomDatabaseException("Error writing to MongoDB: " + e.getMessage(), e);
@@ -70,7 +69,7 @@ public class TestServiceImpl implements TestService {
     }
 
     @Override
-    public Page<EnglishQuestionDto> startNewEnglishTest(EnglishTestRequest englishTestRequest, Pageable pageable) {
+    public EnglishTestDto startNewEnglishTest(EnglishTestRequest englishTestRequest, Pageable pageable) {
         var testModifier = englishTestRequest.getTestModifier();
         var questionClass = testModifier.getModifier(EnglishAttributes.CLASS.getAttributeName());
         var questionLevel = testModifier.getModifier(EnglishAttributes.LEVEL.getAttributeName());
@@ -83,8 +82,37 @@ public class TestServiceImpl implements TestService {
                EnglishQuestionTopic.fromTopicName(questionTopic),
                englishTestRequest.getQuestionCount());
 
-       return EnglishQuestionMapper.mapQuestionPageToDto(questions);
+       var newTest = TestEntity.builder()
+               .userId(englishTestRequest.getUserId())
+               .testSubject(TestSubject.ENGLISH.getSubjectName())
+               .testModifier(englishTestRequest.getTestModifier())
+               .startedAt(LocalDateTime.now())
+               .totalQuestionCount(englishTestRequest.getQuestionCount())
+               .isCompleted(false)
+               .build();
 
+       var savedTestId = saveTest(newTest);;
+
+       var questionsPage = EnglishQuestionMapper.mapQuestionPageToDto(questions);
+
+       return EnglishTestDto.builder()
+               .id(savedTestId)
+               .userId(englishTestRequest.getUserId())
+               .testSubject(TestSubject.ENGLISH.getSubjectName())
+               .totalQuestionCount(englishTestRequest.getQuestionCount())
+               .questions(questionsPage)
+               .build();
+
+    }
+
+    @Override
+    public ObjectId submitTest(List<TestSubmissionRequest> submission) {
+        return null;
+    }
+
+    @Override
+    public TestResult getResult(ObjectId id) {
+        return null;
     }
 
 

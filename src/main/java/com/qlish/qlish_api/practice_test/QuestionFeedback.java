@@ -1,4 +1,4 @@
-package com.qlish.qlish_api.practice_test;
+package com.qlish.qlish_api .practice_test;
 
 import lombok.Builder;
 import lombok.Data;

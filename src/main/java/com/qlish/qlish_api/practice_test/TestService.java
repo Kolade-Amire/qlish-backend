@@ -1,6 +1,5 @@
 package com.qlish.qlish_api.practice_test;
 
-import com.qlish.qlish_api.english_question.EnglishQuestionEntity;
 import com.qlish.qlish_api.practice_test.english_test.EnglishQuestionDto;
 import com.qlish.qlish_api.practice_test.english_test.EnglishTestRequest;
 import org.bson.types.ObjectId;
@@ -15,10 +14,14 @@ public interface TestService {
 
     TestEntity findTestById(ObjectId id);
 
-    void save(TestEntity testEntity);
+    ObjectId saveTest(TestEntity testEntity);
 
     void delete(TestEntity testEntity);
 
-    Page<EnglishQuestionDto> startNewEnglishTest(EnglishTestRequest englishTestRequest, Pageable pageable);
+    EnglishTestDto startNewEnglishTest(EnglishTestRequest englishTestRequest, Pageable pageable);
+
+    ObjectId submitTest(List<TestSubmissionRequest> submission);
+
+    TestResult getResult(ObjectId id);
 
 }
