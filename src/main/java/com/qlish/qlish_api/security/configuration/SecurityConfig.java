@@ -1,8 +1,8 @@
 package com.qlish.qlish_api.security.configuration;
 
-import com.qlish.qlish_api.user.oauth2.CustomOAuth2UserService;
-import com.qlish.qlish_api.util.AppConstants;
-import com.qlish.qlish_api.util.SecurityConstants;
+import com.qlish.qlish_api.service.CustomOAuth2UserService;
+import com.qlish.qlish_api.constants.AppConstants;
+import com.qlish.qlish_api.constants.SecurityConstants;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -1,13 +1,12 @@
 package com.qlish.qlish_api.security.authenticaton;
 
 import com.qlish.qlish_api.security.configuration.LogoutService;
-import com.qlish.qlish_api.util.AppConstants;
+import com.qlish.qlish_api.constants.AppConstants;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestBody;

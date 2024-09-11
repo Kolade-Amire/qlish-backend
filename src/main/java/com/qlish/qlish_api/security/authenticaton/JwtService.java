@@ -1,6 +1,6 @@
 package com.qlish.qlish_api.security.authenticaton;
 
-import com.qlish.qlish_api.util.SecurityConstants;
+import com.qlish.qlish_api.constants.SecurityConstants;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;

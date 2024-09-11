@@ -1,6 +1,6 @@
 package com.qlish.qlish_api.exception;
 
-import com.qlish.qlish_api.util.AppConstants;
+import com.qlish.qlish_api.constants.AppConstants;
 import com.qlish.qlish_api.util.HttpResponse;
 import io.jsonwebtoken.ExpiredJwtException;
 import org.slf4j.Logger;

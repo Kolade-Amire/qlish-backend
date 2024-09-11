@@ -1,7 +1,7 @@
 package com.qlish.qlish_api.security.configuration;
 
 import com.qlish.qlish_api.security.token.TokenRedisRepository;
-import com.qlish.qlish_api.util.SecurityConstants;
+import com.qlish.qlish_api.constants.SecurityConstants;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;

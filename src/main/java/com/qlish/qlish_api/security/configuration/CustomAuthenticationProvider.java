@@ -1,6 +1,6 @@
 package com.qlish.qlish_api.security.configuration;
 
-import com.qlish.qlish_api.user.CustomUserDetailsService;
+import com.qlish.qlish_api.service.CustomUserDetailsService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationProvider;

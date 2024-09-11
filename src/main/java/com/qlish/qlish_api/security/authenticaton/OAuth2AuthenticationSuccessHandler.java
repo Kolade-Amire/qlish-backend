@@ -3,7 +3,7 @@ package com.qlish.qlish_api.security.authenticaton;
 
 import com.qlish.qlish_api.security.token.TokenEntity;
 import com.qlish.qlish_api.security.token.TokenService;
-import com.qlish.qlish_api.user.UserPrincipal;
+import com.qlish.qlish_api.entity.UserPrincipal;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

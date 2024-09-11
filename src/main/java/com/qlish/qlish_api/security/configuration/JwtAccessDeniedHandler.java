@@ -2,7 +2,7 @@ package com.qlish.qlish_api.security.configuration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.qlish.qlish_api.util.HttpResponse;
-import com.qlish.qlish_api.util.SecurityConstants;
+import com.qlish.qlish_api.constants.SecurityConstants;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

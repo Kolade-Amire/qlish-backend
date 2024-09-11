@@ -2,8 +2,8 @@ package com.qlish.qlish_api.security.configuration;
 
 import com.qlish.qlish_api.security.token.TokenRedisRepository;
 import com.qlish.qlish_api.security.authenticaton.JwtService;
-import com.qlish.qlish_api.util.AppConstants;
-import com.qlish.qlish_api.util.SecurityConstants;
+import com.qlish.qlish_api.constants.AppConstants;
+import com.qlish.qlish_api.constants.SecurityConstants;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
