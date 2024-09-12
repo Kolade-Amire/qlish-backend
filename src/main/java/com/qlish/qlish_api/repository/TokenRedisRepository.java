@@ -1,6 +1,6 @@
-package com.qlish.qlish_api.security.token;
+package com.qlish.qlish_api.repository;
 
-import org.bson.types.ObjectId;
+import com.qlish.qlish_api.entity.TokenEntity;
 import org.springframework.data.repository.ListCrudRepository;
 import org.springframework.stereotype.Repository;
 

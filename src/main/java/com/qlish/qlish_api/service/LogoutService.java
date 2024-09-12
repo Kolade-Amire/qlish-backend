@@ -1,6 +1,6 @@
-package com.qlish.qlish_api.security.configuration;
+package com.qlish.qlish_api.service;
 
-import com.qlish.qlish_api.security.token.TokenRedisRepository;
+import com.qlish.qlish_api.repository.TokenRedisRepository;
 import com.qlish.qlish_api.constants.SecurityConstants;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

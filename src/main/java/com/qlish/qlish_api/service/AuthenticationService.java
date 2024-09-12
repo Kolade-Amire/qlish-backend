@@ -1,14 +1,13 @@
-package com.qlish.qlish_api.security.authenticaton;
+package com.qlish.qlish_api.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.qlish.qlish_api.exception.EntityAlreadyExistException;
 import com.qlish.qlish_api.exception.EntityNotFoundException;
-import com.qlish.qlish_api.security.token.TokenEntity;
-import com.qlish.qlish_api.security.token.TokenService;
+import com.qlish.qlish_api.security.data.*;
+import com.qlish.qlish_api.entity.TokenEntity;
 import com.qlish.qlish_api.constants.auth_enums.AuthProvider;
 import com.qlish.qlish_api.entity.UserEntity;
 import com.qlish.qlish_api.entity.UserPrincipal;
-import com.qlish.qlish_api.service.UserService;
 import com.qlish.qlish_api.mapper.UserAuthenticationDtoMapper;
 import com.qlish.qlish_api.constants.auth_enums.Role;
 import com.qlish.qlish_api.util.HttpResponse;

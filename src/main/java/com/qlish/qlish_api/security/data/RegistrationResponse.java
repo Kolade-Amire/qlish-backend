@@ -1,4 +1,4 @@
-package com.qlish.qlish_api.security.authenticaton;
+package com.qlish.qlish_api.security.data;
 
 import com.qlish.qlish_api.dto.UserAuthenticationDto;
 import com.qlish.qlish_api.util.HttpResponse;

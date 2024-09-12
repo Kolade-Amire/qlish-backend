@@ -7,7 +7,7 @@ import com.qlish.qlish_api.constants.english_enums.EnglishQuestionClass;
 import com.qlish.qlish_api.constants.english_enums.EnglishQuestionLevel;
 import com.qlish.qlish_api.constants.english_enums.EnglishQuestionTopic;
 import com.qlish.qlish_api.entity.TestEntity;
-import com.qlish.qlish_api.dto.TestResult;
+import com.qlish.qlish_api.entity.TestResult;
 import com.qlish.qlish_api.constants.TestSubject;
 import com.qlish.qlish_api.dto.TestSubmissionRequest;
 import com.qlish.qlish_api.exception.CustomDatabaseException;

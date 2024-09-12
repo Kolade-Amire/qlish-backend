@@ -1,6 +1,6 @@
 package com.qlish.qlish_api.listener;
 
-import com.qlish.qlish_api.security.configuration.LoginAttemptService;
+import com.qlish.qlish_api.service.LoginAttemptService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;

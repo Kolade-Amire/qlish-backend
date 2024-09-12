@@ -5,7 +5,7 @@ import com.qlish.qlish_api.dto.TestSubmissionRequest;
 import com.qlish.qlish_api.service.EnglishQuestionService;
 import com.qlish.qlish_api.dto.EnglishQuestionDto;
 import com.qlish.qlish_api.dto.EnglishTestRequest;
-import com.qlish.qlish_api.dto.TestResult;
+import com.qlish.qlish_api.entity.TestResult;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

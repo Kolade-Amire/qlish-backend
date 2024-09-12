@@ -1,4 +1,4 @@
-package com.qlish.qlish_api.security.authenticaton;
+package com.qlish.qlish_api.security;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

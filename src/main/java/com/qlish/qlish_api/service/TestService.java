@@ -1,7 +1,7 @@
 package com.qlish.qlish_api.service;
 
 import com.qlish.qlish_api.entity.TestEntity;
-import com.qlish.qlish_api.dto.TestResult;
+import com.qlish.qlish_api.entity.TestResult;
 import com.qlish.qlish_api.dto.TestSubmissionRequest;
 import com.qlish.qlish_api.dto.EnglishTestRequest;
 import com.qlish.qlish_api.dto.EnglishTestDto;

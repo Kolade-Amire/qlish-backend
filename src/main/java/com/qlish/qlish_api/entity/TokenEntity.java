@@ -1,5 +1,6 @@
-package com.qlish.qlish_api.security.token;
+package com.qlish.qlish_api.entity;
 
+import com.qlish.qlish_api.constants.TokenType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

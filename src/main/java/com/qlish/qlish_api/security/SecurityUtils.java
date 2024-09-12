@@ -1,8 +1,7 @@
-package com.qlish.qlish_api.security.configuration;
+package com.qlish.qlish_api.security;
 
-import com.qlish.qlish_api.security.token.TokenService;
-import com.qlish.qlish_api.security.authenticaton.JwtService;
-import com.qlish.qlish_api.security.authenticaton.CustomAuthenticationFailureHandler;
+import com.qlish.qlish_api.service.TokenService;
+import com.qlish.qlish_api.service.JwtService;
 import com.qlish.qlish_api.service.CustomUserDetailsService;
 import com.qlish.qlish_api.service.UserService;
 import lombok.RequiredArgsConstructor;

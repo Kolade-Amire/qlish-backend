@@ -1,4 +1,4 @@
-package com.qlish.qlish_api.security.configuration;
+package com.qlish.qlish_api.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.qlish.qlish_api.util.HttpResponse;

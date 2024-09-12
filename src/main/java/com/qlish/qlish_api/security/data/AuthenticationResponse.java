@@ -1,4 +1,4 @@
-package com.qlish.qlish_api.security.authenticaton;
+package com.qlish.qlish_api.security.data;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.qlish.qlish_api.dto.UserAuthenticationDto;

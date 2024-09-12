@@ -1,5 +1,6 @@
-package com.qlish.qlish_api.dto;
+package com.qlish.qlish_api.entity;
 
+import com.qlish.qlish_api.dto.QuestionFeedback;
 import lombok.Builder;
 import lombok.Data;
 import org.bson.types.ObjectId;

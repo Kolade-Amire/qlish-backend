@@ -1,4 +1,4 @@
-package com.qlish.qlish_api.security.configuration;
+package com.qlish.qlish_api.security;
 
 import com.qlish.qlish_api.service.CustomOAuth2UserService;
 import com.qlish.qlish_api.constants.AppConstants;
