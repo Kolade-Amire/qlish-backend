@@ -1,7 +1,8 @@
 package com.qlish.qlish_api.entity;
 
-import com.qlish.qlish_api.dto.QuestionFeedback;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
@@ -23,7 +24,7 @@ public class TestEntity {
     private ObjectId userId;
     private String testSubject;
     private TestModifier testModifier;
-    private List<QuestionFeedback> questions;
+    private List<Question> questions;
     private LocalDateTime startedAt;
     private int totalQuestionCount;
     private int totalCorrectAnswers;

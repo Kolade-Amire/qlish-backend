@@ -2,25 +2,26 @@ package com.qlish.qlish_api.service;
 
 import com.mongodb.MongoTimeoutException;
 import com.mongodb.MongoWriteException;
+import com.qlish.qlish_api.constants.TestSubject;
 import com.qlish.qlish_api.constants.english_enums.EnglishAttributes;
 import com.qlish.qlish_api.constants.english_enums.EnglishQuestionClass;
 import com.qlish.qlish_api.constants.english_enums.EnglishQuestionLevel;
 import com.qlish.qlish_api.constants.english_enums.EnglishQuestionTopic;
+import com.qlish.qlish_api.dto.EnglishTestDto;
+import com.qlish.qlish_api.dto.EnglishTestRequest;
+import com.qlish.qlish_api.dto.TestSubmissionRequest;
 import com.qlish.qlish_api.entity.TestEntity;
 import com.qlish.qlish_api.entity.TestResult;
-import com.qlish.qlish_api.constants.TestSubject;
-import com.qlish.qlish_api.dto.TestSubmissionRequest;
 import com.qlish.qlish_api.exception.CustomDatabaseException;
 import com.qlish.qlish_api.exception.EntityNotFoundException;
 import com.qlish.qlish_api.mapper.EnglishQuestionMapper;
-import com.qlish.qlish_api.dto.EnglishTestRequest;
-import com.qlish.qlish_api.dto.EnglishTestDto;
 import com.qlish.qlish_api.repository.TestRepository;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -100,9 +101,11 @@ public class TestServiceImpl implements TestService {
                .isCompleted(false)
                .build();
 
-       var savedTestId = saveTest(newTest);;
+       var savedTestId = saveTest(newTest);
 
-       var questionsPage = EnglishQuestionMapper.mapQuestionListToDto(questions);
+       var questionDtoList = EnglishQuestionMapper.mapQuestionListToDto(questions);
+       var questionPage = new PageImpl<>(questionDtoList, pageable, questionDtoList.size());
+
 
 
 
@@ -111,7 +114,7 @@ public class TestServiceImpl implements TestService {
                .userId(englishTestRequest.getUserId())
                .testSubject(TestSubject.ENGLISH.getSubjectName())
                .totalQuestionCount(englishTestRequest.getQuestionCount())
-               .questions(questionsPage)
+               .questions(questionPage)
                .build();
 
     }
