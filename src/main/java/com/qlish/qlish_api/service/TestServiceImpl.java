@@ -7,20 +7,25 @@ import com.qlish.qlish_api.constants.english_enums.EnglishAttributes;
 import com.qlish.qlish_api.constants.english_enums.EnglishQuestionClass;
 import com.qlish.qlish_api.constants.english_enums.EnglishQuestionLevel;
 import com.qlish.qlish_api.constants.english_enums.EnglishQuestionTopic;
+import com.qlish.qlish_api.dto.EnglishQuestionDto;
 import com.qlish.qlish_api.dto.EnglishTestDto;
 import com.qlish.qlish_api.dto.EnglishTestRequest;
 import com.qlish.qlish_api.dto.TestSubmissionRequest;
+import com.qlish.qlish_api.entity.EnglishQuestionEntity;
+import com.qlish.qlish_api.entity.EnglishTest;
 import com.qlish.qlish_api.entity.TestEntity;
 import com.qlish.qlish_api.entity.TestResult;
 import com.qlish.qlish_api.exception.CustomDatabaseException;
 import com.qlish.qlish_api.exception.EntityNotFoundException;
 import com.qlish.qlish_api.mapper.EnglishQuestionMapper;
+import com.qlish.qlish_api.repository.EnglishTestRepository;
 import com.qlish.qlish_api.repository.TestRepository;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -37,12 +42,12 @@ public class TestServiceImpl implements TestService {
     private static final Logger logger = LoggerFactory.getLogger(TestServiceImpl.class);
 
 
-    private final TestRepository testRepository;
+    private final EnglishTestRepository englishTestRepository;
     private final EnglishQuestionService englishQuestionService;
 
     @Override
-    public List<TestEntity> findTestsByUserId(ObjectId userId) {
-        return testRepository.findAllByUserId(userId).orElseThrow(
+    public List<EnglishTest> findEnglishTestsByUserId(ObjectId userId) {
+        return englishTestRepository.findAllByUserId(userId).orElseThrow(
                 () -> new EntityNotFoundException("User has not taken any test.")
         );
     }
@@ -117,6 +122,27 @@ public class TestServiceImpl implements TestService {
                .questions(questionPage)
                .build();
 
+    }
+
+    public Page<EnglishQuestionDto> getPagedQuestionsForTest(ObjectId testId, Pageable pageable) {
+        // Retrieve the test by ID
+        EnglishTest test = testRe(testId)
+                .orElseThrow(() -> new EntityNotFoundException("Test not found"));
+
+        // Get the full list of questions stored in the test entity
+        List<EnglishQuestionEntity> allQuestions = test.getQuestions();
+
+        // Perform in-memory pagination over the full list of questions
+        int start = (int) pageable.getOffset();
+        int end = Math.min(start + pageable.getPageSize(), allQuestions.size());
+
+        List<EnglishQuestionEntity> paginatedQuestions = allQuestions.subList(start, end);
+
+        // Convert to DTOs for frontend response
+        List<EnglishQuestionDto> questionDtos = EnglishQuestionMapper.mapQuestionListToDto(paginatedQuestions);
+
+        // Return the paginated page of questions
+        return new PageImpl<>(questionDtos, pageable, allQuestions.size());
     }
 
     @Override

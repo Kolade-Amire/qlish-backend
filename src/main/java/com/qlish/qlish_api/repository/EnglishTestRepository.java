@@ -1,5 +1,6 @@
 package com.qlish.qlish_api.repository;
 
+import com.qlish.qlish_api.entity.EnglishTest;
 import com.qlish.qlish_api.entity.TestEntity;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.repository.MongoRepository;
@@ -9,7 +10,8 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface TestRepository extends MongoRepository<TestEntity, ObjectId> {
+public interface EnglishTestRepository extends MongoRepository<EnglishTest, ObjectId> {
 
-    Optional<List<TestEntity>> findAllByUserId(ObjectId userId);
+    Optional<List<EnglishTest>> findAllByUserId(ObjectId userId);
+    Optional<EnglishTest> findBy_id(ObjectId id);
 }

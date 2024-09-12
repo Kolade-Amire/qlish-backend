@@ -1,30 +1,18 @@
 package com.qlish.qlish_api.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.index.Indexed;
-import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 
 @Data
-@Builder
-@AllArgsConstructor
-@Document(collection = "tests")
-public class TestEntity {
-
-    @Id
-    @Indexed(unique = true)
-    private ObjectId _id;
+@RequiredArgsConstructor
+public abstract class TestEntity {
+    public ObjectId _id;
     private ObjectId userId;
     private String testSubject;
-    private TestModifier testModifier;
-    private List<Question> questions;
     private LocalDateTime startedAt;
     private int totalQuestionCount;
     private int totalCorrectAnswers;
