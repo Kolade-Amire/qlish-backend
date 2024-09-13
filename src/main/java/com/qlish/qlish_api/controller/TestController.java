@@ -1,37 +1,33 @@
 package com.qlish.qlish_api.controller;
 
-import com.qlish.qlish_api.service.EnglishTestService;
-import com.qlish.qlish_api.dto.TestSubmissionRequest;
-import com.qlish.qlish_api.service.EnglishQuestionService;
-import com.qlish.qlish_api.dto.EnglishQuestionDto;
-import com.qlish.qlish_api.dto.EnglishTestRequest;
+import com.qlish.qlish_api.dto.TestRequest;
 import com.qlish.qlish_api.entity.TestResult;
+import com.qlish.qlish_api.service.TestService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.bson.types.ObjectId;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/test")
 public class TestController {
 
-    private final EnglishTestService englishTestService;
-    private final EnglishQuestionService englishQuestionService;
+    private final TestService testService;
 
 
-    @PostMapping("english/new")
-    public ResponseEntity<Page<EnglishQuestionDto>> getEnglishQuestions(@RequestBody EnglishTestRequest englishTestRequest, @RequestParam int pageNumber, @RequestParam int pageSize) {
-        Pageable page = PageRequest.of(pageNumber, pageSize);
-        var questionList = englishTestService.initiateNewTest(englishTestRequest, page);
+    @PostMapping("create/english")
+    public ResponseEntity<ObjectId> createEnglishTest(@RequestBody TestRequest request) {
 
-        return null;
+        var testId = testService.createEnglishTest(request);
+        return ResponseEntity.ok(testId);
     }
 
     @PostMapping
-    public ResponseEntity<TestResult> submitTest (@RequestBody TestSubmissionRequest submissionRequest) {
+    public ResponseEntity<TestResult> startEnglishTest () {
         return null;
     }
 

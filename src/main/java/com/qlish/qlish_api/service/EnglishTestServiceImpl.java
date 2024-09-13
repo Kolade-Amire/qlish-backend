@@ -8,15 +8,13 @@ import com.qlish.qlish_api.constants.english_enums.EnglishQuestionClass;
 import com.qlish.qlish_api.constants.english_enums.EnglishQuestionLevel;
 import com.qlish.qlish_api.constants.english_enums.EnglishQuestionTopic;
 import com.qlish.qlish_api.dto.EnglishQuestionDto;
-import com.qlish.qlish_api.dto.EnglishTestRequest;
+import com.qlish.qlish_api.dto.EnglishTestDto;
 import com.qlish.qlish_api.dto.TestSubmissionRequest;
-import com.qlish.qlish_api.entity.EnglishQuestionEntity;
-import com.qlish.qlish_api.entity.EnglishTest;
-import com.qlish.qlish_api.entity.TestDetails;
-import com.qlish.qlish_api.entity.TestResult;
+import com.qlish.qlish_api.entity.*;
 import com.qlish.qlish_api.exception.CustomDatabaseException;
 import com.qlish.qlish_api.exception.EntityNotFoundException;
 import com.qlish.qlish_api.mapper.EnglishQuestionMapper;
+import com.qlish.qlish_api.mapper.EnglishTestMapper;
 import com.qlish.qlish_api.repository.EnglishTestRepository;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
@@ -51,11 +49,18 @@ public class EnglishTestServiceImpl implements EnglishTestService {
     }
 
     @Override
-    public EnglishTest findTestById(ObjectId id) {
+    public EnglishTest getTestById(ObjectId id) {
         return englishTestRepository.findById(id).orElseThrow(
                 () -> new EntityNotFoundException("Test not found.")
         );
     }
+
+    @Override
+    public EnglishTestDto getTestForView(ObjectId id) {
+        var test = getTestById(id);
+        return EnglishTestMapper.mapTestToDto(test);
+    }
+
 
     @Override
     public ObjectId saveTest(EnglishTest test) {
@@ -76,28 +81,31 @@ public class EnglishTestServiceImpl implements EnglishTestService {
         }
     }
 
+
     @Override
     public void deleteTest(ObjectId testId) {
-        var test = findTestById(testId);
+        var test = getTestById(testId);
         englishTestRepository.delete(test);
     }
 
-    @Override
-    public ObjectId initiateNewTest(EnglishTestRequest testRequest) {
 
-        var questions = getEnglishQuestions(testRequest);
+    @Override
+    public ObjectId initiateNewTest(ObjectId userId, EnglishTestFactory testFactory) {
+
+
+        var questions = getQuestionsList(testFactory);
 
         var newTestDetails = TestDetails.builder()
-                .userId(testRequest.getUserId())
+                .userId(userId)
                 .testSubject(TestSubject.ENGLISH)
                 .startedAt(LocalDateTime.now())
-                .totalQuestionCount(testRequest.getQuestionCount())
+                .totalQuestionCount(testFactory.getQuestionCount())
                 .isCompleted(false)
                 .build();
 
         var newEnglishTest = EnglishTest.builder()
                 .testDetails(newTestDetails)
-                .testModifier(testRequest.getTestModifier())
+                .modifier(testFactory.getAllModifiers())
                 .questions(questions)
                 .build();
 
@@ -107,25 +115,26 @@ public class EnglishTestServiceImpl implements EnglishTestService {
 
     }
 
-    @Override
-    public List<EnglishQuestionEntity> getEnglishQuestions(EnglishTestRequest testRequest) {
 
-        var testModifier = testRequest.getTestModifier();
-        var questionClass = testModifier.getModifier(EnglishAttributes.CLASS.getAttributeName());
-        var questionLevel = testModifier.getModifier(EnglishAttributes.LEVEL.getAttributeName());
-        var questionTopic = testModifier.getModifier(EnglishAttributes.TOPIC.getAttributeName());
+    @Override
+    public List<EnglishQuestionEntity> getQuestionsList(EnglishTestFactory testFactory) {
+
+        var questionClass = testFactory.getModifier(EnglishAttributes.CLASS.getAttributeName());
+        var questionLevel = testFactory.getModifier(EnglishAttributes.LEVEL.getAttributeName());
+        var questionTopic = testFactory.getModifier(EnglishAttributes.TOPIC.getAttributeName());
 
         return englishQuestionService.getEnglishQuestions(
                 EnglishQuestionLevel.fromLevelName(questionLevel),
                 EnglishQuestionClass.fromClassName(questionClass),
                 EnglishQuestionTopic.fromTopicName(questionTopic),
-                testRequest.getQuestionCount());
+                testFactory.getQuestionCount());
     }
 
-    @Override
-    public Page<EnglishQuestionDto> startTest(ObjectId testId, Pageable pageable) {
 
-        var test = findTestById(testId);
+    @Override
+    public Page<EnglishQuestionDto> getTestQuestionsForView(ObjectId testId, Pageable pageable) {
+
+        var test = getTestById(testId);
 
         var questions = test.getQuestions();
 
@@ -142,6 +151,7 @@ public class EnglishTestServiceImpl implements EnglishTestService {
         return new PageImpl<>(questionDtoList, pageable, questions.size());
     }
 
+    //TODO
     @Override
     public ObjectId submitTest(List<TestSubmissionRequest> submission) {
         return null;

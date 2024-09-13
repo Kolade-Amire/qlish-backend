@@ -9,6 +9,7 @@ import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.List;
+import java.util.Map;
 
 @Data
 @Builder
@@ -20,6 +21,6 @@ public class EnglishTest {
     @Indexed
     private ObjectId _id;
     private TestDetails testDetails;
-    private EnglishTestModifier testModifier;
+    private Map<String, String > modifier;
     private List<EnglishQuestionEntity> questions;
 }

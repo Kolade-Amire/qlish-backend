@@ -1,6 +1,8 @@
 package com.qlish.qlish_api.entity;
 
-public class EnglishTestModifier extends TestModifier {
+public class EnglishTestFactory extends TestFactory {
+
+    public EnglishTestFactory() {}
 
     public void setQuestionClass(String className) {
         addModifier("questionClass", className);

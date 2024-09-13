@@ -30,88 +30,93 @@ public class GlobalExceptionHandler implements ErrorController {
     private final Logger LOGGER = LoggerFactory.getLogger(String.valueOf(this));
 
     @ExceptionHandler(DisabledException.class)
-    public ResponseEntity<HttpResponse> accountDisabledException(){
+    public ResponseEntity<HttpResponse> handleAccountDisabledException(){
         return createHttpResponse(HttpStatus.BAD_REQUEST, AppConstants.ACCOUNT_DISABLED);
     }
 
     @ExceptionHandler(BadCredentialsException.class)
-    public ResponseEntity<HttpResponse> badCredentialsException(){
+    public ResponseEntity<HttpResponse> handleBadCredentialsException(){
         return createHttpResponse(HttpStatus.BAD_REQUEST, AppConstants.INCORRECT_CREDENTIALS);
     }
 
     @ExceptionHandler(AccessDeniedException.class)
-    public ResponseEntity<HttpResponse> accessDeniedException(){
+    public ResponseEntity<HttpResponse> handleAccessDeniedException(){
         return createHttpResponse(HttpStatus.UNAUTHORIZED, AppConstants.NOT_ENOUGH_PERMISSIONS);
     }
 
     @ExceptionHandler(LockedException.class)
-    public ResponseEntity<HttpResponse> accountLockedException(){
+    public ResponseEntity<HttpResponse> handleAccountLockedException(){
         return createHttpResponse(HttpStatus.UNAUTHORIZED, AppConstants.ACCOUNT_LOCKED);
     }
 
     @ExceptionHandler(ExpiredJwtException.class)
-    public ResponseEntity<HttpResponse> tokenExpiredException(ExpiredJwtException exception){
+    public ResponseEntity<HttpResponse> handleTokenExpiredException(ExpiredJwtException exception){
         return createHttpResponse(HttpStatus.UNAUTHORIZED, exception.getMessage());
     }
 
     @ExceptionHandler(EntityAlreadyExistException.class)
-    public ResponseEntity<HttpResponse> entityExistsException(EntityAlreadyExistException exception){
+    public ResponseEntity<HttpResponse> handleEntityExistsException(EntityAlreadyExistException exception){
         return createHttpResponse(HttpStatus.BAD_REQUEST, exception.getMessage());
     }
 
     @ExceptionHandler(PasswordsDoNotMatchException.class)
-    public ResponseEntity<HttpResponse> passwordsDoNotMatchException(PasswordsDoNotMatchException exception){
+    public ResponseEntity<HttpResponse> handlePasswordsDoNotMatchException(PasswordsDoNotMatchException exception){
+        return createHttpResponse(HttpStatus.BAD_REQUEST, exception.getMessage());
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<HttpResponse> handleIllegalArgumentException(IllegalArgumentException exception){
         return createHttpResponse(HttpStatus.BAD_REQUEST, exception.getMessage());
     }
 
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
-    public ResponseEntity<HttpResponse> methodNotSupportedException(HttpRequestMethodNotSupportedException exception){
+    public ResponseEntity<HttpResponse> handleMethodNotSupportedException(HttpRequestMethodNotSupportedException exception){
         HttpMethod supportedMethod = Objects.requireNonNull(exception.getSupportedHttpMethods()).iterator().next();
         return createHttpResponse(HttpStatus.METHOD_NOT_ALLOWED, String.format(AppConstants.METHOD_IS_NOT_ALLOWED, supportedMethod));
     }
 
 
     @ExceptionHandler(NoHandlerFoundException.class)
-    public ResponseEntity<HttpResponse> noHandlerFoundException(){
+    public ResponseEntity<HttpResponse> handleNoHandlerFoundException(){
 
         return createHttpResponse(HttpStatus.NOT_FOUND, AppConstants.PAGE_NOT_FOUND);
     }
 
     @ExceptionHandler(EntityNotFoundException.class)
-    public ResponseEntity<HttpResponse> entityNotFoundException(EntityNotFoundException exception){
+    public ResponseEntity<HttpResponse> handleEntityNotFoundException(EntityNotFoundException exception){
         return createHttpResponse(HttpStatus.NOT_FOUND, exception.getMessage());
     }
 
     @ExceptionHandler(AccountException.class)
-    public ResponseEntity<HttpResponse> accountException(AccountException exception){
+    public ResponseEntity<HttpResponse> handleAccountException(AccountException exception){
         return createHttpResponse(HttpStatus.BAD_REQUEST, exception.getMessage());
     }
 
     @RequestMapping(AppConstants.ERROR_PATH)
-    public ResponseEntity<HttpResponse> notFound404(){
+    public ResponseEntity<HttpResponse> handleNotFound404(){
         return createHttpResponse(HttpStatus.NOT_FOUND, AppConstants.NO_MAPPING_FOUND);
     }
 
     @ExceptionHandler(IllegalStateException.class)
-    public ResponseEntity<HttpResponse> illegalStateException(IllegalStateException exception){
+    public ResponseEntity<HttpResponse> handleIllegalStateException(IllegalStateException exception){
         LOGGER.error(exception.getMessage());
         return createHttpResponse(HttpStatus.BAD_REQUEST, exception.getMessage());
     }
 
     @ExceptionHandler(InternalServerError.class)
-    public ResponseEntity<HttpResponse> internalServerErrorException(InternalServerError exception){
+    public ResponseEntity<HttpResponse> handleInternalServerErrorException(InternalServerError exception){
         LOGGER.error(exception.getMessage());
         return createHttpResponse(HttpStatus.INTERNAL_SERVER_ERROR, exception.getMessage());
     }
 
     @ExceptionHandler(QuestionsRetrievalException.class)
-    public ResponseEntity<HttpResponse> questionsRetrievalException(QuestionsRetrievalException exception){
+    public ResponseEntity<HttpResponse> handleQuestionsRetrievalException(QuestionsRetrievalException exception){
         LOGGER.error(exception.getMessage());
         return createHttpResponse( HttpStatus.INTERNAL_SERVER_ERROR, AppConstants.QUESTIONS_RETRIEVAL_ERROR);
     }
 
     @ExceptionHandler(CustomDatabaseException.class)
-    public ResponseEntity<HttpResponse> customDatabaseException(CustomDatabaseException exception){
+    public ResponseEntity<HttpResponse> handleCustomDatabaseException(CustomDatabaseException exception){
         LOGGER.error(exception.getMessage());
         return createHttpResponse( HttpStatus.INTERNAL_SERVER_ERROR, AppConstants.DATABASE_ERROR);
     }
