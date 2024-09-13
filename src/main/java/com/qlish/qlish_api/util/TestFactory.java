@@ -1,4 +1,4 @@
-package com.qlish.qlish_api.entity;
+package com.qlish.qlish_api.util;
 
 import com.qlish.qlish_api.constants.TestSubject;
 import lombok.Getter;

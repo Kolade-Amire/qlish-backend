@@ -1,4 +1,4 @@
-package com.qlish.qlish_api.entity;
+package com.qlish.qlish_api.util;
 
 public class EnglishTestFactory extends TestFactory {
 

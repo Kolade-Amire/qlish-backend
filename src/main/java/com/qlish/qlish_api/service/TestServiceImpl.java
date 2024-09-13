@@ -1,19 +1,31 @@
 package com.qlish.qlish_api.service;
 
+import com.qlish.qlish_api.constants.TestSubject;
 import com.qlish.qlish_api.dto.EnglishQuestionDto;
 import com.qlish.qlish_api.dto.TestRequest;
-import com.qlish.qlish_api.entity.EnglishTestFactory;
+import com.qlish.qlish_api.util.EnglishTestFactory;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class TestServiceImpl implements TestService {
 
     private final EnglishTestService englishTestService;
+
+
+    @Override
+    public List<String> takeATest() {
+        return List.of(Arrays.stream(TestSubject.values()).map(
+                TestSubject::getSubjectName
+        ).toString());
+    }
 
     @Override
     public ObjectId createEnglishTest (TestRequest testRequest) {

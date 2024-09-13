@@ -6,10 +6,9 @@ import com.qlish.qlish_api.service.TestService;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -18,6 +17,11 @@ public class TestController {
 
     private final TestService testService;
 
+    @GetMapping("/new")
+    public ResponseEntity<List<String>> takeATest(){
+        var subjectList = testService.takeATest();
+        return ResponseEntity.ok(subjectList);
+    }
 
     @PostMapping("create/english")
     public ResponseEntity<ObjectId> createEnglishTest(@RequestBody TestRequest request) {
@@ -26,7 +30,7 @@ public class TestController {
         return ResponseEntity.ok(testId);
     }
 
-    @PostMapping
+    @GetMapping("start/english")
     public ResponseEntity<TestResult> startEnglishTest () {
         return null;
     }
