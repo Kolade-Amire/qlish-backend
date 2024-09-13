@@ -1,6 +1,6 @@
 package com.qlish.qlish_api.controller;
 
-import com.qlish.qlish_api.service.TestService;
+import com.qlish.qlish_api.service.EnglishTestService;
 import com.qlish.qlish_api.dto.TestSubmissionRequest;
 import com.qlish.qlish_api.service.EnglishQuestionService;
 import com.qlish.qlish_api.dto.EnglishQuestionDto;
@@ -18,14 +18,14 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/test")
 public class TestController {
 
-    private final TestService testService;
+    private final EnglishTestService englishTestService;
     private final EnglishQuestionService englishQuestionService;
 
 
     @PostMapping("english/new")
     public ResponseEntity<Page<EnglishQuestionDto>> getEnglishQuestions(@RequestBody EnglishTestRequest englishTestRequest, @RequestParam int pageNumber, @RequestParam int pageSize) {
         Pageable page = PageRequest.of(pageNumber, pageSize);
-        var questionList = testService.startNewEnglishTest(englishTestRequest, page);
+        var questionList = englishTestService.initiateNewTest(englishTestRequest, page);
 
         return null;
     }

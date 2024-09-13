@@ -44,7 +44,7 @@ public class UserEntity {
     private LocalDateTime createdAt;
     private LocalDateTime lastLoginAt;
     @DocumentReference
-    private Set<TestEntity> tests;
+    private Set<TestDetails> tests;
 
     @Override
     public String toString(){

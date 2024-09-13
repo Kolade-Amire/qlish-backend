@@ -1,7 +1,7 @@
 package com.qlish.qlish_api.dto;
 
 import com.qlish.qlish_api.entity.Question;
-import com.qlish.qlish_api.entity.TestEntity;
+import com.qlish.qlish_api.entity.TestDetails;
 import com.qlish.qlish_api.constants.TestSubject;
 import lombok.Builder;
 import lombok.Data;
@@ -16,7 +16,7 @@ import java.util.Set;
 public class TestRequest {
 
     private ObjectId userId;
-    private TestEntity testEntity;
+    private TestDetails testDetails;
     private TestSubject testSubject;
     private Set<Question> questionSet;
 }

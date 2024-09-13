@@ -1,19 +1,25 @@
 package com.qlish.qlish_api.entity;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.RequiredArgsConstructor;
+import org.bson.types.ObjectId;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.List;
 
-@EqualsAndHashCode(callSuper = true)
 @Data
 @Builder
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Document(collection = "english_tests")
-public class EnglishTest extends TestEntity {
+public class EnglishTest {
+
+    @Id
+    @Indexed
+    private ObjectId _id;
+    private TestDetails testDetails;
     private EnglishTestModifier testModifier;
     private List<EnglishQuestionEntity> questions;
 }

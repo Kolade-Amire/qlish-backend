@@ -12,7 +12,6 @@ import org.bson.types.ObjectId;
 @Data
 public class EnglishTestRequest {
     private  ObjectId userId;
-    private TestSubject testSubject;
     private EnglishTestModifier testModifier;
     private int questionCount;
 }

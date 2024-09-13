@@ -1,12 +1,11 @@
 package com.qlish.qlish_api.repository;
 
-import com.qlish.qlish_api.entity.EnglishQuestionEntity;
 import com.qlish.qlish_api.constants.english_enums.EnglishQuestionClass;
 import com.qlish.qlish_api.constants.english_enums.EnglishQuestionLevel;
 import com.qlish.qlish_api.constants.english_enums.EnglishQuestionTopic;
+import com.qlish.qlish_api.entity.EnglishQuestionEntity;
 import com.qlish.qlish_api.exception.QuestionsRetrievalException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -22,7 +21,7 @@ public class CustomEnglishQuestionRepositoryImpl implements CustomEnglishQuestio
     private final MongoTemplate mongoTemplate;
 
     @Override
-    public List<EnglishQuestionEntity> findQuestionsByCriteria(Pageable pageable, @Nullable EnglishQuestionLevel questionEnglishQuestionLevel, @Nullable EnglishQuestionClass englishQuestionClass, @Nullable EnglishQuestionTopic questionEnglishQuestionTopic, int testSize) {
+    public List<EnglishQuestionEntity> findQuestionsByCriteria(@Nullable EnglishQuestionLevel questionEnglishQuestionLevel, @Nullable EnglishQuestionClass englishQuestionClass, @Nullable EnglishQuestionTopic questionEnglishQuestionTopic, int testSize) {
 
         try {
             Criteria criteria = new Criteria();

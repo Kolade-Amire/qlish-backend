@@ -4,7 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import org.bson.types.ObjectId;
-import org.springframework.data.domain.Page;
+
+import java.util.List;
 
 @AllArgsConstructor
 @Data
@@ -14,6 +15,6 @@ public class EnglishTestDto {
     private ObjectId userId;
     private String testSubject;
     private int totalQuestionCount;
-    private Page<EnglishQuestionDto> questions;
+    private List<EnglishQuestionDto> questions;
 
 }

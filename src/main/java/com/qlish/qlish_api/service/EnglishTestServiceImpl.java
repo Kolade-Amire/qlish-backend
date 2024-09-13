@@ -13,13 +13,12 @@ import com.qlish.qlish_api.dto.EnglishTestRequest;
 import com.qlish.qlish_api.dto.TestSubmissionRequest;
 import com.qlish.qlish_api.entity.EnglishQuestionEntity;
 import com.qlish.qlish_api.entity.EnglishTest;
-import com.qlish.qlish_api.entity.TestEntity;
+import com.qlish.qlish_api.entity.TestDetails;
 import com.qlish.qlish_api.entity.TestResult;
 import com.qlish.qlish_api.exception.CustomDatabaseException;
 import com.qlish.qlish_api.exception.EntityNotFoundException;
 import com.qlish.qlish_api.mapper.EnglishQuestionMapper;
 import com.qlish.qlish_api.repository.EnglishTestRepository;
-import com.qlish.qlish_api.repository.TestRepository;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
 import org.slf4j.Logger;
@@ -37,32 +36,32 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class TestServiceImpl implements TestService {
+public class EnglishTestServiceImpl implements EnglishTestService {
 
-    private static final Logger logger = LoggerFactory.getLogger(TestServiceImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(EnglishTestServiceImpl.class);
 
 
     private final EnglishTestRepository englishTestRepository;
     private final EnglishQuestionService englishQuestionService;
 
     @Override
-    public List<EnglishTest> findEnglishTestsByUserId(ObjectId userId) {
+    public List<EnglishTest> findAllTestsByUser(ObjectId userId) {
         return englishTestRepository.findAllByUserId(userId).orElseThrow(
                 () -> new EntityNotFoundException("User has not taken any test.")
         );
     }
 
     @Override
-    public TestEntity findTestById(ObjectId id) {
-        return testRepository.findById(id).orElseThrow(
+    public EnglishTest findTestById(ObjectId id) {
+        return englishTestRepository.findById(id).orElseThrow(
                 () -> new EntityNotFoundException("Test not found.")
         );
     }
 
     @Override
-    public ObjectId saveTest(TestEntity testEntity) {
+    public ObjectId saveTest(EnglishTest test) {
         try {
-            return testRepository.save(testEntity).get_id();
+            return englishTestRepository.save(test).get_id();
         } catch (MongoWriteException e) {
             logger.error("Mongo write error: {}", e.getMessage());
             throw new CustomDatabaseException("Error writing to MongoDB: " + e.getMessage(), e);
@@ -79,57 +78,69 @@ public class TestServiceImpl implements TestService {
     }
 
     @Override
-    public void delete(TestEntity testEntity) {
-        testRepository.delete(testEntity);
+    public void delete(ObjectId testId) {
+        var test = findTestById(testId);
+        englishTestRepository.delete(test);
     }
 
     @Override
-    public EnglishTestDto startNewEnglishTest(EnglishTestRequest englishTestRequest, Pageable pageable) {
-        var testModifier = englishTestRequest.getTestModifier();
+    public ObjectId initiateNewTest(EnglishTestRequest testRequest) {
+
+        var questions = getEnglishQuestions(testRequest);
+
+        var newTestDetails = TestDetails.builder()
+                .userId(testRequest.getUserId())
+                .testSubject(TestSubject.ENGLISH)
+                .startedAt(LocalDateTime.now())
+                .totalQuestionCount(testRequest.getQuestionCount())
+                .isCompleted(false)
+                .build();
+
+        var newEnglishTest = EnglishTest.builder()
+                .testDetails(newTestDetails)
+                .testModifier(testRequest.getTestModifier())
+                .questions(questions)
+                .build();
+
+
+        return saveTest(newEnglishTest);
+
+
+//        var questionDtoList = EnglishQuestionMapper.mapQuestionListToDto(questions);
+//
+//
+//
+//        return EnglishTestDto.builder()
+//                .id(savedTestId)
+//                .userId(testRequest.getUserId())
+//                .testSubject(TestSubject.ENGLISH.getSubjectName())
+//                .totalQuestionCount(testRequest.getQuestionCount())
+//                .questions(questionDtoList)
+//                .build();
+
+    }
+
+    @Override
+    public List<EnglishQuestionEntity> getEnglishQuestions(EnglishTestRequest testRequest) {
+
+        var testModifier = testRequest.getTestModifier();
         var questionClass = testModifier.getModifier(EnglishAttributes.CLASS.getAttributeName());
         var questionLevel = testModifier.getModifier(EnglishAttributes.LEVEL.getAttributeName());
         var questionTopic = testModifier.getModifier(EnglishAttributes.TOPIC.getAttributeName());
 
-       var questions =  englishQuestionService.getEnglishQuestions(
-                pageable,
-               EnglishQuestionLevel.fromLevelName(questionLevel),
-               EnglishQuestionClass.fromClassName(questionClass),
-               EnglishQuestionTopic.fromTopicName(questionTopic),
-               englishTestRequest.getQuestionCount());
-
-       var newTest = TestEntity.builder()
-               .userId(englishTestRequest.getUserId())
-               .testSubject(TestSubject.ENGLISH.getSubjectName())
-               .testModifier(englishTestRequest.getTestModifier())
-               .startedAt(LocalDateTime.now())
-               .totalQuestionCount(englishTestRequest.getQuestionCount())
-               .isCompleted(false)
-               .build();
-
-       var savedTestId = saveTest(newTest);
-
-       var questionDtoList = EnglishQuestionMapper.mapQuestionListToDto(questions);
-       var questionPage = new PageImpl<>(questionDtoList, pageable, questionDtoList.size());
-
-
-
-
-       return EnglishTestDto.builder()
-               .id(savedTestId)
-               .userId(englishTestRequest.getUserId())
-               .testSubject(TestSubject.ENGLISH.getSubjectName())
-               .totalQuestionCount(englishTestRequest.getQuestionCount())
-               .questions(questionPage)
-               .build();
-
+        return englishQuestionService.getEnglishQuestions(
+                EnglishQuestionLevel.fromLevelName(questionLevel),
+                EnglishQuestionClass.fromClassName(questionClass),
+                EnglishQuestionTopic.fromTopicName(questionTopic),
+                testRequest.getQuestionCount());
     }
 
-    public Page<EnglishQuestionDto> getPagedQuestionsForTest(ObjectId testId, Pageable pageable) {
-        // Retrieve the test by ID
-        EnglishTest test = testRe(testId)
-                .orElseThrow(() -> new EntityNotFoundException("Test not found"));
+    public Page<EnglishQuestionDto> getPagedQuestionsForTest(EnglishTestRequest testRequest, Pageable pageable) {
 
-        // Get the full list of questions stored in the test entity
+        var testId = initiateNewTest(testRequest);
+        var test = findTestById(testId);
+
+
         List<EnglishQuestionEntity> allQuestions = test.getQuestions();
 
         // Perform in-memory pagination over the full list of questions
