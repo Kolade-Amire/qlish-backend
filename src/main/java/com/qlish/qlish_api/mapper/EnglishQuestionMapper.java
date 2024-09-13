@@ -20,9 +20,6 @@ public class EnglishQuestionMapper {
                 .id(question.get_id())
                 .question(question.getQuestion())
                 .options(question.getOptions())
-                .questionClass(question.getQuestionClass())
-                .questionLevel(question.getQuestionLevel())
-                .questionTopic(question.getQuestionTopic())
                 .build();
     }
 

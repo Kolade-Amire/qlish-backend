@@ -8,7 +8,6 @@ import com.qlish.qlish_api.constants.english_enums.EnglishQuestionClass;
 import com.qlish.qlish_api.constants.english_enums.EnglishQuestionLevel;
 import com.qlish.qlish_api.constants.english_enums.EnglishQuestionTopic;
 import com.qlish.qlish_api.dto.EnglishQuestionDto;
-import com.qlish.qlish_api.dto.EnglishTestDto;
 import com.qlish.qlish_api.dto.EnglishTestRequest;
 import com.qlish.qlish_api.dto.TestSubmissionRequest;
 import com.qlish.qlish_api.entity.EnglishQuestionEntity;
@@ -45,8 +44,8 @@ public class EnglishTestServiceImpl implements EnglishTestService {
     private final EnglishQuestionService englishQuestionService;
 
     @Override
-    public List<EnglishTest> findAllTestsByUser(ObjectId userId) {
-        return englishTestRepository.findAllByUserId(userId).orElseThrow(
+    public List<EnglishTest> getAllUserTests(ObjectId userId) {
+        return englishTestRepository.findAllUserTests(userId).orElseThrow(
                 () -> new EntityNotFoundException("User has not taken any test.")
         );
     }
@@ -78,7 +77,7 @@ public class EnglishTestServiceImpl implements EnglishTestService {
     }
 
     @Override
-    public void delete(ObjectId testId) {
+    public void deleteTest(ObjectId testId) {
         var test = findTestById(testId);
         englishTestRepository.delete(test);
     }
@@ -106,18 +105,6 @@ public class EnglishTestServiceImpl implements EnglishTestService {
         return saveTest(newEnglishTest);
 
 
-//        var questionDtoList = EnglishQuestionMapper.mapQuestionListToDto(questions);
-//
-//
-//
-//        return EnglishTestDto.builder()
-//                .id(savedTestId)
-//                .userId(testRequest.getUserId())
-//                .testSubject(TestSubject.ENGLISH.getSubjectName())
-//                .totalQuestionCount(testRequest.getQuestionCount())
-//                .questions(questionDtoList)
-//                .build();
-
     }
 
     @Override
@@ -135,25 +122,24 @@ public class EnglishTestServiceImpl implements EnglishTestService {
                 testRequest.getQuestionCount());
     }
 
-    public Page<EnglishQuestionDto> getPagedQuestionsForTest(EnglishTestRequest testRequest, Pageable pageable) {
+    @Override
+    public Page<EnglishQuestionDto> startTest(ObjectId testId, Pageable pageable) {
 
-        var testId = initiateNewTest(testRequest);
         var test = findTestById(testId);
 
+        var questions = test.getQuestions();
 
-        List<EnglishQuestionEntity> allQuestions = test.getQuestions();
-
-        // Perform in-memory pagination over the full list of questions
+        // Perform pagination over the full list of questions
         int start = (int) pageable.getOffset();
-        int end = Math.min(start + pageable.getPageSize(), allQuestions.size());
+        int end = Math.min(start + pageable.getPageSize(), questions.size());
 
-        List<EnglishQuestionEntity> paginatedQuestions = allQuestions.subList(start, end);
+        var paginatedQuestions = questions.subList(start, end);
 
         // Convert to DTOs for frontend response
-        List<EnglishQuestionDto> questionDtos = EnglishQuestionMapper.mapQuestionListToDto(paginatedQuestions);
+        List<EnglishQuestionDto> questionDtoList = EnglishQuestionMapper.mapQuestionListToDto(paginatedQuestions);
 
         // Return the paginated page of questions
-        return new PageImpl<>(questionDtos, pageable, allQuestions.size());
+        return new PageImpl<>(questionDtoList, pageable, questions.size());
     }
 
     @Override

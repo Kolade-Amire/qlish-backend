@@ -17,7 +17,4 @@ public class EnglishQuestionDto {
     private ObjectId id;
     private String question;
     private Map<String, String> options;
-    private EnglishQuestionClass questionClass;
-    private EnglishQuestionLevel questionLevel;
-    private EnglishQuestionTopic questionTopic;
 }
