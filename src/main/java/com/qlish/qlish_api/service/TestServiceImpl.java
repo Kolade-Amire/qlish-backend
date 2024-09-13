@@ -23,7 +23,7 @@ public class TestServiceImpl implements TestService {
     @Override
     public List<String> takeATest() {
         return List.of(Arrays.stream(TestSubject.values()).map(
-                TestSubject::getSubjectName
+                TestSubject::getDisplayName
         ).toString());
     }
 

@@ -10,7 +10,7 @@ public class EnglishTestMapper {
         return EnglishTestDto.builder()
                 .id(test.get_id())
                 .userId(test.getTestDetails().getUserId())
-                .testSubject(test.getTestDetails().getTestSubject().getSubjectName())
+                .testSubject(test.getTestDetails().getTestSubject().getDisplayName())
                 .startedAt(test.getTestDetails().getStartedAt())
                 .totalQuestionCount(test.getTestDetails().getTotalQuestionCount())
                 .totalCorrectAnswers(test.getTestDetails().getTotalCorrectAnswers())

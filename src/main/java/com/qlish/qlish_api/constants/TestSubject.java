@@ -9,13 +9,13 @@ import java.util.Arrays;
 @Getter
 public enum TestSubject {
     ENGLISH("English"),
-    MATH("Math");
+    MATHEMATICS("Math");
 
-    private final String subjectName;
+    private final String displayName;
 
     public static boolean isValidSubjectName(String name) {
         return Arrays.stream(TestSubject.values())
-                .anyMatch(subject -> subject.getSubjectName().equalsIgnoreCase(name));
+                .anyMatch(subject -> subject.getDisplayName().equalsIgnoreCase(name));
     }
 }
 
