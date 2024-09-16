@@ -1,7 +1,7 @@
 package com.qlish.qlish_api.service;
 
 import com.qlish.qlish_api.constants.TestSubject;
-import com.qlish.qlish_api.dto.EnglishQuestionViewDto;
+import com.qlish.qlish_api.dto.QuestionViewDto;
 import com.qlish.qlish_api.dto.TestRequest;
 import com.qlish.qlish_api.dto.TestSubmissionRequest;
 import com.qlish.qlish_api.util.EnglishTestFactory;
@@ -30,6 +30,7 @@ public class TestServiceImpl implements TestService {
         ).toString());
     }
 
+    //TODO: implement an abstraction over test creation
     @Override
     public ObjectId createEnglishTest (TestRequest testRequest) {
 
@@ -50,7 +51,7 @@ public class TestServiceImpl implements TestService {
     }
 
     @Override
-    public Page<EnglishQuestionViewDto> startEnglishTest(ObjectId testId, Pageable pageable) {
+    public Page<QuestionViewDto> startEnglishTest(ObjectId testId, Pageable pageable) {
         return englishTestService.getTestQuestionsForView(testId, pageable);
     }
 

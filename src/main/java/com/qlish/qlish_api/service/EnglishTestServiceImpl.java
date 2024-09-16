@@ -7,7 +7,7 @@ import com.qlish.qlish_api.constants.english_enums.EnglishAttributes;
 import com.qlish.qlish_api.constants.english_enums.EnglishQuestionClass;
 import com.qlish.qlish_api.constants.english_enums.EnglishQuestionLevel;
 import com.qlish.qlish_api.constants.english_enums.EnglishQuestionTopic;
-import com.qlish.qlish_api.dto.EnglishQuestionViewDto;
+import com.qlish.qlish_api.dto.QuestionViewDto;
 import com.qlish.qlish_api.dto.EnglishTestDto;
 import com.qlish.qlish_api.dto.QuestionSubmissionRequest;
 import com.qlish.qlish_api.dto.TestSubmissionRequest;
@@ -17,7 +17,7 @@ import com.qlish.qlish_api.entity.TestDetails;
 import com.qlish.qlish_api.entity.TestResult;
 import com.qlish.qlish_api.exception.CustomDatabaseException;
 import com.qlish.qlish_api.exception.EntityNotFoundException;
-import com.qlish.qlish_api.mapper.EnglishQuestionMapper;
+import com.qlish.qlish_api.mapper.QuestionMapper;
 import com.qlish.qlish_api.mapper.EnglishTestMapper;
 import com.qlish.qlish_api.repository.EnglishTestRepository;
 import com.qlish.qlish_api.util.EnglishTestFactory;
@@ -100,7 +100,7 @@ public class EnglishTestServiceImpl implements EnglishTestService {
 
         List<EnglishQuestionEntity> questions = getQuestionsList(testFactory);
 
-        var questionSubmissionList = EnglishQuestionMapper.mapQuestionListToTestDto(questions);
+        var questionSubmissionList = QuestionMapper.mapQuestionListToTestDto(questions);
 
         var newTestDetails = TestDetails.builder()
                 .userId(userId)
@@ -139,7 +139,7 @@ public class EnglishTestServiceImpl implements EnglishTestService {
 
 
     @Override
-    public Page<EnglishQuestionViewDto> getTestQuestionsForView(ObjectId testId, Pageable pageable) {
+    public Page<QuestionViewDto> getTestQuestionsForView(ObjectId testId, Pageable pageable) {
 
         var test = getTestById(testId);
 
@@ -152,7 +152,7 @@ public class EnglishTestServiceImpl implements EnglishTestService {
         var paginatedQuestions = questions.subList(start, end);
 
         // Convert to DTOs for frontend response
-        List<EnglishQuestionViewDto> questionDtoList = EnglishQuestionMapper.mapQuestionListToViewDto(paginatedQuestions);
+        List<QuestionViewDto> questionDtoList = QuestionMapper.mapQuestionListToViewDto(paginatedQuestions);
 
         // Return the paginated page of questions
         return new PageImpl<>(questionDtoList, pageable, questions.size());
@@ -165,15 +165,16 @@ public class EnglishTestServiceImpl implements EnglishTestService {
         var answers = request.getQuestionSubmissionRequests();
 
         // Process each answer and map it to the corresponding question
-        for (QuestionSubmissionRequest answer : answers) {
-            // Find the question in the test
-            var question = test.getQuestions().stream()
-                    .filter(q -> q.get_id().equals(answer.getQuestionId()))
+        for (QuestionSubmissionRequest submission : answers) {
+            // Find the testQuestion in the test
+            var testQuestion = test.getQuestions().stream()
+                    .filter(q -> q.get_id().equals(submission.getQuestionId()))
                     .findFirst()
                     .orElseThrow(() -> new EntityNotFoundException("Question not found"));
 
-            // Store the answer in the corresponding question of the test
-            question.setCorrectAnswer(answer.getSelectedOption());
+            // Store the submission in the corresponding testQuestion of the test
+            testQuestion.setSelectedOption(submission.getSelectedOption());
+            testQuestion.setAnswerCorrect(submission.getSelectedOption().equals(testQuestion.getCorrectAnswer()));
         }
 
         // Mark the test as completed
@@ -187,7 +188,7 @@ public class EnglishTestServiceImpl implements EnglishTestService {
 
     @Override
     public TestResult getResult(ObjectId id) {
-        return null;
+        return  null;
     }
 
 

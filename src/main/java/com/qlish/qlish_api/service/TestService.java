@@ -1,6 +1,6 @@
 package com.qlish.qlish_api.service;
 
-import com.qlish.qlish_api.dto.EnglishQuestionViewDto;
+import com.qlish.qlish_api.dto.QuestionViewDto;
 import com.qlish.qlish_api.dto.TestRequest;
 import com.qlish.qlish_api.dto.TestSubmissionRequest;
 import org.bson.types.ObjectId;
@@ -14,7 +14,7 @@ public interface TestService {
 
 
     ObjectId createEnglishTest(TestRequest testRequest);
-    Page<EnglishQuestionViewDto> startEnglishTest(ObjectId testId, Pageable pageable);
+    Page<QuestionViewDto> startEnglishTest(ObjectId testId, Pageable pageable);
 
     List<String> takeATest();
 

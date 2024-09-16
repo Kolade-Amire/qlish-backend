@@ -22,4 +22,5 @@ public class EnglishTestDto {
     private int totalQuestionCount;
     private int totalCorrectAnswers;
     private int totalIncorrectAnswers;
+    private int scorePercentage;
 }

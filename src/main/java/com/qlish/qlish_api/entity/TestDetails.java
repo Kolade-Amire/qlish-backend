@@ -2,15 +2,16 @@ package com.qlish.qlish_api.entity;
 
 import com.qlish.qlish_api.constants.TestSubject;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.experimental.SuperBuilder;
+import lombok.Setter;
 import org.bson.types.ObjectId;
 
 import java.time.LocalDateTime;
 
 
-@Data
+@Getter
+@Setter
 @RequiredArgsConstructor
 @Builder
 public class TestDetails {
@@ -20,5 +21,6 @@ public class TestDetails {
     private int totalQuestionCount;
     private int totalCorrectAnswers;
     private int totalIncorrectAnswers;
+    private int scorePercentage;
     private boolean isCompleted;
 }

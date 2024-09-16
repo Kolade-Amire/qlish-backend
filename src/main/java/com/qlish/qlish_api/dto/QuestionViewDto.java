@@ -10,7 +10,7 @@ import java.util.Map;
 @AllArgsConstructor
 @Data
 @Builder
-public class EnglishQuestionViewDto {
+public class QuestionViewDto {
     private ObjectId id;
     private String question;
     private Map<String, String> options;
