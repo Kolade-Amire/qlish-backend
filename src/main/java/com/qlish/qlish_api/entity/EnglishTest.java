@@ -23,4 +23,5 @@ public class EnglishTest {
     private TestDetails testDetails;
     private Map<String, String > modifier;
     private List<EnglishQuestionEntity> questions;
+    private String testStatus;
 }

@@ -18,8 +18,8 @@ public class EnglishTestDto {
     private ObjectId userId;
     private String testSubject;
     private LocalDateTime startedAt;
+    private String testStatus;
     private int totalQuestionCount;
     private int totalCorrectAnswers;
     private int totalIncorrectAnswers;
-    private boolean isCompleted;
 }

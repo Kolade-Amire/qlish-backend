@@ -15,6 +15,7 @@ public class EnglishTestMapper {
                 .totalQuestionCount(test.getTestDetails().getTotalQuestionCount())
                 .totalCorrectAnswers(test.getTestDetails().getTotalCorrectAnswers())
                 .totalIncorrectAnswers(test.getTestDetails().getTotalIncorrectAnswers())
+                .testStatus(test.getTestStatus())
                 .isCompleted(test.getTestDetails().isCompleted())
                 .build();
     }

@@ -9,6 +9,7 @@ import com.qlish.qlish_api.constants.english_enums.EnglishQuestionLevel;
 import com.qlish.qlish_api.constants.english_enums.EnglishQuestionTopic;
 import com.qlish.qlish_api.dto.EnglishQuestionDto;
 import com.qlish.qlish_api.dto.EnglishTestDto;
+import com.qlish.qlish_api.dto.QuestionSubmissionRequest;
 import com.qlish.qlish_api.dto.TestSubmissionRequest;
 import com.qlish.qlish_api.entity.*;
 import com.qlish.qlish_api.exception.CustomDatabaseException;
@@ -152,10 +153,31 @@ public class EnglishTestServiceImpl implements EnglishTestService {
         return new PageImpl<>(questionDtoList, pageable, questions.size());
     }
 
-    //TODO
+    //TODO: test status state implementation
     @Override
-    public ObjectId submitTest(List<TestSubmissionRequest> submission) {
-        return null;
+    public ObjectId submitTest(TestSubmissionRequest request) {
+        var test = getTestById(request.getId());
+        var answers = request.getQuestionSubmissionRequests();
+
+        // Process each answer and map it to the corresponding question
+        for (QuestionSubmissionRequest answer : answers) {
+            // Find the question in the test
+            var question = test.getQuestions().stream()
+                    .filter(q -> q.get_id().equals(answer.getQuestionId()))
+                    .findFirst()
+                    .orElseThrow(() -> new EntityNotFoundException("Question not found"));
+
+            // Store the answer in the corresponding question of the test
+            question.setAnswer(answer.getSelectedOption());
+        }
+
+        // Mark the test as completed
+        test.getTestDetails().setCompleted(true);
+
+        saveTest(test);
+
+        return test.get_id();
+
     }
 
     @Override

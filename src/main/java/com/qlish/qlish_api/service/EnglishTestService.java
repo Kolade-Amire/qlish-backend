@@ -27,7 +27,9 @@ public interface EnglishTestService {
 
     List<EnglishQuestionEntity> getQuestionsList(EnglishTestFactory testFactory);
 
-    ObjectId submitTest(List<TestSubmissionRequest> submission);
+    ObjectId submitTest(TestSubmissionRequest request);
+
+
 
     TestResult getResult(ObjectId id);
 

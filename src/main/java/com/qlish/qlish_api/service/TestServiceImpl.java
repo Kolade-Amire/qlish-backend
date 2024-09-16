@@ -3,9 +3,11 @@ package com.qlish.qlish_api.service;
 import com.qlish.qlish_api.constants.TestSubject;
 import com.qlish.qlish_api.dto.EnglishQuestionDto;
 import com.qlish.qlish_api.dto.TestRequest;
+import com.qlish.qlish_api.dto.TestSubmissionRequest;
 import com.qlish.qlish_api.util.EnglishTestFactory;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
+import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -18,6 +20,7 @@ import java.util.List;
 public class TestServiceImpl implements TestService {
 
     private final EnglishTestService englishTestService;
+    private final ServerProperties serverProperties;
 
 
     @Override
@@ -49,5 +52,10 @@ public class TestServiceImpl implements TestService {
     @Override
     public Page<EnglishQuestionDto> startEnglishTest(ObjectId testId, Pageable pageable) {
         return englishTestService.getTestQuestionsForView(testId, pageable);
+    }
+
+    @Override
+    public ObjectId submitTest(TestSubmissionRequest request) {
+        return englishTestService.submitTest(request);
     }
 }

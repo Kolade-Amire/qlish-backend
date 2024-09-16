@@ -1,8 +1,5 @@
 package com.qlish.qlish_api.dto;
 
-import com.qlish.qlish_api.constants.english_enums.EnglishQuestionClass;
-import com.qlish.qlish_api.constants.english_enums.EnglishQuestionLevel;
-import com.qlish.qlish_api.constants.english_enums.EnglishQuestionTopic;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
