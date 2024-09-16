@@ -22,6 +22,6 @@ public class EnglishTest {
     private ObjectId _id;
     private TestDetails testDetails;
     private Map<String, String > modifier;
-    private List<EnglishQuestionEntity> questions;
+    private List<EnglishQuestionTestDto> questions;
     private String testStatus;
 }

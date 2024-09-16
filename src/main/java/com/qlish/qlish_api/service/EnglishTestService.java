@@ -33,6 +33,6 @@ public interface EnglishTestService {
 
     TestResult getResult(ObjectId id);
 
-    Page<EnglishQuestionDto> getTestQuestionsForView(ObjectId testId, Pageable pageable);
+    Page<EnglishQuestionViewDto> getTestQuestionsForView(ObjectId testId, Pageable pageable);
 
 }

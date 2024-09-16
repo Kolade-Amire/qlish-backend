@@ -8,7 +8,7 @@ import java.util.Map;
 @Data
 @RequiredArgsConstructor
 public abstract class Question {
-    private String question;
+    private String questionText;
     private Map<String, String> options;
     private String answer;
 }
