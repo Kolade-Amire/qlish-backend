@@ -1,9 +1,11 @@
 package com.qlish.qlish_api.entity;
 
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 @Builder
 public class TestResult {
     private int totalQuestionCount;

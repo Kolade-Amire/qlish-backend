@@ -8,6 +8,8 @@ public class AppConstants {
     public static final String QUESTIONS_RETRIEVAL_ERROR = "Couldn't retrieve questions. Please check request.";
     public static final String NO_MAPPING_FOUND = "No mapping found for this url";
     public static final String DATABASE_ERROR = "Unexpected Database Error.";
+
+    public static final String UNSUPPORTED_OPERATION = "Unsupported Operation.";
     public static final String PAGE_NOT_FOUND = "This page was not found";
 
     public static final String ACCOUNT_LOCKED = "Your account has been locked. Please contact administration";

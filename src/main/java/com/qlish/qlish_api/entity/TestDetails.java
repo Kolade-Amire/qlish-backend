@@ -1,6 +1,6 @@
 package com.qlish.qlish_api.entity;
 
-import com.qlish.qlish_api.constants.TestSubject;
+import com.qlish.qlish_api.enums.TestSubject;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

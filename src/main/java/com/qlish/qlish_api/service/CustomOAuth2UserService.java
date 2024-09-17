@@ -1,12 +1,12 @@
 package com.qlish.qlish_api.service;
 
 
-import com.qlish.qlish_api.constants.auth_enums.AuthProvider;
+import com.qlish.qlish_api.enums.auth_enums.AuthProvider;
 import com.qlish.qlish_api.entity.UserEntity;
 import com.qlish.qlish_api.entity.UserPrincipal;
 import com.qlish.qlish_api.entity.OAuth2UserInfo;
-import com.qlish.qlish_api.constants.auth_enums.Role;
-import com.qlish.qlish_api.util.OAuth2UserInfoFactory;
+import com.qlish.qlish_api.enums.auth_enums.Role;
+import com.qlish.qlish_api.factory.OAuth2UserInfoFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;

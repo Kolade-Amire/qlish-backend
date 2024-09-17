@@ -1,6 +1,6 @@
 package com.qlish.qlish_api.entity;
 
-import com.qlish.qlish_api.constants.TokenType;
+import com.qlish.qlish_api.enums.TokenType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

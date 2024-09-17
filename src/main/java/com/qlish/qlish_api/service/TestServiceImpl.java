@@ -1,10 +1,10 @@
 package com.qlish.qlish_api.service;
 
-import com.qlish.qlish_api.constants.TestSubject;
+import com.qlish.qlish_api.enums.TestSubject;
 import com.qlish.qlish_api.dto.QuestionViewDto;
 import com.qlish.qlish_api.dto.TestRequest;
 import com.qlish.qlish_api.dto.TestSubmissionRequest;
-import com.qlish.qlish_api.util.EnglishTestFactory;
+import com.qlish.qlish_api.factory.EnglishTestFactory;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.boot.autoconfigure.web.ServerProperties;

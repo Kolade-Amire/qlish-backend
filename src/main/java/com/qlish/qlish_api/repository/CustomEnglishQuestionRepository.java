@@ -1,8 +1,8 @@
 package com.qlish.qlish_api.repository;
 
-import com.qlish.qlish_api.constants.english_enums.EnglishQuestionClass;
-import com.qlish.qlish_api.constants.english_enums.EnglishQuestionLevel;
-import com.qlish.qlish_api.constants.english_enums.EnglishQuestionTopic;
+import com.qlish.qlish_api.enums.english_enums.EnglishQuestionClass;
+import com.qlish.qlish_api.enums.english_enums.EnglishQuestionLevel;
+import com.qlish.qlish_api.enums.english_enums.EnglishQuestionTopic;
 import com.qlish.qlish_api.entity.EnglishQuestionEntity;
 import org.springframework.lang.Nullable;
 

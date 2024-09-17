@@ -3,7 +3,7 @@ package com.qlish.qlish_api.service;
 import com.qlish.qlish_api.dto.*;
 import com.qlish.qlish_api.entity.EnglishQuestionEntity;
 import com.qlish.qlish_api.entity.EnglishTest;
-import com.qlish.qlish_api.util.EnglishTestFactory;
+import com.qlish.qlish_api.factory.EnglishTestFactory;
 import com.qlish.qlish_api.entity.TestResult;
 import org.bson.types.ObjectId;
 import org.springframework.data.domain.Page;

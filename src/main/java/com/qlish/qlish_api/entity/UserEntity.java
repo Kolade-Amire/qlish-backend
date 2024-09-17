@@ -1,7 +1,7 @@
 package com.qlish.qlish_api.entity;
 
-import com.qlish.qlish_api.constants.auth_enums.AuthProvider;
-import com.qlish.qlish_api.constants.auth_enums.Role;
+import com.qlish.qlish_api.enums.auth_enums.AuthProvider;
+import com.qlish.qlish_api.enums.auth_enums.Role;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;

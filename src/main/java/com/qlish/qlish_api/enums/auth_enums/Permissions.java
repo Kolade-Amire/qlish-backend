@@ -1,4 +1,4 @@
-package com.qlish.qlish_api.constants.auth_enums;
+package com.qlish.qlish_api.enums.auth_enums;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

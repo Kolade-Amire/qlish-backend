@@ -121,6 +121,12 @@ public class GlobalExceptionHandler implements ErrorController {
         return createHttpResponse( HttpStatus.INTERNAL_SERVER_ERROR, AppConstants.DATABASE_ERROR);
     }
 
+    @ExceptionHandler(UnsupportedOperationException.class)
+    public ResponseEntity<HttpResponse> handleUnsupportedOperationException(UnsupportedOperationException exception){
+        LOGGER.error(exception.getMessage());
+        return createHttpResponse( HttpStatus.BAD_REQUEST, AppConstants.UNSUPPORTED_OPERATION);
+    }
+
 
     private ResponseEntity<HttpResponse> createHttpResponse(HttpStatus status, String message){
         HttpResponse httpResponse = new HttpResponse(status.value(), status,
