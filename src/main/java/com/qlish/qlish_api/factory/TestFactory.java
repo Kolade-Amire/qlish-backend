@@ -1,47 +1,47 @@
 package com.qlish.qlish_api.factory;
 
 import com.qlish.qlish_api.dto.TestRequest;
+import com.qlish.qlish_api.entity.Question;
+import com.qlish.qlish_api.entity.QuestionModifier;
+import com.qlish.qlish_api.entity.TestDetails;
 import com.qlish.qlish_api.entity.TestEntity;
 import com.qlish.qlish_api.enums.TestSubject;
+import com.qlish.qlish_api.mapper.QuestionMapper;
+import com.qlish.qlish_api.strategy.QuestionRetrievalStrategy;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import org.bson.types.ObjectId;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+@RequiredArgsConstructor
 public abstract class TestFactory {
 
-    @Setter
-    @Getter
-    protected String subject;
+    private final <? extends QuestionModifier> modifier;
 
-    @Setter
-    @Getter
-    protected int questionCount;
+    public static TestEntity createTest(ObjectId userId, TestSubject subject, int questionCount) {
+        QuestionRetrievalStrategy<modifier> strategy = QuestionRetrievalStrategyFactory.getStrategy(subject);
+        List<? extends Question> questions = strategy.getQuestions(modifier, questionCount);
 
+        var testQuestions = QuestionMapper.mapQuestionListToTestDto(questions);
 
-    public void validateTest(){
-        if (!TestSubject.isValidSubjectName(subject)) {
-            throw new IllegalArgumentException("Subject name is invalid");
-        }
+        var testDetails = TestDetails.builder()
+                .userId(userId)
+                .testSubject(subject)
+                .startedAt(LocalDateTime.now())
+                .totalQuestionCount(questionCount)
+                .isCompleted(false)
+                .build();
+
+        return TestEntity.builder()
+                .testDetails(testDetails)
+                .questions(questions)
+                .build();
     }
-
-    protected Map<String, String> modifiers = new HashMap<>();
-
-    public void addModifier(String key, String value) {
-        modifiers.put(key, value);
-    }
-
-    public String getModifier(String key) {
-        return modifiers.get(key);
-    }
-
-    public Map<String, String> getAllModifiers() {
-        return modifiers;
-    }
-
-
-
 
 
 }

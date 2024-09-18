@@ -1,5 +1,6 @@
 package com.qlish.qlish_api.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +13,7 @@ import java.util.Map;
 
 @Data
 @Builder
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class EnglishTest {
 
     @Id

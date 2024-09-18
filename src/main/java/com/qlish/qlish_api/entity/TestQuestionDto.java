@@ -1,13 +1,17 @@
 package com.qlish.qlish_api.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.bson.types.ObjectId;
 
 import java.util.Map;
 
 @Data
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class TestQuestionDto {
     private ObjectId _id;
     private String questionText;

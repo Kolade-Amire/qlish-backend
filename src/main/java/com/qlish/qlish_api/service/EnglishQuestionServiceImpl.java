@@ -1,8 +1,6 @@
 package com.qlish.qlish_api.service;
 
-import com.qlish.qlish_api.enums.english_enums.EnglishQuestionClass;
-import com.qlish.qlish_api.enums.english_enums.EnglishQuestionLevel;
-import com.qlish.qlish_api.enums.english_enums.EnglishQuestionTopic;
+import com.qlish.qlish_api.entity.EnglishModifier;
 import com.qlish.qlish_api.entity.EnglishQuestionEntity;
 import com.qlish.qlish_api.exception.QuestionsRetrievalException;
 import com.qlish.qlish_api.repository.EnglishQuestionRepository;
@@ -23,14 +21,13 @@ public class EnglishQuestionServiceImpl implements EnglishQuestionService {
 
 
     @Override
-    public List<EnglishQuestionEntity> getEnglishQuestions( EnglishQuestionLevel questionEnglishQuestionLevel, EnglishQuestionClass englishQuestionClass, EnglishQuestionTopic questionEnglishQuestionTopic, int testSize) {
+    public List<EnglishQuestionEntity> getEnglishQuestions(EnglishModifier modifier, int testSize) {
 
         if (testSize < 10) {
             throw new IllegalArgumentException("Test size must be at least 10.");
         }
-
         try {
-            return repository.findQuestionsByCriteria( questionEnglishQuestionLevel, englishQuestionClass, questionEnglishQuestionTopic, testSize);
+            return repository.findQuestionsByCriteria(modifier , testSize);
         } catch (Exception e) {
             logger.error("Error retrieving questions from repository");
             throw new QuestionsRetrievalException(e.getMessage());

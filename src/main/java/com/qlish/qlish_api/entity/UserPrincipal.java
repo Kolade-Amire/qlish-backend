@@ -1,5 +1,6 @@
 package com.qlish.qlish_api.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.security.core.GrantedAuthority;
@@ -10,6 +11,7 @@ import java.util.Collection;
 import java.util.Map;
 
 @RequiredArgsConstructor
+@AllArgsConstructor
 public class UserPrincipal implements OAuth2User, UserDetails {
 
     private final UserEntity user;

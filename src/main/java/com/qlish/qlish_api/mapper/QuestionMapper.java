@@ -2,6 +2,7 @@ package com.qlish.qlish_api.mapper;
 
 import com.qlish.qlish_api.dto.QuestionViewDto;
 import com.qlish.qlish_api.entity.EnglishQuestionEntity;
+import com.qlish.qlish_api.entity.Question;
 import com.qlish.qlish_api.entity.TestQuestionDto;
 
 import java.util.List;
@@ -14,7 +15,7 @@ public class QuestionMapper {
                 .toList();
     }
 
-    public static List<TestQuestionDto> mapQuestionListToTestDto(List<EnglishQuestionEntity> questions) {
+    public static List<TestQuestionDto> mapQuestionListToTestDto(List<? extends Question> questions) {
         return questions.stream().map(
                 QuestionMapper::mapQuestionToTestDto
         ).toList();
@@ -31,7 +32,7 @@ public class QuestionMapper {
     }
 
 
-    public static TestQuestionDto mapQuestionToTestDto(EnglishQuestionEntity question){
+    public static TestQuestionDto mapQuestionToTestDto(<? extends Question question){
         return TestQuestionDto.builder()
                 ._id(question.get_id())
                 .questionText(question.getQuestionText())

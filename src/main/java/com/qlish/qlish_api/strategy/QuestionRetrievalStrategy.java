@@ -1,11 +1,11 @@
 package com.qlish.qlish_api.strategy;
 
 import com.qlish.qlish_api.entity.Question;
+import com.qlish.qlish_api.entity.QuestionModifier;
 
 import java.util.List;
-import java.util.Map;
 
-public interface QuestionRetrievalStrategy {
+public interface QuestionRetrievalStrategy <T extends QuestionModifier> {
 
-    List<? extends Question> getQuestions(Map<String,String> modifiers, int size);
+    List<? extends Question> getQuestions(T modifier, int size);
 }

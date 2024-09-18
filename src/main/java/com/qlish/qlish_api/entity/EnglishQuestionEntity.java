@@ -13,7 +13,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Data
 @Document(collection = "english_questions")
 @AllArgsConstructor
-@RequiredArgsConstructor
 @NoArgsConstructor
 public class EnglishQuestionEntity extends Question {
 

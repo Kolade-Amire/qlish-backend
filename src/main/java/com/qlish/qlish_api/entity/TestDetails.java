@@ -1,10 +1,7 @@
 package com.qlish.qlish_api.entity;
 
 import com.qlish.qlish_api.enums.TestSubject;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.bson.types.ObjectId;
 
 import java.time.LocalDateTime;
@@ -12,7 +9,8 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
-@RequiredArgsConstructor
+@AllArgsConstructor
+@NoArgsConstructor
 @Builder
 public class TestDetails {
     private ObjectId userId;
