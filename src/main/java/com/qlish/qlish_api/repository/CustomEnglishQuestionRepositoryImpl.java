@@ -1,18 +1,15 @@
 package com.qlish.qlish_api.repository;
 
-import com.qlish.qlish_api.enums.english_enums.EnglishQuestionClass;
-import com.qlish.qlish_api.enums.english_enums.EnglishQuestionLevel;
-import com.qlish.qlish_api.enums.english_enums.EnglishQuestionTopic;
 import com.qlish.qlish_api.entity.EnglishQuestionEntity;
 import com.qlish.qlish_api.exception.QuestionsRetrievalException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Map;
 
 @RequiredArgsConstructor
 @Repository
@@ -21,20 +18,20 @@ public class CustomEnglishQuestionRepositoryImpl implements CustomEnglishQuestio
     private final MongoTemplate mongoTemplate;
 
     @Override
-    public List<EnglishQuestionEntity> findQuestionsByCriteria(@Nullable EnglishQuestionLevel questionEnglishQuestionLevel, @Nullable EnglishQuestionClass englishQuestionClass, @Nullable EnglishQuestionTopic questionEnglishQuestionTopic, int testSize) {
+    public List<EnglishQuestionEntity> findQuestionsByCriteria(Map<String, String> modifiers, int testSize) {
 
         try {
             Criteria criteria = new Criteria();
 
             //only applies criteria for non-null modifier fields
-            if (questionEnglishQuestionLevel != null) {
-                criteria.and("questionLevel").regex(questionEnglishQuestionLevel.getLevelName(), "i");
+            if (modifiers.get("level") != null) {
+                criteria.and("questionLevel").regex(modifiers.get("level"), "i");
             }
-            if (englishQuestionClass != null) {
-                criteria.and("questionClass").regex(englishQuestionClass.getClassName(), "i");
+            if (modifiers.get("class") != null) {
+                criteria.and("questionClass").regex(modifiers.get("class"), "i");
             }
-            if (questionEnglishQuestionTopic != null) {
-                criteria.and("questionTopic").regex(questionEnglishQuestionTopic.getTopicName(), "i");
+            if (modifiers.get("topic") != null) {
+                criteria.and("questionTopic").regex(modifiers.get("class"), "i");
             }
 
             //sample of test size

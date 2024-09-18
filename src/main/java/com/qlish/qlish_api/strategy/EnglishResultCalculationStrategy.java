@@ -21,7 +21,7 @@ public class EnglishResultCalculationStrategy implements ResultCalculationStrate
         scorePercentage = 100 * (correctAnswers/questions.size());
 
         return TestResult.builder()
-                .totalQuestionCount(questions.size())
+                .totalQuestions(questions.size())
                 .totalCorrectAnswers(correctAnswers)
                 .totalIncorrectAnswers(incorrectAnswers)
                 .scorePercentage(scorePercentage)

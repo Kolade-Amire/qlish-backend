@@ -8,7 +8,7 @@ import lombok.Setter;
 @Setter
 @Builder
 public class TestResult {
-    private int totalQuestionCount;
+    private int totalQuestions;
     private int totalCorrectAnswers;
     private int totalIncorrectAnswers;
     private int scorePercentage;

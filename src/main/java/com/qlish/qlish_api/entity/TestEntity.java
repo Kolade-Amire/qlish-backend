@@ -6,20 +6,21 @@ import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.List;
-import java.util.Map;
 
 @Data
 @Builder
 @RequiredArgsConstructor
-public class EnglishTest {
+@Document(collection = "tests")
+public class TestEntity {
 
     @Id
-    @Indexed
+    @Indexed(unique = true)
     private ObjectId _id;
     private TestDetails testDetails;
-    private Map<String, String > modifier;
     private List<TestQuestionDto> questions;
     private String testStatus;
+    private TestResult testResult;
 }

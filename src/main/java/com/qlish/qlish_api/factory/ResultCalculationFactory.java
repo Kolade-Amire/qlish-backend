@@ -1,5 +1,6 @@
 package com.qlish.qlish_api.factory;
 
+import com.qlish.qlish_api.constants.AppConstants;
 import com.qlish.qlish_api.enums.TestSubject;
 import com.qlish.qlish_api.strategy.EnglishResultCalculationStrategy;
 import com.qlish.qlish_api.strategy.ResultCalculationStrategy;
@@ -19,7 +20,7 @@ public class ResultCalculationFactory {
     public static ResultCalculationStrategy getStrategy(TestSubject testSubject) {
         ResultCalculationStrategy strategy = strategies.get(testSubject);
         if (strategy == null) {
-            throw new UnsupportedOperationException("Test subject not supported.");
+            throw new UnsupportedOperationException(AppConstants.UNSUPPORTED_TEST_TYPE);
         }
         return strategy;
     }
