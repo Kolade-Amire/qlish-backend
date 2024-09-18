@@ -13,9 +13,11 @@ public enum TestSubject {
 
     private final String displayName;
 
-    public static boolean isValidSubjectName(String name) {
+    public static TestSubject getSubjectByDisplayName(String name) {
         return Arrays.stream(TestSubject.values())
-                .anyMatch(subject -> subject.getDisplayName().equalsIgnoreCase(name));
+                .filter(subject -> subject.getDisplayName().equalsIgnoreCase(name))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("No subject found with name: " + name));
     }
 }
 

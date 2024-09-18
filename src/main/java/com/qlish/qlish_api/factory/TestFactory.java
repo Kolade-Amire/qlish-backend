@@ -8,24 +8,32 @@ import com.qlish.qlish_api.entity.TestEntity;
 import com.qlish.qlish_api.enums.TestSubject;
 import com.qlish.qlish_api.mapper.QuestionMapper;
 import com.qlish.qlish_api.strategy.QuestionRetrievalStrategy;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 import org.bson.types.ObjectId;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
+@Component
 @RequiredArgsConstructor
 public abstract class TestFactory {
 
-    private final <? extends QuestionModifier> modifier;
+    private final QuestionRetrievalFactory retrievalFactory;
+    private final ModifierFactory<? extends QuestionModifier> modifierFactory;
 
-    public static TestEntity createTest(ObjectId userId, TestSubject subject, int questionCount) {
-        QuestionRetrievalStrategy<modifier> strategy = QuestionRetrievalStrategyFactory.getStrategy(subject);
-        List<? extends Question> questions = strategy.getQuestions(modifier, questionCount);
+
+    public TestEntity createTest(TestRequest testRequest) {
+
+        var testSubject = TestSubject.getSubjectByDisplayName(testRequest.getTestSubject());
+
+        QuestionRetrievalStrategy strategy = retrievalFactory.getStrategy(testSubject);
+
+
+        var modifier = modifierFactory.getModifier(testSubject, testRequest.getModifier());
+
+
+        List<? extends Question> questions = strategy.getQuestions(modifier, testRequest.getQuestionCount());
 
         var testQuestions = QuestionMapper.mapQuestionListToTestDto(questions);
 

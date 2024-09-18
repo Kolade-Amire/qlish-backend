@@ -1,7 +1,6 @@
 package com.qlish.qlish_api.mapper;
 
 import com.qlish.qlish_api.dto.QuestionViewDto;
-import com.qlish.qlish_api.entity.EnglishQuestionEntity;
 import com.qlish.qlish_api.entity.Question;
 import com.qlish.qlish_api.entity.TestQuestionDto;
 
@@ -32,9 +31,9 @@ public class QuestionMapper {
     }
 
 
-    public static TestQuestionDto mapQuestionToTestDto(<? extends Question question){
+    public static TestQuestionDto mapQuestionToTestDto(Question question){
         return TestQuestionDto.builder()
-                ._id(question.get_id())
+                ._id(question.getId())
                 .questionText(question.getQuestionText())
                 .options(question.getOptions())
                 .correctAnswer(question.getAnswer())
