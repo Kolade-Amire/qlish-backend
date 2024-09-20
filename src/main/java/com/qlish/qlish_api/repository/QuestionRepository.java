@@ -5,8 +5,8 @@ import com.qlish.qlish_api.entity.QuestionModifier;
 
 import java.util.List;
 
-public interface QuestionRepository <T extends Question> {
+public interface QuestionRepository {
 
-   <M extends QuestionModifier> List<T> getTestQuestions(M modifier, int size);
+   List<Question> getTestQuestions(QuestionModifier modifier, int size);
 
 }

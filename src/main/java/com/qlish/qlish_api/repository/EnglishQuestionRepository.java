@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface EnglishQuestionRepository extends MongoRepository<EnglishQuestionEntity, ObjectId>, CustomEnglishQuestionRepository, QuestionRepository<EnglishQuestionEntity> {
+public interface EnglishQuestionRepository extends MongoRepository<EnglishQuestionEntity, ObjectId>, CustomEnglishQuestionRepository, QuestionRepository {
 
     @Override
     List<EnglishQuestionEntity> getTestQuestions(EnglishModifier modifier, int size);
