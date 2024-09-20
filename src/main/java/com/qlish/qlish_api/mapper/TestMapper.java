@@ -5,7 +5,7 @@ import com.qlish.qlish_api.entity.TestEntity;
 
 public class TestMapper {
 
-    TestDto mapTestToDto(TestEntity test) {
+    public static TestDto mapTestToDto(TestEntity test) {
         return TestDto.builder()
                 .id(test.get_id())
                 .userId(test.getTestDetails().getUserId())

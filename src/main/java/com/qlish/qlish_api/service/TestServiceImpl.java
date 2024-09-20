@@ -3,18 +3,18 @@ package com.qlish.qlish_api.service;
 import com.mongodb.MongoTimeoutException;
 import com.mongodb.MongoWriteException;
 import com.qlish.qlish_api.dto.*;
-import com.qlish.qlish_api.entity.TestEntity;
+import com.qlish.qlish_api.entity.*;
 import com.qlish.qlish_api.enums.TestSubject;
 import com.qlish.qlish_api.enums.english_enums.EnglishAttributes;
 import com.qlish.qlish_api.enums.english_enums.EnglishQuestionClass;
 import com.qlish.qlish_api.enums.english_enums.EnglishQuestionLevel;
 import com.qlish.qlish_api.enums.english_enums.EnglishQuestionTopic;
-import com.qlish.qlish_api.entity.EnglishQuestionEntity;
-import com.qlish.qlish_api.entity.TestDetails;
-import com.qlish.qlish_api.entity.TestResult;
 import com.qlish.qlish_api.exception.CustomDatabaseException;
 import com.qlish.qlish_api.exception.EntityNotFoundException;
+import com.qlish.qlish_api.factory.QuestionRepositoryFactory;
 import com.qlish.qlish_api.mapper.QuestionMapper;
+import com.qlish.qlish_api.mapper.TestMapper;
+import com.qlish.qlish_api.repository.QuestionRepository;
 import com.qlish.qlish_api.repository.TestRepository;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
@@ -29,6 +29,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -36,14 +37,16 @@ import java.util.List;
 public class TestServiceImpl implements TestService {
 
     private static final Logger logger = LoggerFactory.getLogger(TestServiceImpl.class);
+    private final Map<String, QuestionRepositoryFactory<? extends Question>> repositoryFactories;
 
-    private final TestRepository repository;
+
     private final TestRepository testRepository;
+
 
 
     @Override
     public TestEntity getTestById(ObjectId id) {
-        return repository.findById(id).orElseThrow(
+        return testRepository.findById(id).orElseThrow(
                 () -> new EntityNotFoundException("Test not found.")
         );
     }
@@ -51,7 +54,7 @@ public class TestServiceImpl implements TestService {
     @Override
     public TestDto getTestForView(ObjectId id) {
         var test = getTestById(id);
-        return EnglishTestMapper.mapTestToDto(test);
+        return TestMapper.mapTestToDto(test);
     }
 
 
@@ -76,7 +79,11 @@ public class TestServiceImpl implements TestService {
 
     @Override
     public ObjectId createTest(TestRequest request) {
-        return null;
+        var subject = request.getTestSubject();
+        var factory = repositoryFactories.get(subject);
+        var repository = factory.getRepository(TestSubject.getSubjectByDisplayName(subject));
+
+        var questions = repository.getTestQuestions();
     }
 
     @Override
