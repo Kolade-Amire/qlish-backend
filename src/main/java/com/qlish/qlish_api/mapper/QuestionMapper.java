@@ -2,7 +2,7 @@ package com.qlish.qlish_api.mapper;
 
 import com.qlish.qlish_api.dto.QuestionViewDto;
 import com.qlish.qlish_api.entity.Question;
-import com.qlish.qlish_api.entity.TestQuestionDto;
+import com.qlish.qlish_api.dto.TestQuestionDto;
 
 import java.util.List;
 

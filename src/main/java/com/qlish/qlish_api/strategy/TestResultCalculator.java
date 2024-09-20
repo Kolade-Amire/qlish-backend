@@ -1,6 +1,6 @@
 package com.qlish.qlish_api.strategy;
 
-import com.qlish.qlish_api.entity.TestQuestionDto;
+import com.qlish.qlish_api.dto.TestQuestionDto;
 import com.qlish.qlish_api.entity.TestResult;
 import lombok.RequiredArgsConstructor;
 

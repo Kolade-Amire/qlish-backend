@@ -1,16 +1,23 @@
 package com.qlish.qlish_api.dto;
 
-import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.Builder;
-import lombok.Data;
+import lombok.ToString;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import org.bson.types.ObjectId;
 
 import java.time.LocalDateTime;
 
 @AllArgsConstructor
-@Data
+@Getter
+@ToString
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@Setter
 @Builder
-public class EnglishTestDto {
+public class TestDto {
+    @EqualsAndHashCode.Include
     private ObjectId id;
     private ObjectId userId;
     private String testSubject;

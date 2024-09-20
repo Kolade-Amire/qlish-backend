@@ -1,13 +1,12 @@
 package com.qlish.qlish_api.mapper;
 
-import com.qlish.qlish_api.dto.EnglishTestDto;
-import com.qlish.qlish_api.entity.EnglishTest;
+import com.qlish.qlish_api.dto.TestDto;
+import com.qlish.qlish_api.entity.TestEntity;
 
-public class EnglishTestMapper {
+public class TestMapper {
 
-    public static EnglishTestDto mapTestToDto (EnglishTest test) {
-
-        return EnglishTestDto.builder()
+    TestDto mapTestToDto(TestEntity test) {
+        return TestDto.builder()
                 .id(test.get_id())
                 .userId(test.getTestDetails().getUserId())
                 .testSubject(test.getTestDetails().getTestSubject().getDisplayName())
@@ -16,7 +15,6 @@ public class EnglishTestMapper {
                 .totalCorrectAnswers(test.getTestDetails().getTotalCorrectAnswers())
                 .totalIncorrectAnswers(test.getTestDetails().getTotalIncorrectAnswers())
                 .scorePercentage(test.getTestDetails().getScorePercentage())
-                .testStatus(test.getTestStatus())
                 .build();
     }
 }

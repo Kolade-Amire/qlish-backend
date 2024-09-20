@@ -18,7 +18,7 @@ public class CustomEnglishQuestionRepositoryImpl implements CustomEnglishQuestio
     private final MongoTemplate mongoTemplate;
 
     @Override
-    public List<EnglishQuestionEntity> findQuestionsByCriteria(EnglishModifier modifier, int size) {
+    public List<EnglishQuestionEntity> getTestQuestions(EnglishModifier modifier, int size) {
 
         try {
             Criteria criteria = new Criteria();
