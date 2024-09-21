@@ -10,6 +10,8 @@ public class AppConstants {
     public static final String DATABASE_ERROR = "Unexpected Database Error.";
 
     public static final String UNSUPPORTED_OPERATION = "Unsupported Operation.";
+
+    public static final String TEST_SUBMISSION_ERROR = "An unexpected error occurred while submitting test";
     public static final String PAGE_NOT_FOUND = "This page was not found";
 
     public static final String ACCOUNT_LOCKED = "Your account has been locked. Please contact administration";
@@ -19,4 +21,5 @@ public class AppConstants {
     public static final String ACCOUNT_DISABLED = "Your account has been disabled. If this is an error, please contact administration.";
     public static final String NOT_ENOUGH_PERMISSIONS = "You do not have sufficient permissions to access this endpoint.";
     public static final String ERROR_PATH = "/error";
+
 }

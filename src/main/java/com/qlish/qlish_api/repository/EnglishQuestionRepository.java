@@ -8,8 +8,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 @Qualifier("english")
-public interface EnglishQuestionRepository extends MongoRepository<EnglishQuestionEntity, ObjectId>, QuestionRepository {
-
-
-
+public interface EnglishQuestionRepository extends MongoRepository<EnglishQuestionEntity, ObjectId>, CustomEnglishQuestionRepository {
 }

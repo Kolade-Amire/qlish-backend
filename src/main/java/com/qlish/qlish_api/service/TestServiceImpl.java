@@ -2,6 +2,7 @@ package com.qlish.qlish_api.service;
 
 import com.mongodb.MongoTimeoutException;
 import com.mongodb.MongoWriteException;
+import com.qlish.qlish_api.constants.AppConstants;
 import com.qlish.qlish_api.dto.*;
 import com.qlish.qlish_api.entity.Question;
 import com.qlish.qlish_api.entity.TestDetails;
@@ -10,7 +11,9 @@ import com.qlish.qlish_api.entity.TestResult;
 import com.qlish.qlish_api.enums.TestSubject;
 import com.qlish.qlish_api.exception.CustomDatabaseException;
 import com.qlish.qlish_api.exception.EntityNotFoundException;
+import com.qlish.qlish_api.exception.TestSubmissionException;
 import com.qlish.qlish_api.factory.QuestionRepositoryFactory;
+import com.qlish.qlish_api.factory.ResultCalculationFactory;
 import com.qlish.qlish_api.mapper.QuestionMapper;
 import com.qlish.qlish_api.mapper.TestMapper;
 import com.qlish.qlish_api.repository.TestRepository;
@@ -36,15 +39,16 @@ public class TestServiceImpl implements TestService {
     private static final Logger logger = LoggerFactory.getLogger(TestServiceImpl.class);
     private final QuestionRepositoryFactory questionRepositoryFactory;
 
-    private final TestRepository testRepository;
+    private final ResultCalculationFactory resultCalculationFactory;
 
+    private final TestRepository testRepository;
 
 
     @Override
     public TestEntity getTestById(ObjectId id) {
-        return testRepository.findById(id).orElseThrow(
-                () -> new EntityNotFoundException("Test not found.")
-        );
+            return testRepository.findById(id).orElseThrow(
+                    () -> new EntityNotFoundException("Test not found with ID: " + id)
+            );
     }
 
     @Override
@@ -100,7 +104,6 @@ public class TestServiceImpl implements TestService {
     }
 
 
-
     @Override
     public void deleteTest(ObjectId testId) {
         var test = getTestById(testId);
@@ -136,36 +139,45 @@ public class TestServiceImpl implements TestService {
     //TODO: test status state implementation
     @Override
     public ObjectId submitTest(TestSubmissionRequest request) {
-        var test = getTestById(request.getId());
-        var answers = request.getQuestionSubmissionRequests();
 
-        // Process each answer and map it to the corresponding question
-        for (QuestionSubmissionRequest submission : answers) {
-            // Find the testQuestion in the test
-            var testQuestion = test.getQuestions().stream()
-                    .filter(q -> q.get_id().equals(submission.getQuestionId()))
-                    .findFirst()
-                    .orElseThrow(() -> new EntityNotFoundException("Question not found"));
+        try {
+            var test = getTestById(request.getId());
+            var answers = request.getQuestionSubmissionRequests();
 
-            // Store the submission in the corresponding testQuestion of the test
-            testQuestion.setSelectedOption(submission.getSelectedOption());
-            testQuestion.setAnswerCorrect(submission.getSelectedOption().equals(testQuestion.getCorrectAnswer()));
+            // Process each answer and map it to the corresponding question
+            for (QuestionSubmissionRequest submission : answers) {
+                // Find the testQuestion in the test
+                var testQuestion = test.getQuestions().stream()
+                        .filter(q -> q.get_id().equals(submission.getQuestionId()))
+                        .findFirst()
+                        .orElseThrow(() -> new EntityNotFoundException("Question not found"));
+
+                // Store the submission in the corresponding testQuestion of the test
+                testQuestion.setSelectedOption(submission.getSelectedOption());
+                testQuestion.setAnswerCorrect(submission.getSelectedOption().equals(testQuestion.getCorrectAnswer()));
+            }
+
+            // Mark the test as completed
+            test.getTestDetails().setCompleted(true);
+
+            saveTest(test);
+
+            return test.get_id();
         }
-
-        // Mark the test as completed
-        test.getTestDetails().setCompleted(true);
-
-        saveTest(test);
-
-        return test.get_id();
+        catch (TestSubmissionException e) {
+            logger.error("An unexpected error occurred: {}", e.getMessage());
+            throw new TestSubmissionException(AppConstants.TEST_SUBMISSION_ERROR);
+        }
 
     }
 
     @Override
     public TestResult getTestResult(ObjectId id) {
-        return null;
-    }
+        var test = getTestById(id);
+        var strategy = resultCalculationFactory.getStrategy(test.getTestDetails().getTestSubject());
 
+        return strategy.calculateResult(test.getQuestions());
+    }
 
 
 }

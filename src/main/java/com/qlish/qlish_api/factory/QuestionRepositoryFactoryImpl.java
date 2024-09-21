@@ -12,6 +12,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class QuestionRepositoryFactoryImpl implements QuestionRepositoryFactory {
 
+    //initialize the map with injections of interfaces implementation
     private final Map<String, QuestionRepository> repositories;
     private final Map<String, ModifierFactory> modifierFactories;
 

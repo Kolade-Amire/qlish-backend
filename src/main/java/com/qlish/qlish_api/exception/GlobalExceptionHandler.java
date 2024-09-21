@@ -127,6 +127,12 @@ public class GlobalExceptionHandler implements ErrorController {
         return createHttpResponse( HttpStatus.BAD_REQUEST, AppConstants.UNSUPPORTED_OPERATION);
     }
 
+    @ExceptionHandler(TestSubmissionException.class)
+    public ResponseEntity<HttpResponse> handleTestSubmissionException(TestSubmissionException exception){
+        LOGGER.error(exception.getMessage());
+        return createHttpResponse( HttpStatus.INTERNAL_SERVER_ERROR, AppConstants.TEST_SUBMISSION_ERROR);
+    }
+
 
     private ResponseEntity<HttpResponse> createHttpResponse(HttpStatus status, String message){
         HttpResponse httpResponse = new HttpResponse(status.value(), status,
