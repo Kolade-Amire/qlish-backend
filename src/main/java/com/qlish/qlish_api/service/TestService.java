@@ -8,6 +8,7 @@ import com.qlish.qlish_api.entity.TestEntity;
 import com.qlish.qlish_api.entity.TestResult;
 import org.bson.types.ObjectId;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface TestService {
 
@@ -17,7 +18,7 @@ public interface TestService {
 
     ObjectId createTest (TestRequest request);
 
-    Page<QuestionViewDto> getTestQuestions(ObjectId id);
+    Page<QuestionViewDto> getTestQuestions(ObjectId id, Pageable pageable);
 
     TestEntity getTestById(ObjectId id);
 

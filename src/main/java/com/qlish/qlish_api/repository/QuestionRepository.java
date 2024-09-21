@@ -7,6 +7,6 @@ import java.util.List;
 
 public interface QuestionRepository {
 
-   List<Question> getTestQuestions(QuestionModifier modifier, int size);
+   List<? extends Question> getTestQuestions(QuestionModifier modifier, int size);
 
 }

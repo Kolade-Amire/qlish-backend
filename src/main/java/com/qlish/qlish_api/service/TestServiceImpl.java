@@ -3,18 +3,16 @@ package com.qlish.qlish_api.service;
 import com.mongodb.MongoTimeoutException;
 import com.mongodb.MongoWriteException;
 import com.qlish.qlish_api.dto.*;
-import com.qlish.qlish_api.entity.*;
+import com.qlish.qlish_api.entity.Question;
+import com.qlish.qlish_api.entity.TestDetails;
+import com.qlish.qlish_api.entity.TestEntity;
+import com.qlish.qlish_api.entity.TestResult;
 import com.qlish.qlish_api.enums.TestSubject;
-import com.qlish.qlish_api.enums.english_enums.EnglishAttributes;
-import com.qlish.qlish_api.enums.english_enums.EnglishQuestionClass;
-import com.qlish.qlish_api.enums.english_enums.EnglishQuestionLevel;
-import com.qlish.qlish_api.enums.english_enums.EnglishQuestionTopic;
 import com.qlish.qlish_api.exception.CustomDatabaseException;
 import com.qlish.qlish_api.exception.EntityNotFoundException;
 import com.qlish.qlish_api.factory.QuestionRepositoryFactory;
 import com.qlish.qlish_api.mapper.QuestionMapper;
 import com.qlish.qlish_api.mapper.TestMapper;
-import com.qlish.qlish_api.repository.QuestionRepository;
 import com.qlish.qlish_api.repository.TestRepository;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
@@ -29,7 +27,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -37,8 +34,7 @@ import java.util.Map;
 public class TestServiceImpl implements TestService {
 
     private static final Logger logger = LoggerFactory.getLogger(TestServiceImpl.class);
-    private final Map<String, QuestionRepositoryFactory<? extends Question>> repositoryFactories;
-
+    private final QuestionRepositoryFactory questionRepositoryFactory;
 
     private final TestRepository testRepository;
 
@@ -79,77 +75,46 @@ public class TestServiceImpl implements TestService {
 
     @Override
     public ObjectId createTest(TestRequest request) {
-        var subject = request.getTestSubject();
-        var factory = repositoryFactories.get(subject);
-        var repository = factory.getRepository(TestSubject.getSubjectByDisplayName(subject));
+        var subject = TestSubject.getSubjectByDisplayName(request.getTestSubject());
+        var repository = questionRepositoryFactory.getRepository(subject);
+        var modifier = questionRepositoryFactory.getModifier(subject, request.getModifier());
 
-        var questions = repository.getTestQuestions();
+        List<? extends Question> questions = repository.getTestQuestions(modifier, request.getQuestionCount());
+
+        TestDetails testDetails = TestDetails.builder()
+                .userId(request.getUserId())
+                .testSubject(subject)
+                .startedAt(LocalDateTime.now())
+                .totalQuestionCount(request.getQuestionCount())
+                .isCompleted(false)
+                .build();
+
+        List<TestQuestionDto> questionsDto = QuestionMapper.mapQuestionListToTestDto(questions);
+
+        var newTest = TestEntity.builder()
+                .testDetails(testDetails)
+                .questions(questionsDto)
+                .build();
+
+        return saveTest(newTest);
     }
 
-    @Override
-    public Page<QuestionViewDto> getTestQuestions(ObjectId id) {
-        return null;
-    }
 
 
     @Override
     public void deleteTest(ObjectId testId) {
         var test = getTestById(testId);
-        englishTestRepository.delete(test);
+        testRepository.delete(test);
     }
 
     @Override
     public void deleteAllUserTests(ObjectId userId) {
-
+        //TODO
     }
 
 
     @Override
-    public ObjectId initiateNewTest(ObjectId userId, EnglishTestFactory testFactory) {
-
-
-        List<EnglishQuestionEntity> questions = getQuestionsList(testFactory);
-
-        var questionSubmissionList = QuestionMapper.mapQuestionListToTestDto(questions);
-
-        var newTestDetails = TestDetails.builder()
-                .userId(userId)
-                .testSubject(TestSubject.ENGLISH)
-                .startedAt(LocalDateTime.now())
-                .totalQuestionCount(testFactory.getQuestionCount())
-                .isCompleted(false)
-                .build();
-
-        var newEnglishTest = EnglishTest.builder()
-                .testDetails(newTestDetails)
-                .modifier(testFactory.getAllModifiers())
-                .questions(questionSubmissionList)
-                .build();
-
-
-        return saveTest(newEnglishTest);
-
-
-    }
-
-
-    @Override
-    public List<EnglishQuestionEntity> getQuestionsList(EnglishTestFactory testFactory) {
-
-        var questionClass = testFactory.getModifier(EnglishAttributes.CLASS.getAttributeName());
-        var questionLevel = testFactory.getModifier(EnglishAttributes.LEVEL.getAttributeName());
-        var questionTopic = testFactory.getModifier(EnglishAttributes.TOPIC.getAttributeName());
-
-        return englishQuestionService.getEnglishQuestions(
-                EnglishQuestionLevel.fromLevelName(questionLevel),
-                EnglishQuestionClass.fromClassName(questionClass),
-                EnglishQuestionTopic.fromTopicName(questionTopic),
-                testFactory.getQuestionCount());
-    }
-
-
-    @Override
-    public Page<QuestionViewDto> getTestQuestionsForView(ObjectId testId, Pageable pageable) {
+    public Page<QuestionViewDto> getTestQuestions(ObjectId testId, Pageable pageable) {
 
         var test = getTestById(testId);
 
@@ -201,10 +166,6 @@ public class TestServiceImpl implements TestService {
         return null;
     }
 
-    @Override
-    public TestResult getResult(ObjectId id) {
-        return  null;
-    }
 
 
 }

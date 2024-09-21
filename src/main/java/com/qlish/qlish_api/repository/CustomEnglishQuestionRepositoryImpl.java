@@ -2,6 +2,7 @@ package com.qlish.qlish_api.repository;
 
 import com.qlish.qlish_api.entity.EnglishModifier;
 import com.qlish.qlish_api.entity.EnglishQuestionEntity;
+import com.qlish.qlish_api.entity.QuestionModifier;
 import com.qlish.qlish_api.exception.QuestionsRetrievalException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -13,14 +14,15 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Repository
-public class CustomEnglishQuestionRepositoryImpl implements CustomEnglishQuestionRepository {
+public class CustomEnglishQuestionRepositoryImpl implements QuestionRepository {
 
     private final MongoTemplate mongoTemplate;
 
     @Override
-    public List<EnglishQuestionEntity> getTestQuestions(EnglishModifier modifier, int size) {
+    public List<EnglishQuestionEntity> getTestQuestions(QuestionModifier mod, int size) {
 
         try {
+            EnglishModifier modifier = (EnglishModifier) mod;
             Criteria criteria = new Criteria();
 
             //only applies criteria for non-null modifier fields
@@ -49,4 +51,5 @@ public class CustomEnglishQuestionRepositoryImpl implements CustomEnglishQuestio
 
 
     }
+
 }
