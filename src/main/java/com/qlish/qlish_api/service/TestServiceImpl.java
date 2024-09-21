@@ -43,6 +43,9 @@ public class TestServiceImpl implements TestService {
 
     private final TestRepository testRepository;
 
+    //TODO: test status  implementation
+
+
 
     @Override
     public TestEntity getTestById(ObjectId id) {
@@ -117,7 +120,7 @@ public class TestServiceImpl implements TestService {
 
 
     @Override
-    public Page<QuestionViewDto> getTestQuestions(ObjectId testId, Pageable pageable) {
+    public Page<TestQuestionViewDto> getTestQuestions(ObjectId testId, Pageable pageable) {
 
         var test = getTestById(testId);
 
@@ -126,17 +129,15 @@ public class TestServiceImpl implements TestService {
         // Perform pagination over the full list of questions
         int start = (int) pageable.getOffset();
         int end = Math.min(start + pageable.getPageSize(), questions.size());
-
         var paginatedQuestions = questions.subList(start, end);
 
         // Convert to DTOs for frontend response
-        List<QuestionViewDto> questionDtoList = QuestionMapper.mapQuestionListToViewDto(paginatedQuestions);
+        List<TestQuestionViewDto> questionDtoList = QuestionMapper.mapQuestionListToViewDto(paginatedQuestions);
 
         // Return the paginated page of questions
         return new PageImpl<>(questionDtoList, pageable, questions.size());
     }
 
-    //TODO: test status state implementation
     @Override
     public ObjectId submitTest(TestSubmissionRequest request) {
 

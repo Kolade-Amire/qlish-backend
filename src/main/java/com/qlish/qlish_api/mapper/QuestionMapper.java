@@ -1,6 +1,6 @@
 package com.qlish.qlish_api.mapper;
 
-import com.qlish.qlish_api.dto.QuestionViewDto;
+import com.qlish.qlish_api.dto.TestQuestionViewDto;
 import com.qlish.qlish_api.entity.Question;
 import com.qlish.qlish_api.dto.TestQuestionDto;
 
@@ -8,7 +8,7 @@ import java.util.List;
 
 public class QuestionMapper {
 
-    public static List<QuestionViewDto> mapQuestionListToViewDto(List<TestQuestionDto> questions){
+    public static List<TestQuestionViewDto> mapQuestionListToViewDto(List<TestQuestionDto> questions){
         return questions.stream()
                 .map(QuestionMapper::mapQuestionToViewDto)
                 .toList();
@@ -21,11 +21,11 @@ public class QuestionMapper {
     }
 
 
-    public static QuestionViewDto mapQuestionToViewDto(TestQuestionDto question){
+    public static TestQuestionViewDto mapQuestionToViewDto(TestQuestionDto question){
 
-        return QuestionViewDto.builder()
+        return TestQuestionViewDto.builder()
                 .id(question.get_id())
-                .question(question.getQuestionText())
+                .questionText(question.getQuestionText())
                 .options(question.getOptions())
                 .build();
     }
