@@ -1,14 +1,13 @@
 package com.qlish.qlish_api.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.bson.types.ObjectId;
 
 import java.util.List;
 
 @Getter
+@AllArgsConstructor
 public class TestSubmissionRequest {
-    private ObjectId id;
-    private List<QuestionSubmissionRequest> questionSubmissionRequests;
-
+    private List<QuestionSubmissionRequest> answers;
 }
 

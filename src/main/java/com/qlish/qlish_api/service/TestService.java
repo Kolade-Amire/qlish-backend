@@ -22,7 +22,7 @@ public interface TestService {
 
     TestEntity getTestById(ObjectId id);
 
-    ObjectId submitTest(TestSubmissionRequest request);
+    ObjectId submitTest(ObjectId id, TestSubmissionRequest request);
 
     TestResult getTestResult(ObjectId id);
 

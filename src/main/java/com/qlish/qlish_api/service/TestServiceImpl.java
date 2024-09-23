@@ -139,11 +139,11 @@ public class TestServiceImpl implements TestService {
     }
 
     @Override
-    public ObjectId submitTest(TestSubmissionRequest request) {
+    public ObjectId submitTest(ObjectId id, TestSubmissionRequest request) {
 
         try {
-            var test = getTestById(request.getId());
-            var answers = request.getQuestionSubmissionRequests();
+            var test = getTestById(id);
+            var answers = request.getAnswers();
 
             // Process each answer and map it to the corresponding question
             for (QuestionSubmissionRequest submission : answers) {
