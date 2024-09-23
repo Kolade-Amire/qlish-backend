@@ -1,5 +1,6 @@
 package com.qlish.qlish_api.repository;
 
+import com.qlish.qlish_api.constants.AppConstants;
 import com.qlish.qlish_api.entity.EnglishModifier;
 import com.qlish.qlish_api.entity.EnglishQuestionEntity;
 import com.qlish.qlish_api.entity.QuestionModifier;
@@ -46,7 +47,7 @@ public class CustomEnglishQuestionRepositoryImpl implements CustomEnglishQuestio
 
 
         } catch (Exception e) {
-            throw new QuestionsRetrievalException("Failed to retrieve questions.");
+            throw new QuestionsRetrievalException(AppConstants.TEST_QUESTIONS_RETRIEVAL_ERROR);
         }
 
 

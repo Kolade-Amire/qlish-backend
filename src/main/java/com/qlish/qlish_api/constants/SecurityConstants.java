@@ -16,6 +16,8 @@ public class SecurityConstants {
     public static final String REGISTERED_MESSAGE = "User registered successfully!";
     public static final String REFRESHED_MESSAGE = "Access token refreshed successfully!";
 
+    public static final String PASSWORDS_MISMATCH = "Passwords do not match!";
+
 
 
     public static final String[] PUBLIC_URLS = {

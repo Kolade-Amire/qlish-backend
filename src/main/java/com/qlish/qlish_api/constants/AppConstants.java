@@ -5,9 +5,11 @@ public class AppConstants {
     public static final String BASE_URL = "/api/" + API_VERSION;
     public static final String LOGOUT_URL = BASE_URL + "/auth/logout";
     public static final String USER_NOT_FOUND = "User does not exist.";
-    public static final String QUESTIONS_RETRIEVAL_ERROR = "Couldn't retrieve questions. Please check request.";
+    public static final String TEST_QUESTIONS_RETRIEVAL_ERROR = "Failed to retrieve test questions. Please check request.";
     public static final String NO_MAPPING_FOUND = "No mapping found for this url";
     public static final String DATABASE_ERROR = "Unexpected Database Error.";
+
+    public static final String EXPIRED_SESSION = "Expired Session. Login again.";
 
     public static final String UNSUPPORTED_OPERATION = "Unsupported Operation.";
 
@@ -19,7 +21,7 @@ public class AppConstants {
     public static final String INCORRECT_CREDENTIALS = "Username/password incorrect, please try again.";
     public static  final String UNSUPPORTED_TEST_TYPE = "Test type is not supported.";
     public static final String ACCOUNT_DISABLED = "Your account has been disabled. If this is an error, please contact administration.";
-    public static final String NOT_ENOUGH_PERMISSIONS = "You do not have sufficient permissions to access this endpoint.";
+    public static final String NOT_ENOUGH_PERMISSIONS = "You do not have sufficient permissions to access this resource.";
     public static final String ERROR_PATH = "/error";
 
 }
