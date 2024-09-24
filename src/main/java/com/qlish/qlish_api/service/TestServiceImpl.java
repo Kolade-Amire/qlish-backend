@@ -11,6 +11,7 @@ import com.qlish.qlish_api.entity.TestResult;
 import com.qlish.qlish_api.enums.TestSubject;
 import com.qlish.qlish_api.exception.CustomDatabaseException;
 import com.qlish.qlish_api.exception.EntityNotFoundException;
+import com.qlish.qlish_api.exception.TestResultException;
 import com.qlish.qlish_api.exception.TestSubmissionException;
 import com.qlish.qlish_api.factory.QuestionRepositoryFactory;
 import com.qlish.qlish_api.factory.ResultCalculationFactory;
@@ -165,7 +166,7 @@ public class TestServiceImpl implements TestService {
 
             return test.get_id();
         }
-        catch (TestSubmissionException e) {
+        catch (Exception e) {
             logger.error("An unexpected error occurred: {}", e.getMessage());
             throw new TestSubmissionException(AppConstants.TEST_SUBMISSION_ERROR);
         }
@@ -174,10 +175,15 @@ public class TestServiceImpl implements TestService {
 
     @Override
     public TestResult getTestResult(ObjectId id) {
-        var test = getTestById(id);
-        var strategy = resultCalculationFactory.getStrategy(test.getTestDetails().getTestSubject());
+        try {
+            var test = getTestById(id);
+            var strategy = resultCalculationFactory.getStrategy(test.getTestDetails().getTestSubject());
 
-        return strategy.calculateResult(test.getQuestions());
+            return strategy.calculateResult(test.getQuestions());
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            throw new TestResultException(e.getMessage());
+        }
     }
 
 

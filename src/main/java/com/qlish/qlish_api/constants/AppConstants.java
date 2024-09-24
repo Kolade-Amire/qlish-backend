@@ -14,6 +14,7 @@ public class AppConstants {
     public static final String UNSUPPORTED_OPERATION = "Unsupported Operation.";
 
     public static final String TEST_SUBMISSION_ERROR = "An unexpected error occurred while submitting test";
+    public static final String TEST_RESULT_ERROR = "An unexpected error occurred while getting test result.";
     public static final String PAGE_NOT_FOUND = "This page was not found";
 
     public static final String ACCOUNT_LOCKED = "Your account has been locked. Please contact administration";

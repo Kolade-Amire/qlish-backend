@@ -5,6 +5,7 @@ import com.qlish.qlish_api.dto.TestDto;
 import com.qlish.qlish_api.dto.TestQuestionViewDto;
 import com.qlish.qlish_api.dto.TestRequest;
 import com.qlish.qlish_api.dto.TestSubmissionRequest;
+import com.qlish.qlish_api.entity.TestResult;
 import com.qlish.qlish_api.service.TestService;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
@@ -44,6 +45,12 @@ public class TestController {
     public ResponseEntity<ObjectId> submitTest(@PathVariable ObjectId id, @RequestBody TestSubmissionRequest request) {
         var testId = testService.submitTest(id, request);
         return ResponseEntity.ok().body(testId);
+    }
+
+    @GetMapping("{id}/result")
+    public ResponseEntity<TestResult> getTestResult(@PathVariable ObjectId id) {
+        var result = testService.getTestResult(id);
+        return ResponseEntity.ok().body(result);
     }
 
 
