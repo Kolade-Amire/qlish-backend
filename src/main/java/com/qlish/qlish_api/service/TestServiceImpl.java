@@ -97,7 +97,7 @@ public class TestServiceImpl implements TestService {
                 .isCompleted(false)
                 .build();
 
-        List<CompletedTestQuestionDto> questionsDto = QuestionMapper.mapQuestionListToTestDto(questions);
+        List<CompletedTestQuestionDto> questionsDto = QuestionMapper.mapQuestionListToSavedTestQuestionDto(questions);
 
         var newTest = TestEntity.builder()
                 .testDetails(testDetails)
@@ -133,7 +133,7 @@ public class TestServiceImpl implements TestService {
         var paginatedQuestions = questions.subList(start, end);
 
         // Convert to DTOs for frontend response
-        List<TestQuestionDto> questionDtoList = QuestionMapper.mapQuestionListToViewDto(paginatedQuestions);
+        List<TestQuestionDto> questionDtoList = QuestionMapper.mapQuestionListToTestViewDto(paginatedQuestions);
 
         // Return the paginated page of questions
         return new PageImpl<>(questionDtoList, pageable, questions.size());

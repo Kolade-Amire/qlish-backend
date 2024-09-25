@@ -1,8 +1,5 @@
 package com.qlish.qlish_api.entity;
 
-import com.qlish.qlish_api.enums.english_enums.EnglishQuestionClass;
-import com.qlish.qlish_api.enums.english_enums.EnglishQuestionLevel;
-import com.qlish.qlish_api.enums.english_enums.EnglishQuestionTopic;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -17,9 +14,9 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @NoArgsConstructor
 public class EnglishQuestionEntity extends Question {
 
-    private EnglishQuestionClass questionClass;
-    private EnglishQuestionLevel questionLevel;
-    private EnglishQuestionTopic questionTopic;
+    private String questionClass;
+    private String questionLevel;
+    private String questionTopic;
     @Version
     private Long version;
 
