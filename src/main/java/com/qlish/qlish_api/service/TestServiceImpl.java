@@ -154,7 +154,7 @@ public class TestServiceImpl implements TestService {
                         .findFirst()
                         .orElseThrow(() -> new EntityNotFoundException("Question not found"));
 
-                // Store the submission in the corresponding testQuestion of the test
+                // Store the submission in the corresponding question of the test
                 testQuestion.setSelectedOption(submission.getSelectedOption());
                 testQuestion.setAnswerCorrect(submission.getSelectedOption().equals(testQuestion.getCorrectAnswer()));
             }

@@ -1,6 +1,5 @@
 package com.qlish.qlish_api.dto;
 
-import com.qlish.qlish_api.entity.EnglishModifier;
 import com.qlish.qlish_api.entity.QuestionModifier;
 import lombok.*;
 import org.bson.types.ObjectId;
