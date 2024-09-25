@@ -2,7 +2,7 @@ package com.qlish.qlish_api.controller;
 
 import com.qlish.qlish_api.constants.AppConstants;
 import com.qlish.qlish_api.dto.TestDto;
-import com.qlish.qlish_api.dto.TestQuestionViewDto;
+import com.qlish.qlish_api.dto.TestQuestionDto;
 import com.qlish.qlish_api.dto.TestRequest;
 import com.qlish.qlish_api.dto.TestSubmissionRequest;
 import com.qlish.qlish_api.entity.TestResult;
@@ -35,7 +35,7 @@ public class TestController {
     }
 
     @GetMapping("/{id}/questions")
-    public ResponseEntity<Page<TestQuestionViewDto>> startTest(@PathVariable ObjectId id, @RequestParam(defaultValue = "0") int pageNumber, @RequestParam(defaultValue = "10") int pageSize) {
+    public ResponseEntity<Page<TestQuestionDto>> startTest(@PathVariable ObjectId id, @RequestParam(defaultValue = "0") int pageNumber, @RequestParam(defaultValue = "10") int pageSize) {
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
         var test = testService.getTestQuestions(id, pageable);
         return ResponseEntity.ok(test);

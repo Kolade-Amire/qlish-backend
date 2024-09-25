@@ -1,6 +1,6 @@
 package com.qlish.qlish_api.service;
 
-import com.qlish.qlish_api.dto.TestQuestionViewDto;
+import com.qlish.qlish_api.dto.TestQuestionDto;
 import com.qlish.qlish_api.dto.TestDto;
 import com.qlish.qlish_api.dto.TestRequest;
 import com.qlish.qlish_api.dto.TestSubmissionRequest;
@@ -18,7 +18,7 @@ public interface TestService {
 
     ObjectId createTest (TestRequest request);
 
-    Page<TestQuestionViewDto> getTestQuestions(ObjectId id, Pageable pageable);
+    Page<TestQuestionDto> getTestQuestions(ObjectId id, Pageable pageable);
 
     TestEntity getTestById(ObjectId id);
 

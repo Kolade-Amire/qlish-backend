@@ -83,9 +83,9 @@ public class TestServiceImpl implements TestService {
 
     @Override
     public ObjectId createTest(TestRequest request) {
-        var subject = TestSubject.getSubjectByDisplayName(request.getTestSubject());
+        var subject = TestSubject.getSubjectByDisplayName(request.getTestSubject().toLowerCase());
         var repository = questionRepositoryFactory.getRepository(subject);
-        var modifier = questionRepositoryFactory.getModifier(subject, request.getModifier());
+        var modifier = questionRepositoryFactory.getModifier(subject, request.getModifiers());
 
         List<? extends Question> questions = repository.getTestQuestions(modifier, request.getQuestionCount());
 
@@ -97,7 +97,7 @@ public class TestServiceImpl implements TestService {
                 .isCompleted(false)
                 .build();
 
-        List<TestQuestionDto> questionsDto = QuestionMapper.mapQuestionListToTestDto(questions);
+        List<CompletedTestQuestionDto> questionsDto = QuestionMapper.mapQuestionListToTestDto(questions);
 
         var newTest = TestEntity.builder()
                 .testDetails(testDetails)
@@ -121,7 +121,7 @@ public class TestServiceImpl implements TestService {
 
 
     @Override
-    public Page<TestQuestionViewDto> getTestQuestions(ObjectId testId, Pageable pageable) {
+    public Page<TestQuestionDto> getTestQuestions(ObjectId testId, Pageable pageable) {
 
         var test = getTestById(testId);
 
@@ -133,7 +133,7 @@ public class TestServiceImpl implements TestService {
         var paginatedQuestions = questions.subList(start, end);
 
         // Convert to DTOs for frontend response
-        List<TestQuestionViewDto> questionDtoList = QuestionMapper.mapQuestionListToViewDto(paginatedQuestions);
+        List<TestQuestionDto> questionDtoList = QuestionMapper.mapQuestionListToViewDto(paginatedQuestions);
 
         // Return the paginated page of questions
         return new PageImpl<>(questionDtoList, pageable, questions.size());
@@ -147,7 +147,7 @@ public class TestServiceImpl implements TestService {
             var answers = request.getAnswers();
 
             // Process each answer and map it to the corresponding question
-            for (QuestionSubmissionRequest submission : answers) {
+            for (TestQuestionSubmissionRequest submission : answers) {
                 // Find the testQuestion in the test
                 var testQuestion = test.getQuestions().stream()
                         .filter(q -> q.get_id().equals(submission.getQuestionId()))

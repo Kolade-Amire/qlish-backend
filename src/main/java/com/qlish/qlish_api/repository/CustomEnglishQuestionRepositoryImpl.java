@@ -6,9 +6,13 @@ import com.qlish.qlish_api.entity.EnglishQuestionEntity;
 import com.qlish.qlish_api.entity.QuestionModifier;
 import com.qlish.qlish_api.exception.QuestionsRetrievalException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -51,6 +55,40 @@ public class CustomEnglishQuestionRepositoryImpl implements CustomEnglishQuestio
         }
 
 
+    }
+
+    @Override
+    public Page<EnglishQuestionEntity> getAllQuestionsByCriteria(QuestionModifier mod, Pageable pageable) {
+        try {
+
+            var questionModifier = (EnglishModifier) mod;
+
+            var criteria = new Criteria();
+            if (questionModifier.getLevel() != null) {
+                criteria.and("questionLevel").regex(questionModifier.getLevel(), "i");
+            }
+            if (questionModifier.getQuestionClass() != null) {
+                criteria.and("questionClass").regex(questionModifier.getQuestionClass(), "i");
+            }
+            if (questionModifier.getTopic() != null) {
+                criteria.and("questionTopic").regex(questionModifier.getTopic(), "i");
+            }
+
+            // Build query with the criteria
+            Query query = new Query(criteria).with(pageable);
+
+            // Fetch total count of matching documents
+            long total = mongoTemplate.count(query, EnglishQuestionEntity.class, "english_questions");
+
+            // Fetch paginated results
+            List<EnglishQuestionEntity> results = mongoTemplate.find(query, EnglishQuestionEntity.class, "english_questions");
+
+            // Return a Page object containing the results
+            return new PageImpl<>(results, pageable, total);
+
+        } catch (Exception e) {
+            throw new QuestionsRetrievalException(AppConstants.TEST_QUESTIONS_RETRIEVAL_ERROR);
+        }
     }
 
 }

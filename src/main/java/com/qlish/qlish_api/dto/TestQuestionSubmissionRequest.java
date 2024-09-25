@@ -4,7 +4,7 @@ import lombok.Getter;
 import org.bson.types.ObjectId;
 
 @Getter
-public class QuestionSubmissionRequest {
+public class TestQuestionSubmissionRequest {
     private ObjectId questionId;
     private String selectedOption;
 }

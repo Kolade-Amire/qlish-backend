@@ -1,29 +1,29 @@
 package com.qlish.qlish_api.mapper;
 
-import com.qlish.qlish_api.dto.TestQuestionViewDto;
-import com.qlish.qlish_api.entity.Question;
 import com.qlish.qlish_api.dto.TestQuestionDto;
+import com.qlish.qlish_api.entity.Question;
+import com.qlish.qlish_api.dto.CompletedTestQuestionDto;
 
 import java.util.List;
 
 public class QuestionMapper {
 
-    public static List<TestQuestionViewDto> mapQuestionListToViewDto(List<TestQuestionDto> questions){
+    public static List<TestQuestionDto> mapQuestionListToViewDto(List<CompletedTestQuestionDto> questions){
         return questions.stream()
                 .map(QuestionMapper::mapQuestionToViewDto)
                 .toList();
     }
 
-    public static List<TestQuestionDto> mapQuestionListToTestDto(List<? extends Question> questions) {
+    public static List<CompletedTestQuestionDto> mapQuestionListToTestDto(List<? extends Question> questions) {
         return questions.stream().map(
                 QuestionMapper::mapQuestionToTestDto
         ).toList();
     }
 
 
-    public static TestQuestionViewDto mapQuestionToViewDto(TestQuestionDto question){
+    public static TestQuestionDto mapQuestionToViewDto(CompletedTestQuestionDto question){
 
-        return TestQuestionViewDto.builder()
+        return TestQuestionDto.builder()
                 .id(question.get_id())
                 .questionText(question.getQuestionText())
                 .options(question.getOptions())
@@ -31,8 +31,8 @@ public class QuestionMapper {
     }
 
 
-    public static TestQuestionDto mapQuestionToTestDto(Question question){
-        return TestQuestionDto.builder()
+    public static CompletedTestQuestionDto mapQuestionToTestDto(Question question){
+        return CompletedTestQuestionDto.builder()
                 ._id(question.getId())
                 .questionText(question.getQuestionText())
                 .options(question.getOptions())

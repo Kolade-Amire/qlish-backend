@@ -2,16 +2,12 @@ package com.qlish.qlish_api.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.bson.types.ObjectId;
 
 import java.util.Map;
 
-
 @AllArgsConstructor
 @Getter
-public class TestRequest {
-    private ObjectId userId;
+public class AdminQuestionViewRequest {
     private Map<String, String> modifiers;
-    private String testSubject;
-    private int questionCount;
+    private String subject;
 }

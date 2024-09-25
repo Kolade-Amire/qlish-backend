@@ -1,6 +1,6 @@
 package com.qlish.qlish_api.entity;
 
-import com.qlish.qlish_api.dto.TestQuestionDto;
+import com.qlish.qlish_api.dto.CompletedTestQuestionDto;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.Builder;
@@ -30,7 +30,7 @@ public class TestEntity {
     @EqualsAndHashCode.Include
     private ObjectId _id;
     private TestDetails testDetails;
-    private List<TestQuestionDto> questions;
+    private List<CompletedTestQuestionDto> questions;
     private String testStatus;
     private TestResult testResult;
 }

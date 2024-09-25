@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.Version;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @EqualsAndHashCode(callSuper = true)
@@ -19,6 +20,8 @@ public class EnglishQuestionEntity extends Question {
     private EnglishQuestionClass questionClass;
     private EnglishQuestionLevel questionLevel;
     private EnglishQuestionTopic questionTopic;
+    @Version
+    private Long version;
 
 
 }

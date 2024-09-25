@@ -1,14 +1,8 @@
 package com.qlish.qlish_api.dto;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.qlish.qlish_api.entity.Question;
+import com.qlish.qlish_api.entity.EnglishModifier;
 import com.qlish.qlish_api.entity.QuestionModifier;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.Builder;
-import lombok.ToString;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 import org.bson.types.ObjectId;
 
 import java.util.Map;
@@ -19,7 +13,8 @@ import java.util.Map;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Setter
 @Builder
-public class EnglishQuestionDto {
+public class QuestionDto {
+    @EqualsAndHashCode.Include
     private ObjectId id;
     private String questionText;
     private Map<String, String> options;

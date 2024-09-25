@@ -8,6 +8,6 @@ import java.util.List;
 @Getter
 @AllArgsConstructor
 public class TestSubmissionRequest {
-    private List<QuestionSubmissionRequest> answers;
+    private List<TestQuestionSubmissionRequest> answers;
 }
 
