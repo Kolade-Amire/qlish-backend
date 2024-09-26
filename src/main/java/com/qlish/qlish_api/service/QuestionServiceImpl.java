@@ -2,9 +2,11 @@ package com.qlish.qlish_api.service;
 
 import com.qlish.qlish_api.dto.AdminQuestionViewRequest;
 import com.qlish.qlish_api.dto.QuestionDto;
+import com.qlish.qlish_api.entity.Question;
 import com.qlish.qlish_api.enums.TestSubject;
 import com.qlish.qlish_api.factory.QuestionRepositoryFactory;
 import lombok.RequiredArgsConstructor;
+import org.bson.types.ObjectId;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -30,5 +32,27 @@ public class QuestionServiceImpl implements QuestionService {
 
        return mapperFactory.mapToQuestionDtoPage(questionsPage, pageable);
 
+    }
+
+    @Override
+    public ObjectId updateQuestion(QuestionDto questionDto) {
+        return null;
+    }
+
+    @Override
+    public void deleteQuestion(QuestionDto questionDto) {
+
+
+    }
+
+    @Override
+    public ObjectId saveQuestion(QuestionDto questionDto) {
+        return null;
+    }
+
+    @Override
+    public Question getQuestionById(ObjectId id, TestSubject subject) {
+        var repository = questionRepositoryFactory.getRepository(subject);
+        return null;
     }
 }

@@ -3,9 +3,12 @@ package com.qlish.qlish_api.repository;
 import com.qlish.qlish_api.constants.AppConstants;
 import com.qlish.qlish_api.entity.EnglishModifier;
 import com.qlish.qlish_api.entity.EnglishQuestionEntity;
+import com.qlish.qlish_api.entity.Question;
 import com.qlish.qlish_api.entity.QuestionModifier;
+import com.qlish.qlish_api.exception.EntityNotFoundException;
 import com.qlish.qlish_api.exception.QuestionsRetrievalException;
 import lombok.RequiredArgsConstructor;
+import org.bson.types.ObjectId;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -88,6 +91,27 @@ public class CustomEnglishQuestionRepositoryImpl implements CustomEnglishQuestio
 
         } catch (Exception e) {
             throw new QuestionsRetrievalException(AppConstants.TEST_QUESTIONS_RETRIEVAL_ERROR);
+        }
+    }
+
+    @Override
+    public <T extends Question> T saveQuestion(ObjectId id, T question) {
+        return mongoTemplate.save(question);
+    }
+
+    @Override
+    public <T extends Question> T updateQuestion(T question) {
+        return saveQuestion(question.getId(), question);
+    }
+
+    @Override
+    public void deleteQuestion(ObjectId id) {
+        try {
+            var question = mongoTemplate.findById(id, EnglishQuestionEntity.class);
+            assert question != null;
+            mongoTemplate.remove(question);
+        } catch (Exception e) {
+            throw new EntityNotFoundException("Question not found");
         }
     }
 

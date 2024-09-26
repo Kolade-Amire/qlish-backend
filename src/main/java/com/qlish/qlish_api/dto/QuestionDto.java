@@ -18,5 +18,5 @@ public class QuestionDto {
     private String questionText;
     private Map<String, String> options;
     private String answer;
-    private QuestionModifier modifier;
+    private Map<String, String> modifier;
 }
