@@ -6,31 +6,38 @@ import com.qlish.qlish_api.dto.TestQuestionDto;
 import com.qlish.qlish_api.entity.EnglishModifier;
 import com.qlish.qlish_api.entity.EnglishQuestionEntity;
 import com.qlish.qlish_api.entity.Question;
+import com.qlish.qlish_api.factory.QuestionRepositoryFactory;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
-public class QuestionMapper {
+@RequiredArgsConstructor
+public class TestQuestionMapper {
+
+    private final QuestionRepositoryFactory factory;
 
     public static List<TestQuestionDto> mapQuestionListToTestViewDto(List<CompletedTestQuestionDto> questions){
         return questions.stream()
-                .map(QuestionMapper::mapQuestionToTestViewDto)
+                .map(TestQuestionMapper::mapQuestionToTestViewDto)
                 .toList();
     }
 
     public static List<CompletedTestQuestionDto> mapQuestionListToSavedTestQuestionDto(List<? extends Question> questions) {
         return questions.stream().map(
-                QuestionMapper::mapQuestionToSavedTestQuestionDto
+                TestQuestionMapper::mapQuestionToSavedTestQuestionDto
         ).toList();
     }
 
-    public static Page<QuestionDto> mapQuestionToQuestionDto(Page<Question> questions) {
-
-        return questions.stream().map(
-                QuestionMapper::mapEnglishQuestionToQuestionDto
-        ).collect(Collectors.toCollection());
-    }
+//    public static Page<QuestionDto> mapEnglishQuestionToQuestionDtoPage(Page<EnglishQuestionEntity> questions, Pageable pageable) {
+//        List<QuestionDto> questionDtos = questions.stream().map(
+//                TestQuestionMapper::mapEnglishQuestionToQuestionDto
+//        ).toList();
+//
+//        return new PageImpl<>(questionDtos, pageable, questions.getTotalElements());
+//    }
 
 
     public static TestQuestionDto mapQuestionToTestViewDto(CompletedTestQuestionDto question){
@@ -49,21 +56,6 @@ public class QuestionMapper {
                 .questionText(question.getQuestionText())
                 .options(question.getOptions())
                 .correctAnswer(question.getAnswer())
-                .build();
-    }
-    //TODO: refactor to use modifier factory
-    public <Q extends Question> static QuestionDto mapEnglishQuestionToQuestionDto(EnglishQuestionEntity question){
-
-        var modifier = new EnglishModifier(
-                question.getQuestionLevel(),
-                question.getQuestionClass(),
-                question.getQuestionTopic()
-        );
-        return QuestionDto.builder()
-                .questionText(question.getQuestionText())
-                .options(question.getOptions())
-                .answer(question.getAnswer())
-                .modifier(modifier)
                 .build();
     }
 

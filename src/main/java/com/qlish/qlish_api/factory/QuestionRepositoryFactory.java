@@ -11,4 +11,6 @@ public interface QuestionRepositoryFactory {
     QuestionRepository getRepository(TestSubject subject);
 
     QuestionModifier getModifier(TestSubject subject, Map<String, String> requestParams);
+
+    QuestionMapperFactory getMapper(TestSubject subject);
 }

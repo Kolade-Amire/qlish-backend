@@ -15,7 +15,7 @@ import com.qlish.qlish_api.exception.TestResultException;
 import com.qlish.qlish_api.exception.TestSubmissionException;
 import com.qlish.qlish_api.factory.QuestionRepositoryFactory;
 import com.qlish.qlish_api.factory.ResultCalculationFactory;
-import com.qlish.qlish_api.mapper.QuestionMapper;
+import com.qlish.qlish_api.mapper.TestQuestionMapper;
 import com.qlish.qlish_api.mapper.TestMapper;
 import com.qlish.qlish_api.repository.TestRepository;
 import lombok.RequiredArgsConstructor;
@@ -83,28 +83,32 @@ public class TestServiceImpl implements TestService {
 
     @Override
     public ObjectId createTest(TestRequest request) {
-        var subject = TestSubject.getSubjectByDisplayName(request.getTestSubject().toLowerCase());
-        var repository = questionRepositoryFactory.getRepository(subject);
-        var modifier = questionRepositoryFactory.getModifier(subject, request.getModifiers());
+        try {
+            var subject = TestSubject.getSubjectByDisplayName(request.getTestSubject().toLowerCase());
+            var repository = questionRepositoryFactory.getRepository(subject);
+            var modifier = questionRepositoryFactory.getModifier(subject, request.getModifiers());
 
-        List<? extends Question> questions = repository.getTestQuestions(modifier, request.getQuestionCount());
+            List<? extends Question> questions = repository.getTestQuestions(modifier, request.getQuestionCount());
 
-        TestDetails testDetails = TestDetails.builder()
-                .userId(request.getUserId())
-                .testSubject(subject)
-                .startedAt(LocalDateTime.now())
-                .totalQuestionCount(request.getQuestionCount())
-                .isCompleted(false)
-                .build();
+            TestDetails testDetails = TestDetails.builder()
+                    .userId(request.getUserId())
+                    .testSubject(subject)
+                    .startedAt(LocalDateTime.now())
+                    .totalQuestionCount(request.getQuestionCount())
+                    .isCompleted(false)
+                    .build();
 
-        List<CompletedTestQuestionDto> questionsDto = QuestionMapper.mapQuestionListToSavedTestQuestionDto(questions);
+            List<CompletedTestQuestionDto> questionsDto = TestQuestionMapper.mapQuestionListToSavedTestQuestionDto(questions);
 
-        var newTest = TestEntity.builder()
-                .testDetails(testDetails)
-                .questions(questionsDto)
-                .build();
+            var newTest = TestEntity.builder()
+                    .testDetails(testDetails)
+                    .questions(questionsDto)
+                    .build();
 
-        return saveTest(newTest);
+            return saveTest(newTest);
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Invalid Subject: " + request.getTestSubject(), e);
+        }
     }
 
 
@@ -133,7 +137,7 @@ public class TestServiceImpl implements TestService {
         var paginatedQuestions = questions.subList(start, end);
 
         // Convert to DTOs for frontend response
-        List<TestQuestionDto> questionDtoList = QuestionMapper.mapQuestionListToTestViewDto(paginatedQuestions);
+        List<TestQuestionDto> questionDtoList = TestQuestionMapper.mapQuestionListToTestViewDto(paginatedQuestions);
 
         // Return the paginated page of questions
         return new PageImpl<>(questionDtoList, pageable, questions.size());

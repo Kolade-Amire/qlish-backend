@@ -26,8 +26,9 @@ public class QuestionServiceImpl implements QuestionService {
 
         var questionsPage = repository.getAllQuestionsByCriteria(modifier, pageable);
 
+       var mapperFactory = questionRepositoryFactory.getMapper(subject);
 
-
+       return mapperFactory.mapToQuestionDtoPage(questionsPage, pageable);
 
     }
 }

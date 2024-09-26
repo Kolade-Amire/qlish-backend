@@ -15,6 +15,7 @@ public class QuestionRepositoryFactoryImpl implements QuestionRepositoryFactory 
     //initialize the map with injections of interfaces implementation
     private final Map<String, QuestionRepository> repositories;
     private final Map<String, ModifierFactory> modifierFactories;
+    private final Map<String, QuestionMapperFactory> mappers;
 
     @Override
     public QuestionRepository getRepository(TestSubject subject) {
@@ -32,5 +33,16 @@ public class QuestionRepositoryFactoryImpl implements QuestionRepositoryFactory 
             throw new IllegalArgumentException("Invalid subject: " + subject);
         }
         return factory.createModifier(requestParams);
+    }
+
+    @Override
+    public QuestionMapperFactory getMapper(TestSubject subject) {
+        QuestionMapperFactory factory = mappers.get(subject.getDisplayName().toLowerCase());
+
+        if (factory == null) {
+            throw new IllegalArgumentException("Invalid subject: " + subject);
+        }
+
+        return factory;
     }
 }
