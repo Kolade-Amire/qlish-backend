@@ -1,17 +1,15 @@
 package com.qlish.qlish_api.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Version;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import java.util.Map;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Document(collection = "english_questions")
-@AllArgsConstructor
-@NoArgsConstructor
 public class EnglishQuestionEntity extends Question {
 
     private String questionClass;
@@ -19,6 +17,13 @@ public class EnglishQuestionEntity extends Question {
     private String questionTopic;
     @Version
     private Long version;
+
+    public EnglishQuestionEntity(ObjectId id, String questionText, Map<String, String> options, String answer, String questionClass, String questionLevel, String questionTopic) {
+        super(id, questionText, options, answer);
+        this.questionClass = questionClass;
+        this.questionLevel = questionLevel;
+        this.questionTopic = questionTopic;
+    }
 
 
 }

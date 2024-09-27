@@ -14,7 +14,9 @@ public interface QuestionRepository {
 
    Page<? extends Question> getAllQuestionsByCriteria(QuestionModifier modifier, Pageable pageable);
 
-   <T extends Question> T saveQuestion(ObjectId id, T question);
+   Question saveQuestion(ObjectId id, Question question);
    <T extends Question> T updateQuestion(T question);
    void deleteQuestion(ObjectId id);
+
+   <T extends Question> T getQuestionById(ObjectId id);
 }

@@ -95,7 +95,8 @@ public class CustomEnglishQuestionRepositoryImpl implements CustomEnglishQuestio
     }
 
     @Override
-    public <T extends Question> T saveQuestion(ObjectId id, T question) {
+    public EnglishQuestionEntity saveQuestion(ObjectId id, EnglishQuestionEntity question) {
+
         return mongoTemplate.save(question);
     }
 
@@ -113,6 +114,11 @@ public class CustomEnglishQuestionRepositoryImpl implements CustomEnglishQuestio
         } catch (Exception e) {
             throw new EntityNotFoundException("Question not found");
         }
+    }
+
+    @Override
+    public EnglishQuestionEntity getQuestionById(ObjectId id) {
+        return mongoTemplate.findById(id, EnglishQuestionEntity.class);
     }
 
 }

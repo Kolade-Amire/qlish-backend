@@ -7,7 +7,9 @@ import org.springframework.data.domain.Pageable;
 
 public interface QuestionMapperFactory {
 
-    <Q extends Question> QuestionDto mapQuestionToQuestionDto(Q question);
+    QuestionDto mapQuestionToQuestionDto(Question question);
 
     Page<QuestionDto> mapToQuestionDtoPage(Page<? extends Question> questions, Pageable pageable);
+
+    Question mapQuestionDtoToQuestion(QuestionDto questionDto);
 }

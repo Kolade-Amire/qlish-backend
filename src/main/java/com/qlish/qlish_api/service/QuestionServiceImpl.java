@@ -46,13 +46,15 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
-    public ObjectId saveQuestion(QuestionDto questionDto) {
-        return null;
+    public ObjectId saveQuestion(Question question, TestSubject subject) {
+        var repository = questionRepositoryFactory.getRepository(subject);
+        var savedQuestion = repository.saveQuestion(question.getId(), question);
+        return savedQuestion.getId();
     }
 
     @Override
     public Question getQuestionById(ObjectId id, TestSubject subject) {
         var repository = questionRepositoryFactory.getRepository(subject);
-        return null;
+        return repository.getQuestionById(id);
     }
 }
