@@ -13,7 +13,7 @@ import com.qlish.qlish_api.exception.CustomDatabaseException;
 import com.qlish.qlish_api.exception.EntityNotFoundException;
 import com.qlish.qlish_api.exception.TestResultException;
 import com.qlish.qlish_api.exception.TestSubmissionException;
-import com.qlish.qlish_api.factory.QuestionRepositoryFactory;
+import com.qlish.qlish_api.factory.QuestionFactory;
 import com.qlish.qlish_api.factory.ResultCalculationFactory;
 import com.qlish.qlish_api.mapper.TestQuestionMapper;
 import com.qlish.qlish_api.mapper.TestMapper;
@@ -38,7 +38,7 @@ import java.util.List;
 public class TestServiceImpl implements TestService {
 
     private static final Logger logger = LoggerFactory.getLogger(TestServiceImpl.class);
-    private final QuestionRepositoryFactory questionRepositoryFactory;
+    private final QuestionFactory questionFactory;
 
     private final ResultCalculationFactory resultCalculationFactory;
 
@@ -85,8 +85,8 @@ public class TestServiceImpl implements TestService {
     public ObjectId createTest(TestRequest request) {
         try {
             var subject = TestSubject.getSubjectByDisplayName(request.getTestSubject().toLowerCase());
-            var repository = questionRepositoryFactory.getRepository(subject);
-            var modifier = questionRepositoryFactory.getModifier(subject, request.getModifiers());
+            var repository = questionFactory.getRepository(subject);
+            var modifier = questionFactory.getModifier(subject, request.getModifiers());
 
             List<? extends Question> questions = repository.getTestQuestions(modifier, request.getQuestionCount());
 

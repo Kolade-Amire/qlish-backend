@@ -5,7 +5,9 @@ import com.qlish.qlish_api.dto.QuestionDto;
 import com.qlish.qlish_api.entity.Question;
 import com.qlish.qlish_api.enums.TestSubject;
 import com.qlish.qlish_api.exception.EntityNotFoundException;
-import com.qlish.qlish_api.factory.QuestionRepositoryFactory;
+import com.qlish.qlish_api.factory.QuestionFactory;
+import com.qlish.qlish_api.mapper.QuestionMapper;
+import com.qlish.qlish_api.repository.QuestionRepository;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.data.domain.Page;
@@ -18,26 +20,35 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class QuestionServiceImpl implements QuestionService {
 
-    private final QuestionRepositoryFactory questionRepositoryFactory;
+    private final QuestionFactory questionFactory;
 
     @Override
-    public Page<QuestionDto> getQuestionsByCriteria(AdminQuestionViewRequest request, Pageable pageable) {
+    public <T extends Question> Page<QuestionDto> getQuestionsByCriteria(AdminQuestionViewRequest request, Pageable pageable) {
 
         var subject = TestSubject.getSubjectByDisplayName(request.getSubject().toLowerCase());
-        var repository = questionRepositoryFactory.getRepository(subject);
-        var modifier = questionRepositoryFactory.getModifier(subject, request.getModifiers());
+
+        QuestionRepository<T> repository = questionFactory.getRepository(subject);
+        var modifier = questionFactory.getModifier(subject, request.getModifiers());
 
         var questionsPage = repository.getAllQuestionsByCriteria(modifier, pageable);
 
-       var mapperFactory = questionRepositoryFactory.getMapper(subject);
+       QuestionMapper<T> mapper = questionFactory.getMapper(subject);
 
-       return mapperFactory.mapToQuestionDtoPage(questionsPage, pageable);
+       return mapper.mapToQuestionDtoPage(questionsPage, pageable);
 
     }
 
     @Override
-    public ObjectId updateQuestion(QuestionDto questionDto) {
-        return null;
+    public <T extends Question> QuestionDto updateQuestion(QuestionDto questionDto) {
+        var id = questionDto.getId();
+        var subject = TestSubject.getSubjectByDisplayName(questionDto.getQuestionText());
+        T question = getQuestionById(id, subject);
+
+        question.setQuestionText(questionDto.getQuestionText());
+        question.setOptions(questionDto.getOptions());
+        question.setAnswer(questionDto.getAnswer());
+
+        return saveQuestion(question, subject);
     }
 
     @Override
@@ -48,16 +59,18 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Override
     public <T extends  Question> QuestionDto saveQuestion(T question, TestSubject subject) {
-        var repository = questionRepositoryFactory.getRepository(subject);
+        QuestionRepository<T> repository = questionFactory.getRepository(subject);
         var savedQuestion = repository.saveQuestion(question);
-        var mapperFactory = questionRepositoryFactory.getMapper(subject);
+        QuestionMapper<T> mapper = questionFactory.getMapper(subject);
 
-        return mapperFactory.mapQuestionToQuestionDto(question);
+        return mapper.mapQuestionToQuestionDto(savedQuestion);
     }
 
     @Override
     public <T extends Question> T getQuestionById(ObjectId id, TestSubject subject) {
-        var repository = questionRepositoryFactory.getRepository(subject);
-        return repository.getQuestionById(id);
+        QuestionRepository<T> repository = questionFactory.getRepository(subject);
+        return repository.getQuestionById(id).orElseThrow(
+                () -> new EntityNotFoundException("Question not found")
+        );
     }
 }

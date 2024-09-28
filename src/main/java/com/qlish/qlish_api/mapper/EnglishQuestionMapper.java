@@ -1,4 +1,4 @@
-package com.qlish.qlish_api.factory;
+package com.qlish.qlish_api.mapper;
 
 import com.qlish.qlish_api.dto.QuestionDto;
 import com.qlish.qlish_api.entity.EnglishQuestionEntity;
@@ -29,6 +29,7 @@ public class EnglishQuestionMapper implements QuestionMapper<EnglishQuestionEnti
                 .options(question.getOptions())
                 .answer(question.getAnswer())
                 .modifier(modifier)
+                .subject("English")
                 .build();
     }
 

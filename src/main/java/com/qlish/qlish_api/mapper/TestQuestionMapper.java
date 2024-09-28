@@ -3,7 +3,7 @@ package com.qlish.qlish_api.mapper;
 import com.qlish.qlish_api.dto.CompletedTestQuestionDto;
 import com.qlish.qlish_api.dto.TestQuestionDto;
 import com.qlish.qlish_api.entity.Question;
-import com.qlish.qlish_api.factory.QuestionRepositoryFactory;
+import com.qlish.qlish_api.factory.QuestionFactory;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
@@ -11,7 +11,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class TestQuestionMapper {
 
-    private final QuestionRepositoryFactory factory;
+    private final QuestionFactory factory;
 
     public static List<TestQuestionDto> mapQuestionListToTestViewDto(List<CompletedTestQuestionDto> questions){
         return questions.stream()

@@ -7,6 +7,7 @@ import com.qlish.qlish_api.entity.QuestionModifier;
 import com.qlish.qlish_api.exception.QuestionsRetrievalException;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -21,6 +22,7 @@ import java.util.Optional;
 
 @RequiredArgsConstructor
 @Component
+@Qualifier("english")
 public class CustomEnglishQuestionRepository implements QuestionRepository<EnglishQuestionEntity> {
 
     private final MongoTemplate mongoTemplate;

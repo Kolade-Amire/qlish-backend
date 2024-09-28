@@ -10,9 +10,9 @@ import org.springframework.data.domain.Pageable;
 
 public interface QuestionService {
 
-    Page<QuestionDto> getQuestionsByCriteria(AdminQuestionViewRequest request, Pageable pageable);
+    <T extends Question> Page<QuestionDto> getQuestionsByCriteria(AdminQuestionViewRequest request, Pageable pageable);
 
-    ObjectId updateQuestion(QuestionDto questionDto);
+    <T extends Question> QuestionDto updateQuestion(QuestionDto questionDto);
 
     void deleteQuestion(QuestionDto questionDto);
 

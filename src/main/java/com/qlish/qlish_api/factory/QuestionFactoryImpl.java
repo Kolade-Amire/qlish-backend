@@ -3,6 +3,7 @@ package com.qlish.qlish_api.factory;
 import com.qlish.qlish_api.entity.Question;
 import com.qlish.qlish_api.entity.QuestionModifier;
 import com.qlish.qlish_api.enums.TestSubject;
+import com.qlish.qlish_api.mapper.QuestionMapper;
 import com.qlish.qlish_api.repository.QuestionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -11,7 +12,7 @@ import java.util.Map;
 
 @Component
 @RequiredArgsConstructor
-public class QuestionRepositoryFactoryImpl implements QuestionRepositoryFactory {
+public class QuestionFactoryImpl implements QuestionFactory {
 
     //initialize the map with injections of interfaces implementation
     private final Map<String, QuestionRepository<? extends Question>> repositories;
