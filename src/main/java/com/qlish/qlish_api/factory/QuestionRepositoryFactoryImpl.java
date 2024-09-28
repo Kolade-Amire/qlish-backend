@@ -1,5 +1,6 @@
 package com.qlish.qlish_api.factory;
 
+import com.qlish.qlish_api.entity.Question;
 import com.qlish.qlish_api.entity.QuestionModifier;
 import com.qlish.qlish_api.enums.TestSubject;
 import com.qlish.qlish_api.repository.QuestionRepository;
@@ -13,17 +14,18 @@ import java.util.Map;
 public class QuestionRepositoryFactoryImpl implements QuestionRepositoryFactory {
 
     //initialize the map with injections of interfaces implementation
-    private final Map<String, QuestionRepository> repositories;
+    private final Map<String, QuestionRepository<? extends Question>> repositories;
     private final Map<String, ModifierFactory> modifierFactories;
-    private final Map<String, QuestionMapperFactory> mappers;
+    private final Map<String, QuestionMapper<? extends Question>> mappers;
 
+    @SuppressWarnings("unchecked")
     @Override
-    public QuestionRepository getRepository(TestSubject subject) {
-        QuestionRepository repository = repositories.get(subject.getDisplayName().toLowerCase());
+    public <T extends Question> QuestionRepository<T> getRepository(TestSubject subject) {
+        var repository = repositories.get(subject.getDisplayName().toLowerCase());
         if (repository == null) {
             throw new IllegalArgumentException("Invalid subject " + subject);
         }
-        return repository;
+        return (QuestionRepository<T>) repository;
     }
 
     @Override
@@ -35,14 +37,15 @@ public class QuestionRepositoryFactoryImpl implements QuestionRepositoryFactory 
         return factory.createModifier(requestParams);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
-    public QuestionMapperFactory getMapper(TestSubject subject) {
-        QuestionMapperFactory factory = mappers.get(subject.getDisplayName().toLowerCase());
+    public <T extends  Question> QuestionMapper<T> getMapper(TestSubject subject) {
+        var factory = mappers.get(subject.getDisplayName().toLowerCase());
 
         if (factory == null) {
             throw new IllegalArgumentException("Invalid subject: " + subject);
         }
 
-        return factory;
+        return (QuestionMapper<T>) factory;
     }
 }

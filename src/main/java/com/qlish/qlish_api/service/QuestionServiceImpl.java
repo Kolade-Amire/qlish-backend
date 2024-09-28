@@ -4,6 +4,7 @@ import com.qlish.qlish_api.dto.AdminQuestionViewRequest;
 import com.qlish.qlish_api.dto.QuestionDto;
 import com.qlish.qlish_api.entity.Question;
 import com.qlish.qlish_api.enums.TestSubject;
+import com.qlish.qlish_api.exception.EntityNotFoundException;
 import com.qlish.qlish_api.factory.QuestionRepositoryFactory;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
@@ -46,14 +47,16 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
-    public ObjectId saveQuestion(Question question, TestSubject subject) {
+    public <T extends  Question> QuestionDto saveQuestion(T question, TestSubject subject) {
         var repository = questionRepositoryFactory.getRepository(subject);
-        var savedQuestion = repository.saveQuestion(question.getId(), question);
-        return savedQuestion.getId();
+        var savedQuestion = repository.saveQuestion(question);
+        var mapperFactory = questionRepositoryFactory.getMapper(subject);
+
+        return mapperFactory.mapQuestionToQuestionDto(question);
     }
 
     @Override
-    public Question getQuestionById(ObjectId id, TestSubject subject) {
+    public <T extends Question> T getQuestionById(ObjectId id, TestSubject subject) {
         var repository = questionRepositoryFactory.getRepository(subject);
         return repository.getQuestionById(id);
     }

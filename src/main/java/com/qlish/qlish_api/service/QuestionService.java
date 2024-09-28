@@ -16,7 +16,7 @@ public interface QuestionService {
 
     void deleteQuestion(QuestionDto questionDto);
 
-    ObjectId saveQuestion(Question question, TestSubject);
+    <T extends Question> QuestionDto saveQuestion(T question, TestSubject subject);
 
-    Question getQuestionById(ObjectId id, TestSubject subject);
+    <T extends Question> T getQuestionById(ObjectId id, TestSubject subject);
 }

@@ -2,7 +2,6 @@ package com.qlish.qlish_api.factory;
 
 import com.qlish.qlish_api.dto.QuestionDto;
 import com.qlish.qlish_api.entity.EnglishQuestionEntity;
-import com.qlish.qlish_api.entity.Question;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -14,16 +13,15 @@ import java.util.Map;
 
 @Component
 @Qualifier("english")
-public class EnglishQuestionMapperFactory implements QuestionMapperFactory {
+public class EnglishQuestionMapper implements QuestionMapper<EnglishQuestionEntity> {
 
     @Override
-    public QuestionDto mapQuestionToQuestionDto(Question question) {
+    public QuestionDto mapQuestionToQuestionDto(EnglishQuestionEntity question) {
 
-        var englishQuestion = (EnglishQuestionEntity) question;
         var modifier = Map.of(
-                "level", englishQuestion.getQuestionLevel(),
-                "class", englishQuestion.getQuestionClass(),
-                "topic", englishQuestion.getQuestionTopic()
+                "level", question.getQuestionLevel(),
+                "class", question.getQuestionClass(),
+                "topic", question.getQuestionTopic()
         );
 
         return QuestionDto.builder()
@@ -37,8 +35,9 @@ public class EnglishQuestionMapperFactory implements QuestionMapperFactory {
 
 
     @Override
-    public Page<QuestionDto> mapToQuestionDtoPage(Page<? extends Question> questions, Pageable pageable) {
-        List<QuestionDto> questionDtos = questions.stream().map(this::mapQuestionToQuestionDto
+    public Page<QuestionDto> mapToQuestionDtoPage(Page<EnglishQuestionEntity> questions, Pageable pageable) {
+        List<QuestionDto> questionDtos = questions.stream().map(
+                this::mapQuestionToQuestionDto
         ).toList();
 
         return new PageImpl<>(questionDtos, pageable, questions.getTotalElements());
