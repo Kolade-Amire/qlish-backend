@@ -1,6 +1,7 @@
 package com.qlish.qlish_api.service;
 
 import com.qlish.qlish_api.dto.AdminQuestionViewRequest;
+import com.qlish.qlish_api.dto.QuestionRequest;
 import com.qlish.qlish_api.dto.QuestionDto;
 import com.qlish.qlish_api.entity.Question;
 import com.qlish.qlish_api.enums.TestSubject;
@@ -12,11 +13,13 @@ public interface QuestionService {
 
     <T extends Question> Page<QuestionDto> getQuestionsByCriteria(AdminQuestionViewRequest request, Pageable pageable);
 
-    <T extends Question> QuestionDto updateQuestion(QuestionDto questionDto);
+    <T extends Question> QuestionDto updateQuestion(ObjectId id, QuestionRequest request);
 
-    void deleteQuestion(QuestionDto questionDto);
+    <T extends Question> void deleteQuestion(QuestionDto questionDto);
 
     <T extends Question> QuestionDto saveQuestion(T question, TestSubject subject);
 
     <T extends Question> T getQuestionById(ObjectId id, TestSubject subject);
+
+    <T extends Question> QuestionDto addNewQuestion(QuestionRequest request);
 }

@@ -2,6 +2,7 @@ package com.qlish.qlish_api.service;
 
 import com.qlish.qlish_api.dto.AdminQuestionViewRequest;
 import com.qlish.qlish_api.dto.QuestionDto;
+import com.qlish.qlish_api.dto.QuestionRequest;
 import com.qlish.qlish_api.entity.Question;
 import com.qlish.qlish_api.enums.TestSubject;
 import com.qlish.qlish_api.exception.EntityNotFoundException;
@@ -32,33 +33,46 @@ public class QuestionServiceImpl implements QuestionService {
 
         var questionsPage = repository.getAllQuestionsByCriteria(modifier, pageable);
 
-       QuestionMapper<T> mapper = questionFactory.getMapper(subject);
+        QuestionMapper<T> mapper = questionFactory.getMapper(subject);
 
-       return mapper.mapToQuestionDtoPage(questionsPage, pageable);
+        return mapper.mapToQuestionDtoPage(questionsPage, pageable);
 
     }
 
     @Override
-    public <T extends Question> QuestionDto updateQuestion(QuestionDto questionDto) {
-        var id = questionDto.getId();
-        var subject = TestSubject.getSubjectByDisplayName(questionDto.getQuestionText());
+    public <T extends Question> QuestionDto updateQuestion(ObjectId id, QuestionRequest request) {
+
+        var subject = TestSubject.getSubjectByDisplayName(request.getQuestionText());
         T question = getQuestionById(id, subject);
 
-        question.setQuestionText(questionDto.getQuestionText());
-        question.setOptions(questionDto.getOptions());
-        question.setAnswer(questionDto.getAnswer());
+        question.setQuestionText(request.getQuestionText());
+        question.setOptions(request.getOptions());
+        question.setAnswer(request.getAnswer());
 
         return saveQuestion(question, subject);
     }
 
     @Override
-    public void deleteQuestion(QuestionDto questionDto) {
-
+    public <T extends Question> void deleteQuestion(QuestionDto questionDto) {
+        var subject = TestSubject.getSubjectByDisplayName(questionDto.getQuestionText());
+        QuestionRepository<T> repository = questionFactory.getRepository(subject);
+        T question = getQuestionById(questionDto.getId(), subject);
+        repository.deleteQuestion(question);
 
     }
 
     @Override
-    public <T extends  Question> QuestionDto saveQuestion(T question, TestSubject subject) {
+    public <T extends Question> QuestionDto addNewQuestion(QuestionRequest questionRequest) {
+        var subject = TestSubject.getSubjectByDisplayName(questionRequest.getSubject());
+        QuestionMapper<T> mapper = questionFactory.getMapper(subject);
+        T newQuestion = mapper.mapQuestionRequestToQuestion(questionRequest);
+
+        return saveQuestion(newQuestion, subject);
+
+    }
+
+    @Override
+    public <T extends Question> QuestionDto saveQuestion(T question, TestSubject subject) {
         QuestionRepository<T> repository = questionFactory.getRepository(subject);
         var savedQuestion = repository.saveQuestion(question);
         QuestionMapper<T> mapper = questionFactory.getMapper(subject);

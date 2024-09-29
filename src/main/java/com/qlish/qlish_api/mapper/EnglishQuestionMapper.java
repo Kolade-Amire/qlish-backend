@@ -1,6 +1,7 @@
 package com.qlish.qlish_api.mapper;
 
 import com.qlish.qlish_api.dto.QuestionDto;
+import com.qlish.qlish_api.dto.QuestionRequest;
 import com.qlish.qlish_api.entity.EnglishQuestionEntity;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
@@ -28,11 +29,10 @@ public class EnglishQuestionMapper implements QuestionMapper<EnglishQuestionEnti
                 .questionText(question.getQuestionText())
                 .options(question.getOptions())
                 .answer(question.getAnswer())
-                .modifier(modifier)
+                .modifiers(modifier)
                 .subject("English")
                 .build();
     }
-
 
 
     @Override
@@ -45,15 +45,15 @@ public class EnglishQuestionMapper implements QuestionMapper<EnglishQuestionEnti
     }
 
     @Override
-    public EnglishQuestionEntity mapQuestionDtoToQuestion(QuestionDto questionDto) {
+    public EnglishQuestionEntity mapQuestionRequestToQuestion(QuestionRequest request) {
         return new EnglishQuestionEntity(
-                questionDto.getId(),
-                questionDto.getQuestionText(),
-                questionDto.getOptions(),
-                questionDto.getAnswer(),
-                questionDto.getModifier().get("class"),
-                questionDto.getModifier().get("level"),
-                questionDto.getModifier().get("topic")
+                null,
+                request.getQuestionText(),
+                request.getOptions(),
+                request.getAnswer(),
+                request.getModifiers().get("class"),
+                request.getModifiers().get("level"),
+                request.getModifiers().get("topic")
         );
     }
 

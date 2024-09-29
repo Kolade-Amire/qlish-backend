@@ -1,19 +1,14 @@
 package com.qlish.qlish_api.dto;
 
-import lombok.*;
-import org.bson.types.ObjectId;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 import java.util.Map;
 
+
 @AllArgsConstructor
 @Getter
-@ToString
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@Setter
-@Builder
-public class QuestionDto {
-    @EqualsAndHashCode.Include
-    private ObjectId id;
+public class QuestionRequest {
     private String questionText;
     private Map<String, String> options;
     private String answer;

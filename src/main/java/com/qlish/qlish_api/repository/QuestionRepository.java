@@ -10,15 +10,15 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 import java.util.Optional;
 
-public interface QuestionRepository <T extends Question> {
+public interface QuestionRepository<T extends Question> {
 
-   List<T> getTestQuestions(QuestionModifier modifier, int size);
+    List<T> getTestQuestions(QuestionModifier modifier, int size);
 
-   Page<T> getAllQuestionsByCriteria(QuestionModifier modifier, Pageable pageable);
+    Page<T> getAllQuestionsByCriteria(QuestionModifier modifier, Pageable pageable);
 
-   T saveQuestion(T question);
+    T saveQuestion(T question);
 
-   void deleteQuestion(T question);
+    void deleteQuestion(T question);
 
-   Optional<T> getQuestionById(ObjectId id);
+    Optional<T> getQuestionById(ObjectId id);
 }
