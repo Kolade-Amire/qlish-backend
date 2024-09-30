@@ -2,9 +2,7 @@ package com.qlish.qlish_api.service;
 
 import com.mongodb.MongoTimeoutException;
 import com.mongodb.MongoWriteException;
-import com.qlish.qlish_api.request.AdminQuestionViewRequest;
 import com.qlish.qlish_api.dto.QuestionDto;
-import com.qlish.qlish_api.request.QuestionRequest;
 import com.qlish.qlish_api.entity.Question;
 import com.qlish.qlish_api.enums.TestSubject;
 import com.qlish.qlish_api.exception.CustomDatabaseException;
@@ -12,6 +10,9 @@ import com.qlish.qlish_api.exception.EntityNotFoundException;
 import com.qlish.qlish_api.factory.QuestionFactory;
 import com.qlish.qlish_api.mapper.QuestionMapper;
 import com.qlish.qlish_api.repository.QuestionRepository;
+import com.qlish.qlish_api.request.AdminQuestionViewRequest;
+import com.qlish.qlish_api.request.QuestionRequest;
+import com.qlish.qlish_api.request.UpdateQuestionRequest;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
 import org.slf4j.Logger;
@@ -47,10 +48,10 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
-    public <T extends Question> QuestionDto updateQuestion(ObjectId id, QuestionRequest request) {
+    public <T extends Question> QuestionDto updateQuestion(ObjectId id, UpdateQuestionRequest request) {
 
         var subject = TestSubject.getSubjectByDisplayName(request.getQuestionText());
-        T question = getQuestionById(id, subject);
+        T question = findQuestionById(id, subject);
 
         question.setQuestionText(request.getQuestionText());
         question.setOptions(request.getOptions());
@@ -63,7 +64,7 @@ public class QuestionServiceImpl implements QuestionService {
     public <T extends Question> void deleteQuestion(ObjectId id, String questionSubject) {
         var subject = TestSubject.getSubjectByDisplayName(questionSubject);
         QuestionRepository<T> repository = questionFactory.getRepository(subject);
-        T question = getQuestionById(id, subject);
+        T question = findQuestionById(id, subject);
         repository.deleteQuestion(question);
     }
 
@@ -75,6 +76,15 @@ public class QuestionServiceImpl implements QuestionService {
 
         return saveQuestion(newQuestion, subject);
 
+    }
+
+    @Override
+    public <T extends Question> QuestionDto getQuestion(ObjectId id, String questionSubject) {
+        TestSubject subject = TestSubject.getSubjectByDisplayName(questionSubject);
+        T question = findQuestionById(id, subject);
+        QuestionMapper<T> mapper = questionFactory.getMapper(subject);
+
+        return mapper.mapQuestionToQuestionDto(question);
     }
 
     @Override
@@ -102,7 +112,7 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
-    public <T extends Question> T getQuestionById(ObjectId id, TestSubject subject) {
+    public <T extends Question> T findQuestionById(ObjectId id, TestSubject subject) {
         QuestionRepository<T> repository = questionFactory.getRepository(subject);
         return repository.getQuestionById(id).orElseThrow(
                 () -> new EntityNotFoundException("Question not found")
