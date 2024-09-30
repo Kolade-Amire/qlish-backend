@@ -2,8 +2,8 @@ package com.qlish.qlish_api.service;
 
 import com.qlish.qlish_api.dto.TestQuestionDto;
 import com.qlish.qlish_api.dto.TestDto;
-import com.qlish.qlish_api.dto.TestRequest;
-import com.qlish.qlish_api.dto.TestSubmissionRequest;
+import com.qlish.qlish_api.request.TestRequest;
+import com.qlish.qlish_api.request.TestSubmissionRequest;
 import com.qlish.qlish_api.entity.TestEntity;
 import com.qlish.qlish_api.entity.TestResult;
 import org.bson.types.ObjectId;

@@ -1,16 +1,22 @@
 package com.qlish.qlish_api.service;
 
-import com.qlish.qlish_api.dto.AdminQuestionViewRequest;
+import com.mongodb.MongoTimeoutException;
+import com.mongodb.MongoWriteException;
+import com.qlish.qlish_api.request.AdminQuestionViewRequest;
 import com.qlish.qlish_api.dto.QuestionDto;
-import com.qlish.qlish_api.dto.QuestionRequest;
+import com.qlish.qlish_api.request.QuestionRequest;
 import com.qlish.qlish_api.entity.Question;
 import com.qlish.qlish_api.enums.TestSubject;
+import com.qlish.qlish_api.exception.CustomDatabaseException;
 import com.qlish.qlish_api.exception.EntityNotFoundException;
 import com.qlish.qlish_api.factory.QuestionFactory;
 import com.qlish.qlish_api.mapper.QuestionMapper;
 import com.qlish.qlish_api.repository.QuestionRepository;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -21,6 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class QuestionServiceImpl implements QuestionService {
 
+    private static final Logger logger = LoggerFactory.getLogger(QuestionServiceImpl.class);
     private final QuestionFactory questionFactory;
 
     @Override
@@ -53,12 +60,11 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
-    public <T extends Question> void deleteQuestion(QuestionDto questionDto) {
-        var subject = TestSubject.getSubjectByDisplayName(questionDto.getQuestionText());
+    public <T extends Question> void deleteQuestion(ObjectId id, String questionSubject) {
+        var subject = TestSubject.getSubjectByDisplayName(questionSubject);
         QuestionRepository<T> repository = questionFactory.getRepository(subject);
-        T question = getQuestionById(questionDto.getId(), subject);
+        T question = getQuestionById(id, subject);
         repository.deleteQuestion(question);
-
     }
 
     @Override
@@ -74,10 +80,25 @@ public class QuestionServiceImpl implements QuestionService {
     @Override
     public <T extends Question> QuestionDto saveQuestion(T question, TestSubject subject) {
         QuestionRepository<T> repository = questionFactory.getRepository(subject);
-        var savedQuestion = repository.saveQuestion(question);
-        QuestionMapper<T> mapper = questionFactory.getMapper(subject);
 
-        return mapper.mapQuestionToQuestionDto(savedQuestion);
+        try {
+            var savedQuestion = repository.saveQuestion(question);
+            QuestionMapper<T> mapper = questionFactory.getMapper(subject);
+            return mapper.mapQuestionToQuestionDto(savedQuestion);
+        } catch (MongoWriteException e) {
+            logger.error("Mongo write error: {}", e.getMessage());
+            throw new CustomDatabaseException("Error writing to MongoDB: " + e.getMessage(), e);
+        } catch (MongoTimeoutException e) {
+            logger.error("Mongo timeout error: {}", e.getMessage());
+            throw new CustomDatabaseException("MongoDB connection timeout: " + e.getMessage(), e);
+        } catch (DataAccessException e) {
+            logger.error("Data access error: {}", e.getMessage());
+            throw new CustomDatabaseException("Data access error: " + e.getMessage(), e);
+        } catch (Exception e) {
+            logger.error("Unexpected error occurred: {}", e.getMessage());
+            throw new CustomDatabaseException("Unexpected error occurred while saving question: " + e.getMessage(), e);
+        }
+
     }
 
     @Override

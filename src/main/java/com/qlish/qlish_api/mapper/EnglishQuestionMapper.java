@@ -1,7 +1,7 @@
 package com.qlish.qlish_api.mapper;
 
 import com.qlish.qlish_api.dto.QuestionDto;
-import com.qlish.qlish_api.dto.QuestionRequest;
+import com.qlish.qlish_api.request.QuestionRequest;
 import com.qlish.qlish_api.entity.EnglishQuestionEntity;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;

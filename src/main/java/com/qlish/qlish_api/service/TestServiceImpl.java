@@ -18,6 +18,9 @@ import com.qlish.qlish_api.factory.ResultCalculationFactory;
 import com.qlish.qlish_api.mapper.TestQuestionMapper;
 import com.qlish.qlish_api.mapper.TestMapper;
 import com.qlish.qlish_api.repository.TestRepository;
+import com.qlish.qlish_api.request.TestQuestionSubmissionRequest;
+import com.qlish.qlish_api.request.TestRequest;
+import com.qlish.qlish_api.request.TestSubmissionRequest;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
 import org.slf4j.Logger;
@@ -77,7 +80,7 @@ public class TestServiceImpl implements TestService {
             throw new CustomDatabaseException("Data access error: " + e.getMessage(), e);
         } catch (Exception e) {
             logger.error("Unexpected error occurred: {}", e.getMessage());
-            throw new CustomDatabaseException("Unexpected error occurred while saving entity: " + e.getMessage(), e);
+            throw new CustomDatabaseException("Unexpected error occurred while saving test: " + e.getMessage(), e);
         }
     }
 

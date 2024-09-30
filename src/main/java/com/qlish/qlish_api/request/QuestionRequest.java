@@ -1,4 +1,4 @@
-package com.qlish.qlish_api.dto;
+package com.qlish.qlish_api.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
