@@ -16,9 +16,14 @@ public enum Role {
 
     USER(Set.of(
             USER_DEFAULT
-        )
+    )
     ),
-    ADMIN(
+    ADMIN_VIEW(
+            Set.of(
+                    ADMIN_READ
+            )
+    ),
+    ADMIN_FULL(
             Set.of(
                     ADMIN_READ,
                     ADMIN_CREATE,
@@ -26,9 +31,14 @@ public enum Role {
                     ADMIN_UPDATE
             )
     ),
-    DEV(Set.of(
-                DEV_DEFAULT
-        )
+    DEV(
+            Set.of(
+                    ADMIN_READ,
+                    ADMIN_CREATE,
+                    ADMIN_DELETE,
+                    ADMIN_UPDATE,
+                    DEV_DEFAULT
+            )
     );
     private final Set<Permissions> permissions;
 

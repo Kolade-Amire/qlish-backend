@@ -22,7 +22,5 @@ public interface QuestionService {
 
     <T extends Question> QuestionDto saveQuestion(T question, TestSubject subject);
 
-    <T extends Question> T findQuestionById(ObjectId id, TestSubject subject);
-
     <T extends Question> QuestionDto addNewQuestion(QuestionRequest request);
 }

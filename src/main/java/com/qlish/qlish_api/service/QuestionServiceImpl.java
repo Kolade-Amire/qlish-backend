@@ -2,7 +2,9 @@ package com.qlish.qlish_api.service;
 
 import com.mongodb.MongoTimeoutException;
 import com.mongodb.MongoWriteException;
+import com.qlish.qlish_api.request.AdminQuestionViewRequest;
 import com.qlish.qlish_api.dto.QuestionDto;
+import com.qlish.qlish_api.request.QuestionRequest;
 import com.qlish.qlish_api.entity.Question;
 import com.qlish.qlish_api.enums.TestSubject;
 import com.qlish.qlish_api.exception.CustomDatabaseException;
@@ -10,8 +12,6 @@ import com.qlish.qlish_api.exception.EntityNotFoundException;
 import com.qlish.qlish_api.factory.QuestionFactory;
 import com.qlish.qlish_api.mapper.QuestionMapper;
 import com.qlish.qlish_api.repository.QuestionRepository;
-import com.qlish.qlish_api.request.AdminQuestionViewRequest;
-import com.qlish.qlish_api.request.QuestionRequest;
 import com.qlish.qlish_api.request.UpdateQuestionRequest;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
@@ -20,6 +20,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,6 +32,7 @@ public class QuestionServiceImpl implements QuestionService {
     private static final Logger logger = LoggerFactory.getLogger(QuestionServiceImpl.class);
     private final QuestionFactory questionFactory;
 
+    @PreAuthorize("hasAuthority('ADMIN_READ')")
     @Override
     public <T extends Question> Page<QuestionDto> getQuestionsByCriteria(AdminQuestionViewRequest request, Pageable pageable) {
 
@@ -47,6 +49,7 @@ public class QuestionServiceImpl implements QuestionService {
 
     }
 
+    @PreAuthorize("hasAuthority('ADMIN_UPDATE')")
     @Override
     public <T extends Question> QuestionDto updateQuestion(ObjectId id, UpdateQuestionRequest request) {
 
@@ -60,6 +63,7 @@ public class QuestionServiceImpl implements QuestionService {
         return saveQuestion(question, subject);
     }
 
+    @PreAuthorize("hasAuthority('ADMIN_DELETE')")
     @Override
     public <T extends Question> void deleteQuestion(ObjectId id, String questionSubject) {
         var subject = TestSubject.getSubjectByDisplayName(questionSubject);
@@ -68,6 +72,7 @@ public class QuestionServiceImpl implements QuestionService {
         repository.deleteQuestion(question);
     }
 
+    @PreAuthorize("hasAuthority('ADMIN_CREATE')")
     @Override
     public <T extends Question> QuestionDto addNewQuestion(QuestionRequest questionRequest) {
         var subject = TestSubject.getSubjectByDisplayName(questionRequest.getSubject());
@@ -78,6 +83,7 @@ public class QuestionServiceImpl implements QuestionService {
 
     }
 
+    @PreAuthorize("hasAuthority('ADMIN_READ')")
     @Override
     public <T extends Question> QuestionDto getQuestion(ObjectId id, String questionSubject) {
         TestSubject subject = TestSubject.getSubjectByDisplayName(questionSubject);
@@ -87,6 +93,7 @@ public class QuestionServiceImpl implements QuestionService {
         return mapper.mapQuestionToQuestionDto(question);
     }
 
+    @PreAuthorize("hasAuthority('ADMIN_CREATE')")
     @Override
     public <T extends Question> QuestionDto saveQuestion(T question, TestSubject subject) {
         QuestionRepository<T> repository = questionFactory.getRepository(subject);
@@ -111,8 +118,7 @@ public class QuestionServiceImpl implements QuestionService {
 
     }
 
-    @Override
-    public <T extends Question> T findQuestionById(ObjectId id, TestSubject subject) {
+    private <T extends Question> T findQuestionById(ObjectId id, TestSubject subject) {
         QuestionRepository<T> repository = questionFactory.getRepository(subject);
         return repository.getQuestionById(id).orElseThrow(
                 () -> new EntityNotFoundException("Question not found")

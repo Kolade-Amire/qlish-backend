@@ -1,8 +1,9 @@
 package com.qlish.qlish_api.security;
 
-import com.qlish.qlish_api.service.CustomOAuth2UserService;
 import com.qlish.qlish_api.constants.AppConstants;
 import com.qlish.qlish_api.constants.SecurityConstants;
+import com.qlish.qlish_api.enums.auth_enums.Role;
+import com.qlish.qlish_api.service.CustomOAuth2UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -49,6 +50,7 @@ public class SecurityConfig {
                 .addFilterBefore(corsFilter(), UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(SecurityConstants.PUBLIC_URLS).permitAll()
+                        .requestMatchers(AppConstants.BASE_URL + "/questions/**").hasAnyRole(Role.ADMIN_FULL.name(), Role.ADMIN_VIEW.name(), Role.DEV.name())
                         .anyRequest().authenticated()
 
                 )
