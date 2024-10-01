@@ -2,6 +2,9 @@ package com.qlish.qlish_api.service;
 
 import com.qlish.qlish_api.dto.TestQuestionDto;
 import com.qlish.qlish_api.dto.TestDto;
+import com.qlish.qlish_api.entity.Question;
+import com.qlish.qlish_api.entity.QuestionModifier;
+import com.qlish.qlish_api.repository.QuestionRepository;
 import com.qlish.qlish_api.request.TestRequest;
 import com.qlish.qlish_api.request.TestSubmissionRequest;
 import com.qlish.qlish_api.entity.TestEntity;
@@ -16,7 +19,7 @@ public interface TestService {
 
     ObjectId saveTest(TestEntity testDto);
 
-    ObjectId createTest (TestRequest request);
+    <T extends Question, M extends QuestionModifier> ObjectId createTest (TestRequest request);
 
     Page<TestQuestionDto> getTestQuestions(ObjectId id, Pageable pageable);
 

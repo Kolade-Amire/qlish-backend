@@ -29,7 +29,7 @@ public class CustomEnglishQuestionRepository implements QuestionRepository<Engli
     private final EnglishRepository repository;
 
     @Override
-    public List<EnglishQuestionEntity> getTestQuestions(QuestionModifier mod, int size) {
+    public <M extends QuestionModifier> List<EnglishQuestionEntity> getTestQuestions(M mod, int size) {
 
         try {
             EnglishModifier modifier = (EnglishModifier) mod;

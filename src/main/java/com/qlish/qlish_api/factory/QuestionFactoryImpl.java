@@ -18,9 +18,9 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class QuestionFactoryImpl implements QuestionFactory {
 
-    private Map<String, QuestionRepository<? extends Question>> repositories;
-    private Map<String, ModifierFactory<? extends QuestionModifier>> modifierFactories;
-    private Map<String, QuestionMapper<? extends Question>> mappers;
+    private final Map<String, QuestionRepository<? extends Question>> repositories;
+    private final Map<String, ModifierFactory<? extends QuestionModifier>> modifierFactories;
+    private final Map<String, QuestionMapper<? extends Question>> mappers;
 
     private final CustomEnglishQuestionRepository customEnglishQuestionRepository;
     private final EnglishModifierFactory englishModifierFactory;

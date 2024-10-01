@@ -12,9 +12,9 @@ import java.util.Optional;
 
 public interface QuestionRepository<T extends Question> {
 
-    List<T> getTestQuestions(QuestionModifier modifier, int size);
+    <M extends QuestionModifier> List<T> getTestQuestions(M modifier, int size);
 
-    Page<T> getAllQuestionsByCriteria(QuestionModifier modifier, Pageable pageable);
+    <M extends QuestionModifier> Page<T> getAllQuestionsByCriteria(M modifier, Pageable pageable);
 
     T saveQuestion(T question);
 

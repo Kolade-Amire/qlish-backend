@@ -4,10 +4,7 @@ import com.mongodb.MongoTimeoutException;
 import com.mongodb.MongoWriteException;
 import com.qlish.qlish_api.constants.AppConstants;
 import com.qlish.qlish_api.dto.*;
-import com.qlish.qlish_api.entity.Question;
-import com.qlish.qlish_api.entity.TestDetails;
-import com.qlish.qlish_api.entity.TestEntity;
-import com.qlish.qlish_api.entity.TestResult;
+import com.qlish.qlish_api.entity.*;
 import com.qlish.qlish_api.enums.TestSubject;
 import com.qlish.qlish_api.exception.CustomDatabaseException;
 import com.qlish.qlish_api.exception.EntityNotFoundException;
@@ -17,6 +14,7 @@ import com.qlish.qlish_api.factory.QuestionFactory;
 import com.qlish.qlish_api.factory.ResultCalculationFactory;
 import com.qlish.qlish_api.mapper.TestQuestionMapper;
 import com.qlish.qlish_api.mapper.TestMapper;
+import com.qlish.qlish_api.repository.QuestionRepository;
 import com.qlish.qlish_api.repository.TestRepository;
 import com.qlish.qlish_api.request.TestQuestionSubmissionRequest;
 import com.qlish.qlish_api.request.TestRequest;
@@ -85,15 +83,15 @@ public class TestServiceImpl implements TestService {
     }
 
     @Override
-    public ObjectId createTest(TestRequest request) {
+    public <T extends Question, M extends QuestionModifier> ObjectId createTest(TestRequest request) {
         try {
             var subject = TestSubject.getSubjectByDisplayName(request.getTestSubject().toLowerCase());
-            var repository = questionFactory.getRepository(subject);
+            QuestionRepository<T> repository = questionFactory.getRepository(subject);
         System.out.println(repository.getClass().getSimpleName());
 
-            var modifier = questionFactory.getModifier(subject, request.getModifiers());
+            M modifier = questionFactory.getModifier(subject, request.getModifiers());
 
-            List<? extends Question> questions = repository.getTestQuestions(modifier, request.getQuestionCount());
+            List<T> questions = repository.getTestQuestions(modifier, request.getQuestionCount());
 
             TestDetails testDetails = TestDetails.builder()
                     .userId(request.getUserId())
