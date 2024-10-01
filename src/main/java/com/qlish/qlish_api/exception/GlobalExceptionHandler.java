@@ -7,12 +7,14 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.apache.coyote.BadRequestException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.*;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ProblemDetail;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.LockedException;
-import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -21,7 +23,6 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.net.URI;
-import java.util.Objects;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
@@ -112,32 +113,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
         var problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.UNAUTHORIZED, AppConstants.NOT_ENOUGH_PERMISSIONS);
         problemDetail.setTitle("Access Denied");
-        problemDetail.setInstance(URI.create(request.getRequestURI()));
-
-        return new ResponseEntity<>(problemDetail, HttpStatusCode.valueOf(problemDetail.getStatus()));
-    }
-
-    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
-    public ResponseEntity<ProblemDetail> handleMethodNotSupportedException(HttpRequestMethodNotSupportedException exception, HttpServletRequest request) {
-        LOGGER.error(exception.getMessage());
-
-        HttpMethod supportedMethod = Objects.requireNonNull(exception.getSupportedHttpMethods()).iterator().next();
-        var problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.METHOD_NOT_ALLOWED, AppConstants.METHOD_IS_NOT_ALLOWED);
-        problemDetail.setTitle("Method Not Allowed");
-        problemDetail.setProperty("SupportedMethod", supportedMethod.name());
-        problemDetail.setInstance(URI.create(request.getRequestURI()));
-
-        return new ResponseEntity<>(problemDetail, HttpStatusCode.valueOf(problemDetail.getStatus()));
-    }
-
-
-    @ExceptionHandler(NoHandlerFoundException.class)
-    public ResponseEntity<ProblemDetail> handleNoHandlerFoundException(NoHandlerFoundException exception, HttpServletRequest request) {
-        LOGGER.error(exception.getMessage());
-
-        var problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, AppConstants.PAGE_NOT_FOUND);
-        problemDetail.setTitle("Page Not Found");
-
         problemDetail.setInstance(URI.create(request.getRequestURI()));
 
         return new ResponseEntity<>(problemDetail, HttpStatusCode.valueOf(problemDetail.getStatus()));
