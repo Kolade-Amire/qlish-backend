@@ -3,9 +3,13 @@ package com.qlish.qlish_api.factory;
 import com.qlish.qlish_api.entity.Question;
 import com.qlish.qlish_api.entity.QuestionModifier;
 import com.qlish.qlish_api.enums.TestSubject;
+import com.qlish.qlish_api.mapper.EnglishQuestionMapper;
 import com.qlish.qlish_api.mapper.QuestionMapper;
+import com.qlish.qlish_api.repository.CustomEnglishQuestionRepository;
 import com.qlish.qlish_api.repository.QuestionRepository;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
@@ -14,11 +18,21 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class QuestionFactoryImpl implements QuestionFactory {
 
-    //initialize the map with injections of interfaces implementation
-    private final Map<String, QuestionRepository<? extends Question>> repositories;
-    private final Map<String, ModifierFactory> modifierFactories;
-    private final Map<String, QuestionMapper<? extends Question>> mappers;
+    private Map<String, QuestionRepository<? extends Question>> repositories;
+    private Map<String, ModifierFactory<? extends QuestionModifier>> modifierFactories;
+    private Map<String, QuestionMapper<? extends Question>> mappers;
 
+    private final CustomEnglishQuestionRepository customEnglishQuestionRepository;
+    private final EnglishModifierFactory englishModifierFactory;
+    private final EnglishQuestionMapper englishQuestionMapper;
+
+    @PostConstruct
+    void  init(){
+        repositories.put("english", customEnglishQuestionRepository);
+        modifierFactories.put("english", englishModifierFactory);
+        mappers.put("english", englishQuestionMapper);
+
+    }
     @SuppressWarnings("unchecked")
     @Override
     public <T extends Question> QuestionRepository<T> getRepository(TestSubject subject) {
@@ -29,13 +43,14 @@ public class QuestionFactoryImpl implements QuestionFactory {
         return (QuestionRepository<T>) repository;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
-    public QuestionModifier getModifier(TestSubject subject, Map<String, String> requestParams) {
-        ModifierFactory factory = modifierFactories.get(subject.getDisplayName().toLowerCase());
+    public <T extends  QuestionModifier> T getModifier(TestSubject subject, Map<String, String> requestParams) {
+        var factory = modifierFactories.get(subject.getDisplayName().toLowerCase());
         if (factory == null) {
             throw new IllegalArgumentException("Invalid subject: " + subject);
         }
-        return factory.createModifier(requestParams);
+        return (T) factory.createModifier(requestParams);
     }
 
     @SuppressWarnings("unchecked")

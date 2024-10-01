@@ -111,8 +111,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<ProblemDetail> handleIllegalArgumentException(IllegalArgumentException exception, HttpServletRequest request) {
         LOGGER.error(exception.getMessage());
 
-        var problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.UNAUTHORIZED, AppConstants.NOT_ENOUGH_PERMISSIONS);
-        problemDetail.setTitle("Access Denied");
+        var problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, HttpStatus.BAD_REQUEST.getReasonPhrase());
+        problemDetail.setTitle("BAD REQUEST");
         problemDetail.setInstance(URI.create(request.getRequestURI()));
 
         return new ResponseEntity<>(problemDetail, HttpStatusCode.valueOf(problemDetail.getStatus()));

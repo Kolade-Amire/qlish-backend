@@ -89,6 +89,8 @@ public class TestServiceImpl implements TestService {
         try {
             var subject = TestSubject.getSubjectByDisplayName(request.getTestSubject().toLowerCase());
             var repository = questionFactory.getRepository(subject);
+        System.out.println(repository.getClass().getSimpleName());
+
             var modifier = questionFactory.getModifier(subject, request.getModifiers());
 
             List<? extends Question> questions = repository.getTestQuestions(modifier, request.getQuestionCount());
@@ -109,7 +111,7 @@ public class TestServiceImpl implements TestService {
                     .build();
 
             return saveTest(newTest);
-        } catch (Exception e) {
+        } catch (IllegalArgumentException e) {
             throw new IllegalArgumentException("Invalid Subject: " + request.getTestSubject(), e);
         }
     }

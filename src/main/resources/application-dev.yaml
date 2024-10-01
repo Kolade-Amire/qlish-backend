@@ -5,6 +5,8 @@ spring:
   devtools:
     livereload:
       enabled: true
+    restart:
+      enabled: true
   application:
     name: qlish-api
   docker:

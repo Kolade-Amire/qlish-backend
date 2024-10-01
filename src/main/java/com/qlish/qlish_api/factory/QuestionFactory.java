@@ -12,7 +12,7 @@ public interface QuestionFactory {
 
     <T extends Question> QuestionRepository<T> getRepository(TestSubject subject);
 
-    QuestionModifier getModifier(TestSubject subject, Map<String, String> requestParams);
+    <T extends QuestionModifier> T getModifier(TestSubject subject, Map<String, String> requestParams);
 
     <T extends Question> QuestionMapper<T> getMapper(TestSubject subject);
 }
