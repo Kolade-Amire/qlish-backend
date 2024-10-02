@@ -91,6 +91,9 @@ public class TestServiceImpl implements TestService {
 
             M modifier = questionFactory.getModifier(subject, request.getModifiers());
 
+            System.out.println(modifier.getClass().getSimpleName());
+
+
             List<T> questions = repository.getTestQuestions(modifier, request.getQuestionCount());
 
             TestDetails testDetails = TestDetails.builder()
