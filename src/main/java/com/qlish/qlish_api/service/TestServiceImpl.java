@@ -83,15 +83,12 @@ public class TestServiceImpl implements TestService {
     }
 
     @Override
-    public <T extends Question, M extends QuestionModifier> ObjectId createTest(TestRequest request) {
+    public <T extends Question, M extends QuestionModifier> String createTest(TestRequest request) {
         try {
             var subject = TestSubject.getSubjectByDisplayName(request.getTestSubject().toLowerCase());
             QuestionRepository<T> repository = questionFactory.getRepository(subject);
-        System.out.println(repository.getClass().getSimpleName());
 
             M modifier = questionFactory.getModifier(subject, request.getModifiers());
-
-            System.out.println(modifier.getClass().getSimpleName());
 
 
             List<T> questions = repository.getTestQuestions(modifier, request.getQuestionCount());
@@ -104,14 +101,14 @@ public class TestServiceImpl implements TestService {
                     .isCompleted(false)
                     .build();
 
-            List<CompletedTestQuestionDto> questionsDto = TestQuestionMapper.mapQuestionListToSavedTestQuestionDto(questions);
+            List<CompletedTestQuestion> questionsDto = TestQuestionMapper.mapQuestionListToSavedTestQuestionDto(questions);
 
             var newTest = TestEntity.builder()
                     .testDetails(testDetails)
                     .questions(questionsDto)
                     .build();
 
-            return saveTest(newTest);
+            return saveTest(newTest).toHexString();
         } catch (IllegalArgumentException e) {
             throw new IllegalArgumentException("Invalid Subject: " + request.getTestSubject(), e);
         }
@@ -150,7 +147,7 @@ public class TestServiceImpl implements TestService {
     }
 
     @Override
-    public ObjectId submitTest(ObjectId id, TestSubmissionRequest request) {
+    public String submitTest(ObjectId id, TestSubmissionRequest request) {
 
         try {
             var test = getTestById(id);
@@ -174,7 +171,7 @@ public class TestServiceImpl implements TestService {
 
             saveTest(test);
 
-            return test.get_id();
+            return test.get_id().toHexString();
         }
         catch (Exception e) {
             logger.error("An unexpected error occurred: {}", e.getMessage());

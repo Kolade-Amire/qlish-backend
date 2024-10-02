@@ -1,13 +1,7 @@
 package com.qlish.qlish_api.dto;
 
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.Builder;
-import lombok.ToString;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import org.bson.types.ObjectId;
+import lombok.*;
 
 import java.util.Map;
 
@@ -19,7 +13,7 @@ import java.util.Map;
 @Builder
 public class TestQuestionDto {
     @EqualsAndHashCode.Include
-    private ObjectId id;
+    private String id;
     private String questionText;
     private Map<String, String> options;
 }

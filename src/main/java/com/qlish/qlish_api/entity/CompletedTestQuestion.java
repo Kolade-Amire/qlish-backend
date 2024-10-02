@@ -1,4 +1,4 @@
-package com.qlish.qlish_api.dto;
+package com.qlish.qlish_api.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,7 +12,7 @@ import java.util.Map;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class CompletedTestQuestionDto {
+public class CompletedTestQuestion {
     private ObjectId _id;
     private String questionText;
     private Map<String, String> options;

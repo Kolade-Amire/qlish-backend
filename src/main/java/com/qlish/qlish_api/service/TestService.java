@@ -19,13 +19,13 @@ public interface TestService {
 
     ObjectId saveTest(TestEntity testDto);
 
-    <T extends Question, M extends QuestionModifier> ObjectId createTest (TestRequest request);
+    <T extends Question, M extends QuestionModifier> String createTest (TestRequest request);
 
     Page<TestQuestionDto> getTestQuestions(ObjectId id, Pageable pageable);
 
     TestEntity getTestById(ObjectId id);
 
-    ObjectId submitTest(ObjectId id, TestSubmissionRequest request);
+    String submitTest(ObjectId id, TestSubmissionRequest request);
 
     TestResult getTestResult(ObjectId id);
 

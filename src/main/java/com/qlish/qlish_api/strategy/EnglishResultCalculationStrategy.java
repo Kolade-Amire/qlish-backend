@@ -1,6 +1,6 @@
 package com.qlish.qlish_api.strategy;
 
-import com.qlish.qlish_api.dto.CompletedTestQuestionDto;
+import com.qlish.qlish_api.entity.CompletedTestQuestion;
 import com.qlish.qlish_api.entity.TestResult;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -11,11 +11,11 @@ import java.util.List;
 @Qualifier("english")
 public class EnglishResultCalculationStrategy implements ResultCalculationStrategy {
     @Override
-    public TestResult calculateResult(List<CompletedTestQuestionDto> questions) {
+    public TestResult calculateResult(List<CompletedTestQuestion> questions) {
         int correctAnswers = 0;
         int incorrectAnswers = 0;
         int scorePercentage = 0;
-        for (CompletedTestQuestionDto question : questions) {
+        for (CompletedTestQuestion question : questions) {
             if(question.isAnswerCorrect()){
                 correctAnswers++;
             }else {

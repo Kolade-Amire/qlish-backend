@@ -29,7 +29,7 @@ public class TestController {
     }
 
     @PostMapping("/new")
-    public ResponseEntity<ObjectId> createTest(@RequestBody TestRequest testRequest) {
+    public ResponseEntity<String> createTest(@RequestBody TestRequest testRequest) {
         var testId = testService.createTest(testRequest);
         return ResponseEntity.ok().body(testId);
     }
@@ -42,7 +42,7 @@ public class TestController {
     }
 
     @PostMapping("/{id}/submit")
-    public ResponseEntity<ObjectId> submitTest(@PathVariable ObjectId id, @RequestBody TestSubmissionRequest request) {
+    public ResponseEntity<String> submitTest(@PathVariable ObjectId id, @RequestBody TestSubmissionRequest request) {
         var testId = testService.submitTest(id, request);
         return ResponseEntity.ok().body(testId);
     }
