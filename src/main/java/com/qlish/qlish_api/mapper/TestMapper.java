@@ -7,7 +7,7 @@ public class TestMapper {
 
     public static TestDto mapTestToDto(TestEntity test) {
         return TestDto.builder()
-                .id(test.get_id())
+                .id(test.get_id().toHexString())
                 .userId(test.getTestDetails().getUserId())
                 .testSubject(test.getTestDetails().getTestSubject().getDisplayName())
                 .startedAt(test.getTestDetails().getStartedAt())

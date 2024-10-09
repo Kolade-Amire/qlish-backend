@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 @Builder
 public class TestDto {
     @EqualsAndHashCode.Include
-    private ObjectId id;
+    private String id;
     private ObjectId userId;
     private String testSubject;
     private LocalDateTime startedAt;
