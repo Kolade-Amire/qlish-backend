@@ -108,7 +108,7 @@ public class AuthenticationController {
             service.refreshAccessToken(request, response);
             response.getOutputStream();
         } catch (IOException e) {
-            throw new CustomQlishException("Failed to refresh token: ", e.getCause());
+            throw new CustomQlishException("Failed to refresh token: ", e);
         }
     }
 

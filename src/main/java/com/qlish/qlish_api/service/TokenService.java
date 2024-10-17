@@ -22,19 +22,20 @@ public class TokenService {
     }
 
     public TokenEntity findTokenByUserId(String userId) {
-            return tokenRepository.findByUserId(userId).orElseThrow(() -> new EntityNotFoundException(String.format("Could not get token for user with id: %s ", userId)));
+        return tokenRepository.findByUserId(userId).orElseThrow(() -> new EntityNotFoundException(String.format("Could not get token for user with id: %s ", userId)));
     }
 
     public void saveToken(TokenEntity token) {
         try {
             tokenRepository.save(token);
         } catch (Exception e) {
-            throw new CustomQlishException("Failed to save token.", e.getCause());
+            throw new CustomQlishException("Failed to save token.", e);
         }
     }
 
     public void deleteTokenByUserId(String userId) {
-        findTokenByUserId(userId).ifPresent(tokenRepository::delete);
+        var token = findTokenByUserId(userId)
+        tokenRepository.delete(token);
     }
 
 }

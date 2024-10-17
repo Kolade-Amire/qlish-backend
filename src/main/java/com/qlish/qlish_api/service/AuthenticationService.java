@@ -101,7 +101,7 @@ public class AuthenticationService {
         } catch (PasswordsDoNotMatchException e){
             throw new PasswordsDoNotMatchException(e.getMessage());
         } catch(Exception e){
-            throw new CustomQlishException("Error registering new user: ", e.getCause());
+            throw new CustomQlishException("Error registering new user: ", e);
         }
 
     }
@@ -144,9 +144,9 @@ public class AuthenticationService {
                     .user(userDto)
                     .build();
         } catch (AuthenticationException e) {
-            throw new CustomQlishException("Error Authenticating user: ", e.getCause());
+            throw new CustomQlishException("Error Authenticating user: ", e);
         } catch (Exception e){
-            throw new CustomQlishException("User Authentication failed: ", e.getCause());
+            throw new CustomQlishException("User Authentication failed: ", e);
         }
 
 
@@ -165,7 +165,7 @@ public class AuthenticationService {
         try {
             tokenService.saveToken(newTokenEntity);
         } catch (Exception e) {
-            throw new CustomQlishException(e.getMessage(), e.getCause());
+            throw new CustomQlishException(e.getMessage(), e);
         }
     }
 
@@ -210,11 +210,11 @@ public class AuthenticationService {
 
             }
         } catch (JwtException e) {
-            throw new CustomQlishException("JWT could not be validated: ", e.getCause());
+            throw new CustomQlishException("JWT could not be validated: ", e);
         } catch (UsernameNotFoundException e) {
-            throw new CustomQlishException("User not found: ", e.getCause());
+            throw new CustomQlishException("User not found: ", e);
         } catch (Exception e) {
-            throw new CustomQlishException("Error refreshing access token: ", e.getCause());
+            throw new CustomQlishException("Error refreshing access token: ", e);
         }
 
     }
