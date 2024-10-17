@@ -1,19 +1,22 @@
 package com.qlish.qlish_api.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.qlish.qlish_api.exception.CustomQlishException;
-import com.qlish.qlish_api.exception.EntityAlreadyExistException;
-import com.qlish.qlish_api.exception.EntityNotFoundException;
-import com.qlish.qlish_api.exception.PasswordsDoNotMatchException;
-import com.qlish.qlish_api.security.data.*;
+import com.qlish.qlish_api.constants.SecurityConstants;
 import com.qlish.qlish_api.entity.TokenEntity;
-import com.qlish.qlish_api.enums.auth_enums.AuthProvider;
 import com.qlish.qlish_api.entity.UserEntity;
 import com.qlish.qlish_api.entity.UserPrincipal;
-import com.qlish.qlish_api.mapper.UserAuthenticationDtoMapper;
+import com.qlish.qlish_api.enums.auth_enums.AuthProvider;
 import com.qlish.qlish_api.enums.auth_enums.Role;
+import com.qlish.qlish_api.exception.CustomQlishException;
+import com.qlish.qlish_api.exception.EntityAlreadyExistException;
+import com.qlish.qlish_api.exception.PasswordsDoNotMatchException;
+import com.qlish.qlish_api.mapper.UserAuthenticationDtoMapper;
+import com.qlish.qlish_api.security.data.AuthenticationRequest;
+import com.qlish.qlish_api.security.data.AuthenticationResponse;
+import com.qlish.qlish_api.security.data.RegistrationRequest;
+import com.qlish.qlish_api.security.data.RegistrationResponse;
 import com.qlish.qlish_api.util.HttpResponse;
-import com.qlish.qlish_api.constants.SecurityConstants;
+import io.jsonwebtoken.JwtException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +24,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.core.OAuth2AccessToken;
 import org.springframework.stereotype.Service;
@@ -103,41 +108,46 @@ public class AuthenticationService {
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
 
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        request.getEmail(),
-                        request.getPassword()
-                )
-        );
+        try {
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            request.getEmail(),
+                            request.getPassword()
+                    )
+            );
 
-        var user = userService.getUserByEmail(request.getEmail());
+            var user = userService.getUserByEmail(request.getEmail());
 
-        user.setLastLoginAt(LocalDateTime.now());
-        tokenService.deleteTokenByUserId(user.get_id().toString());
+            user.setLastLoginAt(LocalDateTime.now());
+            tokenService.deleteTokenByUserId(user.get_id().toString());
 
 
+            var userPrincipal = new UserPrincipal(user);
 
-        var userPrincipal = new UserPrincipal(user);
+            var accessToken = jwtService.generateAccessToken(userPrincipal);
+            var refreshToken = jwtService.generateRefreshToken(userPrincipal);
 
-        var accessToken = jwtService.generateAccessToken(userPrincipal);
-        var refreshToken = jwtService.generateRefreshToken(userPrincipal);
+            saveUserRefreshToken(user, refreshToken);
 
-        saveUserRefreshToken(user, refreshToken);
+            var response = HttpResponse.builder()
+                    .httpStatusCode(HttpStatus.OK.value())
+                    .httpStatus(HttpStatus.OK)
+                    .reason(HttpStatus.OK.getReasonPhrase())
+                    .message(SecurityConstants.AUTHENTICATED_MESSAGE)
+                    .build();
 
-        var response = HttpResponse.builder()
-                .httpStatusCode(HttpStatus.OK.value())
-                .httpStatus(HttpStatus.OK)
-                .reason(HttpStatus.OK.getReasonPhrase())
-                .message(SecurityConstants.AUTHENTICATED_MESSAGE)
-                .build();
+            var userDto = UserAuthenticationDtoMapper.mapUserToUserAuthDto(user);
 
-        var userDto = UserAuthenticationDtoMapper.mapUserToUserAuthDto(user);
-
-        return AuthenticationResponse.builder()
-                .accessToken(accessToken)
-                .httpResponse(response)
-                .user(userDto)
-                .build();
+            return AuthenticationResponse.builder()
+                    .accessToken(accessToken)
+                    .httpResponse(response)
+                    .user(userDto)
+                    .build();
+        } catch (AuthenticationException e) {
+            throw new CustomQlishException("Error Authenticating user: ", e.getCause());
+        } catch (Exception e){
+            throw new CustomQlishException("User Authentication failed: ", e.getCause());
+        }
 
 
     }
@@ -145,14 +155,18 @@ public class AuthenticationService {
     private void saveUserRefreshToken(UserEntity user, String token) {
 
         var newTokenEntity = TokenEntity.builder()
-                .userId(user.get_id().toString())
+                .userId(user.get_id().toHexString())
                 .token(token)
                 .tokenType(OAuth2AccessToken.TokenType.BEARER.getValue())
                 .isExpired(false)
                 .isRevoked(false)
                 .build();
 
-        tokenService.saveToken(newTokenEntity);
+        try {
+            tokenService.saveToken(newTokenEntity);
+        } catch (Exception e) {
+            throw new CustomQlishException(e.getMessage(), e.getCause());
+        }
     }
 
 
@@ -165,36 +179,43 @@ public class AuthenticationService {
             return;
         }
 
-        accessToken = authHeader.substring(SecurityConstants.TOKEN_PREFIX.length());
-        userEmail = jwtService.extractUsername(accessToken);
+        try {
+            accessToken = authHeader.substring(SecurityConstants.TOKEN_PREFIX.length());
+            userEmail = jwtService.extractUsername(accessToken);
 
-        if (userEmail != null) {
-            var user = this.userService.getUserByEmail(userEmail);
-            var userPrincipal = new UserPrincipal(user);
-            var refreshToken = tokenService.findTokenByUserId(user.get_id().toString()).orElseThrow(() -> new EntityNotFoundException("Unknown user or token"));
+            if (userEmail != null) {
+                var user = this.userService.getUserByEmail(userEmail);
+                var userPrincipal = new UserPrincipal(user);
+                var refreshToken = tokenService.findTokenByUserId(user.get_id().toHexString());
 
-            if (jwtService.isTokenValid(refreshToken.getToken(), userPrincipal)) {
-                var newAccessToken = jwtService.generateAccessToken(userPrincipal);
+                if (jwtService.isTokenValid(refreshToken.getToken(), userPrincipal)) {
+                    var newAccessToken = jwtService.generateAccessToken(userPrincipal);
 
 
-                var customHttpResponse = HttpResponse.builder()
-                        .httpStatusCode(HttpStatus.OK.value())
-                        .httpStatus(HttpStatus.OK)
-                        .reason(HttpStatus.OK.getReasonPhrase())
-                        .message(SecurityConstants.REFRESHED_MESSAGE)
-                        .build();
+                    var customHttpResponse = HttpResponse.builder()
+                            .httpStatusCode(HttpStatus.OK.value())
+                            .httpStatus(HttpStatus.OK)
+                            .reason(HttpStatus.OK.getReasonPhrase())
+                            .message(SecurityConstants.REFRESHED_MESSAGE)
+                            .build();
 
-                var authResponse = AuthenticationResponse.builder()
-                        .httpResponse(customHttpResponse)
-                        .accessToken(newAccessToken)
-                        .build();
+                    var authResponse = AuthenticationResponse.builder()
+                            .httpResponse(customHttpResponse)
+                            .accessToken(newAccessToken)
+                            .build();
 
-                new ObjectMapper().writeValue(response.getOutputStream(), authResponse);
+                    new ObjectMapper().writeValue(response.getOutputStream(), authResponse);
+                }
+
+
             }
-
-
+        } catch (JwtException e) {
+            throw new CustomQlishException("JWT could not be validated: ", e.getCause());
+        } catch (UsernameNotFoundException e) {
+            throw new CustomQlishException("User not found: ", e.getCause());
+        } catch (Exception e) {
+            throw new CustomQlishException("Error refreshing access token: ", e.getCause());
         }
-
 
     }
 

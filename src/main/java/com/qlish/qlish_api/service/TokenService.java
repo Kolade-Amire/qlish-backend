@@ -1,6 +1,7 @@
 package com.qlish.qlish_api.service;
 
 import com.qlish.qlish_api.entity.TokenEntity;
+import com.qlish.qlish_api.exception.CustomQlishException;
 import com.qlish.qlish_api.exception.EntityNotFoundException;
 import com.qlish.qlish_api.repository.TokenRedisRepository;
 import lombok.RequiredArgsConstructor;
@@ -20,12 +21,16 @@ public class TokenService {
         );
     }
 
-    public Optional<TokenEntity> findTokenByUserId(String userId) {
-        return tokenRepository.findByUserId(userId);
+    public TokenEntity findTokenByUserId(String userId) {
+            return tokenRepository.findByUserId(userId).orElseThrow(() -> new EntityNotFoundException(String.format("Could not get token for user with id: %s ", userId)));
     }
 
     public void saveToken(TokenEntity token) {
-        tokenRepository.save(token);
+        try {
+            tokenRepository.save(token);
+        } catch (Exception e) {
+            throw new CustomQlishException("Failed to save token.", e.getCause());
+        }
     }
 
     public void deleteTokenByUserId(String userId) {

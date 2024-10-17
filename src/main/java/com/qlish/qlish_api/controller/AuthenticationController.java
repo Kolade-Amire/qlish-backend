@@ -1,5 +1,6 @@
 package com.qlish.qlish_api.controller;
 
+import com.qlish.qlish_api.exception.CustomQlishException;
 import com.qlish.qlish_api.security.data.*;
 import com.qlish.qlish_api.service.LogoutService;
 import com.qlish.qlish_api.constants.AppConstants;
@@ -102,9 +103,13 @@ public class AuthenticationController {
     public void refreshToken(
             HttpServletRequest request,
             HttpServletResponse response
-    ) throws IOException {
-        service.refreshAccessToken(request, response);
-        response.getOutputStream();
+    ) {
+        try {
+            service.refreshAccessToken(request, response);
+            response.getOutputStream();
+        } catch (IOException e) {
+            throw new CustomQlishException("Failed to refresh token: ", e.getCause());
+        }
     }
 
     @PostMapping("/logout")

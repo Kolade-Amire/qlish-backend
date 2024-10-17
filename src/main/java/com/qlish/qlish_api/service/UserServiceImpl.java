@@ -34,18 +34,18 @@ public class UserServiceImpl implements UserService {
         } catch (
     MongoWriteException e) {
         logger.error("Mongo write error: {}", e.getMessage());
-        throw new CustomQlishException("Error writing to MongoDB: " + e.getMessage(), e);
+        throw new CustomQlishException("Error writing to MongoDB: " + e.getMessage(), e.getCause());
     } catch (
     MongoTimeoutException e) {
         logger.error("Mongo timeout error: {}", e.getMessage());
-        throw new CustomQlishException("MongoDB connection timeout: " + e.getMessage(), e);
+        throw new CustomQlishException("MongoDB connection timeout: " + e.getMessage(), e.getCause());
     } catch (
     DataAccessException e) {
         logger.error("Data access error: {}", e.getMessage());
-        throw new CustomQlishException("Data access error: " + e.getMessage(), e);
+        throw new CustomQlishException("Data access error: " + e.getMessage(), e.getCause());
     } catch (Exception e) {
         logger.error("Unexpected error occurred: {}", e.getMessage());
-        throw new CustomQlishException("Unexpected error occurred while saving entity: " + e.getMessage(), e);
+        throw new CustomQlishException("Unexpected error occurred while saving entity: " + e.getMessage(), e.getCause());
     }
     }
 
