@@ -6,7 +6,7 @@ import com.qlish.qlish_api.constants.AppConstants;
 import com.qlish.qlish_api.dto.*;
 import com.qlish.qlish_api.entity.*;
 import com.qlish.qlish_api.enums.TestSubject;
-import com.qlish.qlish_api.exception.CustomDatabaseException;
+import com.qlish.qlish_api.exception.CustomQlishException;
 import com.qlish.qlish_api.exception.EntityNotFoundException;
 import com.qlish.qlish_api.exception.TestResultException;
 import com.qlish.qlish_api.exception.TestSubmissionException;
@@ -69,16 +69,16 @@ public class TestServiceImpl implements TestService {
             return testRepository.save(test).get_id();
         } catch (MongoWriteException e) {
             logger.error("Mongo write error: {}", e.getMessage());
-            throw new CustomDatabaseException("Error writing to MongoDB: " + e.getMessage(), e);
+            throw new CustomQlishException("Error writing to MongoDB: " + e.getMessage(), e);
         } catch (MongoTimeoutException e) {
             logger.error("Mongo timeout error: {}", e.getMessage());
-            throw new CustomDatabaseException("MongoDB connection timeout: " + e.getMessage(), e);
+            throw new CustomQlishException("MongoDB connection timeout: " + e.getMessage(), e);
         } catch (DataAccessException e) {
             logger.error("Data access error: {}", e.getMessage());
-            throw new CustomDatabaseException("Data access error: " + e.getMessage(), e);
+            throw new CustomQlishException("Data access error: " + e.getMessage(), e);
         } catch (Exception e) {
             logger.error("Unexpected error occurred: {}", e.getMessage());
-            throw new CustomDatabaseException("Unexpected error occurred while saving test: " + e.getMessage(), e);
+            throw new CustomQlishException("Unexpected error occurred while saving test: " + e.getMessage(), e);
         }
     }
 

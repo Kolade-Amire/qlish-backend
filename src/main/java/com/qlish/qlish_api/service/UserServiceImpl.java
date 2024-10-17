@@ -2,7 +2,7 @@ package com.qlish.qlish_api.service;
 
 import com.mongodb.MongoTimeoutException;
 import com.mongodb.MongoWriteException;
-import com.qlish.qlish_api.exception.CustomDatabaseException;
+import com.qlish.qlish_api.exception.CustomQlishException;
 import com.qlish.qlish_api.constants.AppConstants;
 import com.qlish.qlish_api.entity.UserEntity;
 import com.qlish.qlish_api.repository.UserRepository;
@@ -34,18 +34,18 @@ public class UserServiceImpl implements UserService {
         } catch (
     MongoWriteException e) {
         logger.error("Mongo write error: {}", e.getMessage());
-        throw new CustomDatabaseException("Error writing to MongoDB: " + e.getMessage(), e);
+        throw new CustomQlishException("Error writing to MongoDB: " + e.getMessage(), e);
     } catch (
     MongoTimeoutException e) {
         logger.error("Mongo timeout error: {}", e.getMessage());
-        throw new CustomDatabaseException("MongoDB connection timeout: " + e.getMessage(), e);
+        throw new CustomQlishException("MongoDB connection timeout: " + e.getMessage(), e);
     } catch (
     DataAccessException e) {
         logger.error("Data access error: {}", e.getMessage());
-        throw new CustomDatabaseException("Data access error: " + e.getMessage(), e);
+        throw new CustomQlishException("Data access error: " + e.getMessage(), e);
     } catch (Exception e) {
         logger.error("Unexpected error occurred: {}", e.getMessage());
-        throw new CustomDatabaseException("Unexpected error occurred while saving entity: " + e.getMessage(), e);
+        throw new CustomQlishException("Unexpected error occurred while saving entity: " + e.getMessage(), e);
     }
     }
 

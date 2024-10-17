@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.client.HttpServerErrorException.InternalServerError;
-import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.net.URI;
@@ -175,8 +174,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(problemDetail, HttpStatusCode.valueOf(problemDetail.getStatus()));
     }
 
-    @ExceptionHandler(CustomDatabaseException.class)
-    public ResponseEntity<ProblemDetail> handleCustomDatabaseException(CustomDatabaseException exception, HttpServletRequest request) {
+    @ExceptionHandler(CustomQlishException.class)
+    public ResponseEntity<ProblemDetail> handleCustomDatabaseException(CustomQlishException exception, HttpServletRequest request) {
         LOGGER.error(exception.getMessage());
 
         var problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.INTERNAL_SERVER_ERROR, AppConstants.DATABASE_ERROR + ":\n" + exception.getLocalizedMessage());

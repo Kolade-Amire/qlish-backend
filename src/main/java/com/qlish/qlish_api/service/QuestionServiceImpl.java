@@ -7,7 +7,7 @@ import com.qlish.qlish_api.dto.QuestionDto;
 import com.qlish.qlish_api.request.QuestionRequest;
 import com.qlish.qlish_api.entity.Question;
 import com.qlish.qlish_api.enums.TestSubject;
-import com.qlish.qlish_api.exception.CustomDatabaseException;
+import com.qlish.qlish_api.exception.CustomQlishException;
 import com.qlish.qlish_api.exception.EntityNotFoundException;
 import com.qlish.qlish_api.factory.QuestionFactory;
 import com.qlish.qlish_api.mapper.QuestionMapper;
@@ -104,16 +104,16 @@ public class QuestionServiceImpl implements QuestionService {
             return mapper.mapQuestionToQuestionDto(savedQuestion);
         } catch (MongoWriteException e) {
             logger.error("Mongo write error: {}", e.getMessage());
-            throw new CustomDatabaseException("Error writing to MongoDB: " + e.getMessage(), e);
+            throw new CustomQlishException("Error writing to MongoDB: " + e.getMessage(), e);
         } catch (MongoTimeoutException e) {
             logger.error("Mongo timeout error: {}", e.getMessage());
-            throw new CustomDatabaseException("MongoDB connection timeout: " + e.getMessage(), e);
+            throw new CustomQlishException("MongoDB connection timeout: " + e.getMessage(), e);
         } catch (DataAccessException e) {
             logger.error("Data access error: {}", e.getMessage());
-            throw new CustomDatabaseException("Data access error: " + e.getMessage(), e);
+            throw new CustomQlishException("Data access error: " + e.getMessage(), e);
         } catch (Exception e) {
             logger.error("Unexpected error occurred: {}", e.getMessage());
-            throw new CustomDatabaseException("Unexpected error occurred while saving question: " + e.getMessage(), e);
+            throw new CustomQlishException("Unexpected error occurred while saving question: " + e.getMessage(), e);
         }
 
     }

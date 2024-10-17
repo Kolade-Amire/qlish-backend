@@ -1,8 +1,10 @@
 package com.qlish.qlish_api.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.qlish.qlish_api.exception.CustomQlishException;
 import com.qlish.qlish_api.exception.EntityAlreadyExistException;
 import com.qlish.qlish_api.exception.EntityNotFoundException;
+import com.qlish.qlish_api.exception.PasswordsDoNotMatchException;
 import com.qlish.qlish_api.security.data.*;
 import com.qlish.qlish_api.entity.TokenEntity;
 import com.qlish.qlish_api.enums.auth_enums.AuthProvider;
@@ -41,7 +43,7 @@ public class AuthenticationService {
     //TODO: implement a regex checker for a strong password
     public String doPasswordsMatch(String p1, String p2) {
         if (!p1.equals(p2)) {
-            throw new RuntimeException("Passwords do not match!");
+            throw new PasswordsDoNotMatchException("Passwords do not match!");
         } else return p2;
     }
 
@@ -55,40 +57,48 @@ public class AuthenticationService {
 
 
     public RegistrationResponse register(RegistrationRequest request) {
-        validateNewUser(request.getEmail());
-        var password = doPasswordsMatch(request.getPassword(), request.getConfirmPassword());
+        try {
+            validateNewUser(request.getEmail());
+            var password = doPasswordsMatch(request.getPassword(), request.getConfirmPassword());
 
-        var user = UserEntity.builder()
-                .firstname(request.getFirstname())
-                .lastname(request.getLastname())
-                .email(request.getEmail())
-                .password(passwordEncoder.encode(password))
-                .role(Role.USER)
-                .authProvider(AuthProvider.LOCAL)
-                .createdAt(LocalDateTime.now())
-                .isBlocked(false)
-                .isAccountExpired(false)
-                .isEmailVerified(true)
-                .profileName(request.getProfileName())
-                .passwordLastChangedDate(LocalDate.now())
-                .build();
+            var user = UserEntity.builder()
+                    .firstname(request.getFirstname())
+                    .lastname(request.getLastname())
+                    .email(request.getEmail())
+                    .password(passwordEncoder.encode(password))
+                    .role(Role.USER)
+                    .authProvider(AuthProvider.LOCAL)
+                    .createdAt(LocalDateTime.now())
+                    .isBlocked(false)
+                    .isAccountExpired(false)
+                    .isEmailVerified(true)
+                    .profileName(request.getProfileName())
+                    .passwordLastChangedDate(LocalDate.now())
+                    .build();
 
-        var savedUser = userService.saveUser(user);
-        var userDto = UserAuthenticationDtoMapper.mapUserToUserAuthDto(savedUser);
+            var savedUser = userService.saveUser(user);
+            var userDto = UserAuthenticationDtoMapper.mapUserToUserAuthDto(savedUser);
 
 
+            var httpResponse = HttpResponse.builder()
+                    .httpStatus(HttpStatus.CREATED)
+                    .httpStatusCode(HttpStatus.CREATED.value())
+                    .reason(HttpStatus.CREATED.getReasonPhrase())
+                    .message(SecurityConstants.REGISTERED_MESSAGE)
+                    .build();
 
-        var httpResponse = HttpResponse.builder()
-                .httpStatus(HttpStatus.CREATED)
-                .httpStatusCode(HttpStatus.CREATED.value())
-                .reason(HttpStatus.CREATED.getReasonPhrase())
-                .message(SecurityConstants.REGISTERED_MESSAGE)
-                .build();
+            return RegistrationResponse.builder()
+                    .httpResponse(httpResponse)
+                    .user(userDto)
+                    .build();
+        } catch (EntityAlreadyExistException e) {
+            throw new EntityAlreadyExistException(e.getMessage());
+        } catch (PasswordsDoNotMatchException e){
+            throw new PasswordsDoNotMatchException(e.getMessage());
+        } catch(Exception e){
+            throw new CustomQlishException("Error registering new user: ", e.getCause());
+        }
 
-        return RegistrationResponse.builder()
-                .httpResponse(httpResponse)
-                .user(userDto)
-                .build();
     }
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
