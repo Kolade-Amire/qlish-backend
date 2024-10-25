@@ -34,7 +34,7 @@ public class TokenService {
     }
 
     public void deleteTokenByUserId(String userId) {
-        var token = findTokenByUserId(userId)
+        var token = findTokenByUserId(userId);
         tokenRepository.delete(token);
     }
 
