@@ -85,19 +85,19 @@ public class TestServiceImpl implements TestService {
     @Override
     public <T extends Question, M extends QuestionModifier> String createTest(TestRequest request) {
         try {
-            var subject = TestSubject.getSubjectByDisplayName(request.getTestSubject().toLowerCase());
+            var subject = TestSubject.getSubjectByDisplayName(request.getSubject().toLowerCase());
             QuestionRepository<T> repository = questionFactory.getRepository(subject);
 
             M modifier = questionFactory.getModifier(subject, request.getModifiers());
 
 
-            List<T> questions = repository.getTestQuestions(modifier, request.getQuestionCount());
+            List<T> questions = repository.getTestQuestions(modifier, request.getCount());
 
             TestDetails testDetails = TestDetails.builder()
                     .userId(request.getUserId())
                     .testSubject(subject)
                     .startedAt(LocalDateTime.now())
-                    .totalQuestionCount(request.getQuestionCount())
+                    .totalQuestionCount(request.getCount())
                     .isCompleted(false)
                     .build();
 
@@ -110,7 +110,7 @@ public class TestServiceImpl implements TestService {
 
             return saveTest(newTest).toHexString();
         } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException("Invalid Subject: " + request.getTestSubject(), e);
+            throw new IllegalArgumentException("Invalid Subject: " + request.getSubject(), e);
         }
     }
 

@@ -11,7 +11,8 @@ import java.util.Map;
 @Getter
 public class TestRequest {
     private ObjectId userId;
+    private String subject;
     private Map<String, String> modifiers;
-    private String testSubject;
-    private int questionCount;
+    private int count;
+    private boolean isRandom;
 }

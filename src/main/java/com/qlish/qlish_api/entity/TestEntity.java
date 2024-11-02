@@ -20,10 +20,8 @@ import java.util.List;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Builder
 @AllArgsConstructor
-@NoArgsConstructor
 @Document(collection = "tests")
 public class TestEntity {
-
     @Id
     @Indexed(unique = true)
     @EqualsAndHashCode.Include
