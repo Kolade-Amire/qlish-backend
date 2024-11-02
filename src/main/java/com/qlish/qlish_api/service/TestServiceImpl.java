@@ -1,25 +1,35 @@
 package com.qlish.qlish_api.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mongodb.MongoBulkWriteException;
 import com.mongodb.MongoTimeoutException;
 import com.mongodb.MongoWriteException;
 import com.qlish.qlish_api.constants.AppConstants;
 import com.qlish.qlish_api.dto.*;
 import com.qlish.qlish_api.entity.*;
+import com.qlish.qlish_api.enums.PromptHandlerName;
 import com.qlish.qlish_api.enums.TestSubject;
 import com.qlish.qlish_api.exception.CustomQlishException;
 import com.qlish.qlish_api.exception.EntityNotFoundException;
 import com.qlish.qlish_api.exception.TestResultException;
 import com.qlish.qlish_api.exception.TestSubmissionException;
+import com.qlish.qlish_api.factory.TestHandlerFactory;
 import com.qlish.qlish_api.factory.QuestionFactory;
 import com.qlish.qlish_api.factory.ResultCalculationFactory;
+import com.qlish.qlish_api.generativeAI.GeminiAI;
+import com.qlish.qlish_api.generativeAI.TestHandler;
 import com.qlish.qlish_api.mapper.TestQuestionMapper;
 import com.qlish.qlish_api.mapper.TestMapper;
+import com.qlish.qlish_api.repository.CustomQuestionRepository;
 import com.qlish.qlish_api.repository.QuestionRepository;
 import com.qlish.qlish_api.repository.TestRepository;
 import com.qlish.qlish_api.request.TestQuestionSubmissionRequest;
 import com.qlish.qlish_api.request.TestRequest;
 import com.qlish.qlish_api.request.TestSubmissionRequest;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.text.StringEscapeUtils;
 import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,6 +42,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 @Service
 @RequiredArgsConstructor
@@ -40,20 +51,20 @@ public class TestServiceImpl implements TestService {
 
     private static final Logger logger = LoggerFactory.getLogger(TestServiceImpl.class);
     private final QuestionFactory questionFactory;
-
+    private final GeminiAI geminiAI;
+    private final TestHandlerFactory testHandlerFactory;
     private final ResultCalculationFactory resultCalculationFactory;
-
+    private final ObjectMapper objectMapper;
     private final TestRepository testRepository;
+    private final CustomQuestionRepository customQuestionRepository;
 
     //TODO: test status  implementation
 
-
-
     @Override
     public TestEntity getTestById(ObjectId id) {
-            return testRepository.findById(id).orElseThrow(
-                    () -> new EntityNotFoundException("Test not found with ID: " + id)
-            );
+        return testRepository.findById(id).orElseThrow(
+                () -> new EntityNotFoundException("Test not found with ID: " + id)
+        );
     }
 
     @Override
@@ -114,6 +125,64 @@ public class TestServiceImpl implements TestService {
         }
     }
 
+    @Override
+    public Page<TestQuestionDto> generateQuestions(TestRequest request) {
+        TestSubject subject = TestSubject.getSubjectByDisplayName(request.getSubject());
+        var handlerName = PromptHandlerName.getHandlerNameBySubject(subject);
+        try {
+            var testHandler = testHandlerFactory.getTestHandler(handlerName);
+            var prompt = testHandler.getPrompt(request);
+            var systemInstruction = testHandler.getSystemInstruction();
+            String generatedQuestions = geminiAI.generateQuestions(prompt, systemInstruction);
+
+            logger.info("Response from Gemini: {}", generatedQuestions);
+
+            var cleanedQuestions = getQuestionsFromResponse(generatedQuestions);
+            //save questions in the database
+            CompletableFuture.runAsync(
+                            () -> saveGeneratedQuestions(cleanedQuestions, testHandler))
+                    .exceptionally(e -> {
+                        logger.error("Failed to save questions to database: ", e);
+                        return null;
+                    })
+            ;
+
+            return null;
+        } catch (Exception e) {
+            throw new RuntimeException("Error occurred while generating questions: ", e);
+        }
+    }
+
+    private String getQuestionsFromResponse(String jsonResponse) throws JsonProcessingException {
+        //get questions list from returned json response
+        JsonNode root = objectMapper.readTree(jsonResponse);
+        String escapedQuestionsJson = root.at(
+                "/candidates/0/content/parts/0/text"
+        ).asText();
+
+        //unescape the questions list json string and clean it
+        return StringEscapeUtils.unescapeJson(escapedQuestionsJson)
+                .replaceAll("^```json|```$", "")
+                .trim();
+    }
+
+    private void saveGeneratedQuestions (String questionResponse, TestHandler handler) {
+
+        try {
+            List<CustomQuestion> questionsList = handler.parseQuestions(questionResponse);
+
+            var questions = customQuestionRepository.saveAll(questionsList);
+            questions.forEach(question -> logger.info(question.toString()));
+        } catch (CustomQlishException e){
+            throw new RuntimeException(e.getMessage(), e);
+        }catch(MongoBulkWriteException e){
+            throw new RuntimeException("MongoBulkWriteException: ", e);
+        }catch (Exception e){
+            throw new RuntimeException("Error occurred while saving generative questions: ", e);
+        }
+
+    }
+
 
     @Override
     public void deleteTest(ObjectId testId) {
@@ -172,8 +241,7 @@ public class TestServiceImpl implements TestService {
             saveTest(test);
 
             return test.get_id().toHexString();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             logger.error("An unexpected error occurred: {}", e.getMessage());
             throw new TestSubmissionException(AppConstants.TEST_SUBMISSION_ERROR);
         }

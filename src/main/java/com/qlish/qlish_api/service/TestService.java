@@ -21,6 +21,8 @@ public interface TestService {
 
     <T extends Question, M extends QuestionModifier> String createTest (TestRequest request);
 
+    Page<TestQuestionDto> generateQuestions(TestRequest request);
+
     Page<TestQuestionDto> getTestQuestions(ObjectId id, Pageable pageable);
 
     TestEntity getTestById(ObjectId id);
