@@ -1,12 +1,12 @@
 package com.qlish.qlish_api.entity;
 
+import com.qlish.qlish_api.enums.TestStatus;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.Builder;
 import lombok.ToString;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
@@ -27,7 +27,6 @@ public class TestEntity {
     @EqualsAndHashCode.Include
     private ObjectId _id;
     private TestDetails testDetails;
-    private List<CompletedTestQuestion> questions;
-    private String testStatus;
-    private TestResult testResult;
+    private List<TestQuestion> questions;
+    private TestStatus testStatus;
 }

@@ -2,16 +2,15 @@ package com.qlish.qlish_api.service;
 
 import com.qlish.qlish_api.dto.TestQuestionDto;
 import com.qlish.qlish_api.dto.TestDto;
-import com.qlish.qlish_api.entity.Question;
-import com.qlish.qlish_api.entity.QuestionModifier;
+import com.qlish.qlish_api.entity.*;
 import com.qlish.qlish_api.repository.QuestionRepository;
 import com.qlish.qlish_api.request.TestRequest;
 import com.qlish.qlish_api.request.TestSubmissionRequest;
-import com.qlish.qlish_api.entity.TestEntity;
-import com.qlish.qlish_api.entity.TestResult;
 import org.bson.types.ObjectId;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+
+import java.util.List;
 
 public interface TestService {
 
@@ -19,9 +18,9 @@ public interface TestService {
 
     ObjectId saveTest(TestEntity testDto);
 
-    <T extends Question, M extends QuestionModifier> String createTest (TestRequest request);
+    String createTest (TestRequest request);
 
-    Page<TestQuestionDto> generateQuestions(TestRequest request);
+    List<CustomQuestion> generateQuestions(TestRequest request);
 
     Page<TestQuestionDto> getTestQuestions(ObjectId id, Pageable pageable);
 

@@ -12,10 +12,11 @@ import java.util.Map;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class CompletedTestQuestion {
-    private ObjectId _id;
+public class TestQuestion {
+    private ObjectId id;
     private String questionText;
     private Map<String, String> options;
+    private Map<String, String> modifiers;
     private String correctAnswer;
     private String selectedOption;
     private boolean isAnswerCorrect;

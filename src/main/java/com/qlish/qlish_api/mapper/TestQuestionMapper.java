@@ -1,8 +1,8 @@
 package com.qlish.qlish_api.mapper;
 
-import com.qlish.qlish_api.entity.CompletedTestQuestion;
 import com.qlish.qlish_api.dto.TestQuestionDto;
-import com.qlish.qlish_api.entity.Question;
+import com.qlish.qlish_api.entity.CustomQuestion;
+import com.qlish.qlish_api.entity.TestQuestion;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
@@ -10,34 +10,35 @@ import java.util.List;
 @RequiredArgsConstructor
 public class TestQuestionMapper {
 
-    public static List<TestQuestionDto> mapQuestionListToTestViewDto(List<CompletedTestQuestion> questions){
+    public static List<TestQuestionDto> mapQuestionListToTestViewDto(List<TestQuestion> questions){
         return questions.stream()
                 .map(TestQuestionMapper::mapQuestionToTestViewDto)
                 .toList();
     }
 
-    public static List<CompletedTestQuestion> mapQuestionListToSavedTestQuestionDto(List<? extends Question> questions) {
+    public static List<TestQuestion> mapQuestionListToSavedTestQuestionDto(List<CustomQuestion> questions) {
         return questions.stream().map(
                 TestQuestionMapper::mapQuestionToSavedTestQuestionDto
         ).toList();
     }
 
-    public static TestQuestionDto mapQuestionToTestViewDto(CompletedTestQuestion question){
+    public static TestQuestionDto mapQuestionToTestViewDto(TestQuestion question){
 
         return TestQuestionDto.builder()
-                .id(question.get_id().toHexString())
+                .id(question.getId())
                 .questionText(question.getQuestionText())
                 .options(question.getOptions())
                 .build();
     }
 
 
-    public static CompletedTestQuestion mapQuestionToSavedTestQuestionDto(Question question){
-        return CompletedTestQuestion.builder()
-                ._id(question.getId())
+    public static TestQuestion mapQuestionToSavedTestQuestionDto(CustomQuestion question){
+        return TestQuestion.builder()
+                .id(question.getId())
                 .questionText(question.getQuestionText())
                 .options(question.getOptions())
-                .correctAnswer(question.getAnswer())
+                .modifiers(question.getModifiers())
+                .correctAnswer(question.getCorrectAnswer())
                 .build();
     }
 
