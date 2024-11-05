@@ -134,9 +134,9 @@ public class TestServiceImpl implements TestService {
 
             var cleanedQuestions = getQuestionsFromResponse(generatedQuestions);
 
-            var questions = testHandler.parseQuestions(cleanedQuestions);
+            var questionsList = testHandler.parseQuestions(cleanedQuestions);
 
-            return saveGeneratedQuestions(questions);
+            return saveGeneratedQuestions(questionsList);
         } catch (Exception e) {
             throw new RuntimeException("Error occurred while generating questions: ", e);
         }
@@ -155,17 +155,20 @@ public class TestServiceImpl implements TestService {
                 .trim();
     }
 
-    private List<CustomQuestion> saveGeneratedQuestions (List<CustomQuestion> generatedQuestions) {
+    private List<CustomQuestion> saveGeneratedQuestions(List<CustomQuestion> generatedQuestions) {
 
         try {
             var questions = customQuestionRepository.saveAll(generatedQuestions);
             questions.forEach(question -> logger.info(question.toString()));
             return questions;
-        } catch (CustomQlishException e){
+        } catch (CustomQlishException e) {
             throw new RuntimeException(e.getMessage(), e);
-        }catch(MongoBulkWriteException e){
+        } catch (MongoTimeoutException e) {
+            logger.error("Mongo timeout error occurred: {} ", e.getMessage());
+            throw new CustomQlishException("MongoDB connection timeout: " + e.getMessage(), e);
+        } catch (MongoBulkWriteException e) {
             throw new RuntimeException("MongoBulkWriteException: ", e);
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new RuntimeException("Error occurred while saving generative questions: ", e);
         }
 

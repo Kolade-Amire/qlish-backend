@@ -2,6 +2,7 @@ package com.qlish.qlish_api.service;
 
 import com.mongodb.MongoTimeoutException;
 import com.mongodb.MongoWriteException;
+import com.qlish.qlish_api.repository.CustomQuestionRepository;
 import com.qlish.qlish_api.request.AdminQuestionViewRequest;
 import com.qlish.qlish_api.dto.QuestionDto;
 import com.qlish.qlish_api.request.QuestionRequest;
@@ -31,21 +32,20 @@ public class QuestionServiceImpl implements QuestionService {
 
     private static final Logger logger = LoggerFactory.getLogger(QuestionServiceImpl.class);
     private final QuestionFactory questionFactory;
+    private final CustomQuestionRepository questionRepository;
 
     @PreAuthorize("hasAuthority('ADMIN_READ')")
     @Override
-    public <T extends Question> Page<QuestionDto> getQuestionsByCriteria(AdminQuestionViewRequest request, Pageable pageable) {
+    public Page<QuestionDto> getQuestionsByCriteria(AdminQuestionViewRequest request, Pageable pageable) {
 
         var subject = TestSubject.getSubjectByDisplayName(request.getSubject().toLowerCase());
 
-        QuestionRepository<T> repository = questionFactory.getRepository(subject);
-        var modifier = questionFactory.getModifier(subject, request.getModifiers());
+        var questionsPage = questionRepository.getCustomQuestionByModifiers(request.getModifiers(), pageable);
 
-        var questionsPage = repository.getAllQuestionsByCriteria(modifier, pageable);
+        var questionDtoPage = QuestionMapper
 
-        QuestionMapper<T> mapper = questionFactory.getMapper(subject);
+        return  questionsPage;
 
-        return mapper.mapToQuestionDtoPage(questionsPage, pageable);
 
     }
 
