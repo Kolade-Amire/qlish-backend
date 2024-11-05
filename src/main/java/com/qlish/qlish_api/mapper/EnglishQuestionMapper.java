@@ -14,9 +14,9 @@ import java.util.Map;
 
 @Component
 @Qualifier("english")
-public class EnglishQuestionMapper implements QuestionMapper<EnglishQuestionEntity> {
+public class EnglishQuestionMapper {
 
-    @Override
+
     public QuestionDto mapQuestionToQuestionDto(EnglishQuestionEntity question) {
 
         var modifier = Map.of(
@@ -35,7 +35,6 @@ public class EnglishQuestionMapper implements QuestionMapper<EnglishQuestionEnti
     }
 
 
-    @Override
     public Page<QuestionDto> mapToQuestionDtoPage(Page<EnglishQuestionEntity> questions, Pageable pageable) {
         List<QuestionDto> questionDtos = questions.stream().map(
                 this::mapQuestionToQuestionDto
@@ -44,7 +43,7 @@ public class EnglishQuestionMapper implements QuestionMapper<EnglishQuestionEnti
         return new PageImpl<>(questionDtos, pageable, questions.getTotalElements());
     }
 
-    @Override
+
     public EnglishQuestionEntity mapQuestionRequestToQuestion(QuestionRequest request) {
         return new EnglishQuestionEntity(
                 null,
