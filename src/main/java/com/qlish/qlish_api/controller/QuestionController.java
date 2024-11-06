@@ -3,7 +3,7 @@ package com.qlish.qlish_api.controller;
 import com.qlish.qlish_api.constants.AppConstants;
 import com.qlish.qlish_api.enums.TestSubject;
 import com.qlish.qlish_api.request.AdminQuestionViewRequest;
-import com.qlish.qlish_api.request.QuestionRequest;
+import com.qlish.qlish_api.request.NewQuestionRequest;
 import com.qlish.qlish_api.dto.QuestionDto;
 import com.qlish.qlish_api.request.UpdateQuestionRequest;
 import com.qlish.qlish_api.service.QuestionService;
@@ -27,7 +27,7 @@ public class QuestionController {
     @PreAuthorize("hasAuthority('ADMIN_READ')")
     @GetMapping("/{subject}")
     public ResponseEntity<Page<QuestionDto>> getQuestionsByCriteria(@RequestBody AdminQuestionViewRequest request, Pageable pageable) {
-        Page<QuestionDto> questionsPage = questionService.getQuestionsByCriteria(request, pageable);
+        Page<QuestionDto> questionsPage = questionService.getQuestionsBySubjectAndCriteria(request, pageable);
         return ResponseEntity.ok(questionsPage);
     }
 
@@ -40,7 +40,7 @@ public class QuestionController {
 
     @PreAuthorize("hasAuthority('ADMIN_CREATE')")
     @PostMapping("/{subject}/new")
-    public ResponseEntity<QuestionDto> createQuestion(@RequestBody QuestionRequest request) {
+    public ResponseEntity<QuestionDto> createQuestion(@RequestBody NewQuestionRequest request) {
         QuestionDto question = questionService.addNewQuestion(request);
         var subject = TestSubject.getSubjectByDisplayName(request.getSubject());
         URI newQuestionLocation = ServletUriComponentsBuilder

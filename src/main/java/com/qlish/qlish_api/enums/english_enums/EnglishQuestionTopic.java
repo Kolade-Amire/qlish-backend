@@ -24,6 +24,7 @@ public enum EnglishQuestionTopic {
                 return topic;
             }
         }
-        throw new IllegalArgumentException("Invalid level name: " + topicName);
+        return null;
     }
+
 }

@@ -10,7 +10,7 @@ import com.qlish.qlish_api.constants.AppConstants;
 import com.qlish.qlish_api.dto.TestDto;
 import com.qlish.qlish_api.dto.TestQuestionDto;
 import com.qlish.qlish_api.entity.*;
-import com.qlish.qlish_api.enums.PromptHandlerName;
+import com.qlish.qlish_api.enums.HandlerName;
 import com.qlish.qlish_api.enums.TestStatus;
 import com.qlish.qlish_api.enums.TestSubject;
 import com.qlish.qlish_api.exception.CustomQlishException;
@@ -18,7 +18,7 @@ import com.qlish.qlish_api.exception.EntityNotFoundException;
 import com.qlish.qlish_api.exception.TestResultException;
 import com.qlish.qlish_api.exception.TestSubmissionException;
 import com.qlish.qlish_api.factory.ResultCalculationFactory;
-import com.qlish.qlish_api.factory.TestHandlerFactory;
+import com.qlish.qlish_api.factory.HandlerFactory;
 import com.qlish.qlish_api.generativeAI.GeminiAI;
 import com.qlish.qlish_api.mapper.TestMapper;
 import com.qlish.qlish_api.mapper.TestQuestionMapper;
@@ -49,7 +49,7 @@ public class TestServiceImpl implements TestService {
 
     private static final Logger logger = LoggerFactory.getLogger(TestServiceImpl.class);
     private final GeminiAI geminiAI;
-    private final TestHandlerFactory testHandlerFactory;
+    private final HandlerFactory handlerFactory;
     private final ResultCalculationFactory resultCalculationFactory;
     private final ObjectMapper objectMapper = new ObjectMapper();
     private final TestRepository testRepository;
@@ -124,8 +124,8 @@ public class TestServiceImpl implements TestService {
 
         try {
             TestSubject subject = TestSubject.getSubjectByDisplayName(request.getSubject());
-            var handlerName = PromptHandlerName.getHandlerNameBySubject(subject);
-            var testHandler = testHandlerFactory.getTestHandler(handlerName);
+            var handlerName = HandlerName.getHandlerNameBySubject(subject);
+            var testHandler = handlerFactory.getHandler(handlerName);
             var prompt = testHandler.getPrompt(request);
             var systemInstruction = testHandler.getSystemInstruction();
             String generatedQuestions = geminiAI.generateQuestions(prompt, systemInstruction);
@@ -134,7 +134,7 @@ public class TestServiceImpl implements TestService {
 
             var cleanedQuestions = getQuestionsFromResponse(generatedQuestions);
 
-            var questionsList = testHandler.parseQuestions(cleanedQuestions);
+            var questionsList = testHandler.parseJsonQuestions(cleanedQuestions);
 
             return saveGeneratedQuestions(questionsList);
         } catch (Exception e) {

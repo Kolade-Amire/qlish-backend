@@ -1,6 +1,6 @@
 package com.qlish.qlish_api.factory;
 
-import com.qlish.qlish_api.generativeAI.TestHandler;
+import com.qlish.qlish_api.handler.Handler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -8,11 +8,11 @@ import java.util.Map;
 
 @RequiredArgsConstructor
 @Component
-public class TestHandlerFactory {
+public class HandlerFactory {
 
-    private final Map<String, TestHandler> promptMap;
+    private final Map<String, Handler> promptMap;
 
-    public TestHandler getTestHandler(String promptHandlerName){
+    public Handler getHandler(String promptHandlerName){
         var promptHandler = promptMap.get(promptHandlerName);
         if(promptHandler == null){
             throw new IllegalArgumentException("Invalid prompt handler name: " + promptHandlerName);

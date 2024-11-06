@@ -5,10 +5,10 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Getter
-public enum EnglishAttributes {
-    TOPIC("questionTopic"),
-    LEVEL("questionLevel"),
-    CLASS("questionClass");
+public enum EnglishModifiers {
+    TOPIC("topic"),
+    LEVEL("level"),
+    CLASS("class");
 
     private final String attributeName;
 }

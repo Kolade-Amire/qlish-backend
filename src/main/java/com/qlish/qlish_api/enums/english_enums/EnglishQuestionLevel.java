@@ -18,6 +18,6 @@ public enum EnglishQuestionLevel {
                 return level;
             }
         }
-        throw new IllegalArgumentException("Invalid level name: " + levelName);
+        return null;
     }
 }

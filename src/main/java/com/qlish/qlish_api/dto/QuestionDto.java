@@ -8,15 +8,14 @@ import java.util.Map;
 @AllArgsConstructor
 @Getter
 @ToString
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Setter
 @Builder
 public class QuestionDto {
-    @EqualsAndHashCode.Include
-    private ObjectId id;
+    private String id;
     private String questionText;
     private Map<String, String> options;
     private String answer;
     private String subject;
     private Map<String, String> modifiers;
+
 }

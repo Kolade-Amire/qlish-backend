@@ -1,25 +1,23 @@
 package com.qlish.qlish_api.service;
 
 import com.qlish.qlish_api.dto.QuestionDto;
-import com.qlish.qlish_api.entity.Question;
-import com.qlish.qlish_api.enums.TestSubject;
+import com.qlish.qlish_api.entity.CustomQuestion;
 import com.qlish.qlish_api.request.AdminQuestionViewRequest;
-import com.qlish.qlish_api.request.QuestionRequest;
-import com.qlish.qlish_api.request.UpdateQuestionRequest;
+import com.qlish.qlish_api.request.NewQuestionRequest;
 import org.bson.types.ObjectId;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface QuestionService {
-    Page<QuestionDto> getQuestionsByCriteria(AdminQuestionViewRequest request, Pageable pageable);
+    Page<QuestionDto> getQuestionsBySubjectAndCriteria(AdminQuestionViewRequest request, Pageable pageable);
 
-    <T extends Question> QuestionDto updateQuestion(ObjectId id, UpdateQuestionRequest request);
+     QuestionDto updateQuestion(QuestionDto existingQuestion);
 
-    <T extends Question> QuestionDto getQuestion(ObjectId id, String subject);
+     QuestionDto getQuestion(String id);
 
-    <T extends Question> void deleteQuestion(ObjectId id, String subject);
+     void deleteQuestion(String id);
 
-    <T extends Question> QuestionDto saveQuestion(T question, TestSubject subject);
+     CustomQuestion saveQuestion(CustomQuestion question);
 
-    <T extends Question> QuestionDto addNewQuestion(QuestionRequest request);
+     QuestionDto addNewQuestion(NewQuestionRequest request);
 }

@@ -1,18 +1,19 @@
-package com.qlish.qlish_api.generativeAI;
+package com.qlish.qlish_api.handler;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.qlish.qlish_api.entity.CustomQuestion;
+import com.qlish.qlish_api.request.NewQuestionRequest;
 import com.qlish.qlish_api.request.TestRequest;
 import org.apache.coyote.BadRequestException;
 
 import java.util.List;
 
-public interface TestHandler {
+public interface Handler {
 
     String getPrompt(TestRequest request) throws BadRequestException;
     String getSystemInstruction();
-
-    List<CustomQuestion> parseQuestions(String jsonResponse) throws JsonProcessingException;
+    boolean validateNewQuestionRequest(NewQuestionRequest request);
+    List<CustomQuestion> parseJsonQuestions(String jsonResponse) throws JsonProcessingException;
 
 
 }

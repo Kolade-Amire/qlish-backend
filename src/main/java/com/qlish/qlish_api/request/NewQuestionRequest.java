@@ -8,7 +8,7 @@ import java.util.Map;
 
 @AllArgsConstructor
 @Getter
-public class QuestionRequest {
+public class NewQuestionRequest {
     private String questionText;
     private Map<String, String> options;
     private String answer;

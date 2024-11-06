@@ -4,7 +4,6 @@ import com.qlish.qlish_api.entity.Question;
 import com.qlish.qlish_api.entity.QuestionModifier;
 import com.qlish.qlish_api.enums.TestSubject;
 import com.qlish.qlish_api.mapper.EnglishQuestionMapper;
-import com.qlish.qlish_api.mapper.QuestionMapper;
 import com.qlish.qlish_api.repository.CustomEnglishQuestionRepository;
 import com.qlish.qlish_api.repository.QuestionRepository;
 import jakarta.annotation.PostConstruct;

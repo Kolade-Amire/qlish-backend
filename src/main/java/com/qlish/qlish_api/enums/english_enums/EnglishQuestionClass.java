@@ -18,7 +18,7 @@ public enum EnglishQuestionClass {
                 return item;
             }
         }
-        throw new IllegalArgumentException("Invalid class name: " + className);
+        return null;
     }
 
 }
