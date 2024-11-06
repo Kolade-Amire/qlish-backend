@@ -3,6 +3,7 @@ package com.qlish.qlish_api.service;
 import com.qlish.qlish_api.dto.TestQuestionDto;
 import com.qlish.qlish_api.dto.TestDto;
 import com.qlish.qlish_api.entity.*;
+import com.qlish.qlish_api.exception.GenerativeAIException;
 import com.qlish.qlish_api.request.TestRequest;
 import com.qlish.qlish_api.request.TestSubmissionRequest;
 import org.bson.types.ObjectId;
@@ -17,9 +18,9 @@ public interface TestService {
 
     ObjectId saveTest(TestEntity testDto);
 
-    String createTest (TestRequest request);
+    String createTest (TestRequest request) throws GenerativeAIException;
 
-    List<Question> generateQuestions(TestRequest request);
+    List<Question> generateQuestions(TestRequest request) throws GenerativeAIException;
 
     Page<TestQuestionDto> getTestQuestions(ObjectId id, Pageable pageable);
 
@@ -29,7 +30,7 @@ public interface TestService {
 
     TestResult getTestResult(ObjectId id);
 
-    void deleteTest(ObjectId id);
+    void deleteTest(String id);
 
-    void deleteAllUserTests(ObjectId userId);
+    void deleteAllUserTests(String userId);
 }

@@ -21,7 +21,7 @@ public class MathHandler implements Handler {
     }
 
     @Override
-    public boolean validateNewQuestionRequest(NewQuestionRequest request) {
+    public boolean validateRequest(NewQuestionRequest request) {
         return false;
     }
 

@@ -224,7 +224,19 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
         var problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, HttpStatus.BAD_REQUEST.getReasonPhrase());
 
-        problemDetail.setTitle("Invalid request!");
+        problemDetail.setTitle("Invalid Request");
+        problemDetail.setInstance(URI.create(request.getRequestURI()));
+
+        return new ResponseEntity<>(problemDetail, HttpStatusCode.valueOf(problemDetail.getStatus()));
+    }
+
+    @ExceptionHandler(GenerativeAIException.class)
+    public ResponseEntity<ProblemDetail> handleGenerativeAIException(GenerativeAIException exception, HttpServletRequest request){
+        LOGGER.error(exception.getMessage());
+
+        var problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.INTERNAL_SERVER_ERROR, exception.getLocalizedMessage());
+
+        problemDetail.setTitle("Question Generation Error");
         problemDetail.setInstance(URI.create(request.getRequestURI()));
 
         return new ResponseEntity<>(problemDetail, HttpStatusCode.valueOf(problemDetail.getStatus()));

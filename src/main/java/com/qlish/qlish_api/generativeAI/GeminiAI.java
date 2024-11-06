@@ -3,6 +3,7 @@ package com.qlish.qlish_api.generativeAI;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.qlish.qlish_api.exception.GenerativeAIException;
 import okhttp3.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,7 +36,7 @@ public class GeminiAI {
             .build();
 
 
-    public String generateQuestions(String prompt, String systemInstruction) throws Exception {
+    public String generateQuestions(String prompt, String systemInstruction) throws GenerativeAIException {
 
         objectMapper.configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS, true);
 
@@ -53,7 +54,11 @@ public class GeminiAI {
                 .addHeader("Content-Type", "application/json")
                 .build();
 
-        return executeRequest(request);
+        try {
+            return executeRequest(request);
+        } catch (IOException e) {
+            throw new GenerativeAIException("An error occurred while executing request to generate questions.");
+        }
     }
 
     private String buildRequestBody(String prompt, String systemInstruction){
@@ -96,7 +101,7 @@ public class GeminiAI {
                 attempt++;
                 if (attempt >= MAX_RETRY_ATTEMPTS) {
                     logger.error("All retry attempts failed for request: {}", request, e);
-                    throw e; // Rethrow after maximum attempts
+                    throw e;
                 }
                 logger.warn("Attempt {} failed, retrying after {} ms...", attempt, retryDelay, e);
                 try {

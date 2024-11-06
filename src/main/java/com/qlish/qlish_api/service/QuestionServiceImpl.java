@@ -113,7 +113,7 @@ public class QuestionServiceImpl implements QuestionService {
             TestSubject subject = TestSubject.getSubjectByDisplayName(request.getSubject());
             Handler handler = handlerFactory.getHandler(HandlerName.getHandlerNameBySubject(subject));
 
-            boolean isValid = handler.validateNewQuestionRequest(request);
+            boolean isValid = handler.validateRequest(request.getSubject(), request.getModifiers());
 
             if (!isValid) {
                 throw new CustomQlishException("Validation failed for the provided new question request.");

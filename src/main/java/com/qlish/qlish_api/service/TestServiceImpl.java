@@ -13,10 +13,7 @@ import com.qlish.qlish_api.entity.*;
 import com.qlish.qlish_api.enums.HandlerName;
 import com.qlish.qlish_api.enums.TestStatus;
 import com.qlish.qlish_api.enums.TestSubject;
-import com.qlish.qlish_api.exception.CustomQlishException;
-import com.qlish.qlish_api.exception.EntityNotFoundException;
-import com.qlish.qlish_api.exception.TestResultException;
-import com.qlish.qlish_api.exception.TestSubmissionException;
+import com.qlish.qlish_api.exception.*;
 import com.qlish.qlish_api.factory.HandlerFactory;
 import com.qlish.qlish_api.generativeAI.GeminiAI;
 import com.qlish.qlish_api.mapper.TestMapper;
@@ -55,7 +52,10 @@ public class TestServiceImpl implements TestService {
     private final TestRepository testRepository;
     private final CustomQuestionRepository customQuestionRepository;
 
-    //TODO: test status  implementation
+    //TODO List:
+    // 1. test status  implementation
+    // 2. leaderboard implementation
+    // 3. test result email/messaging
 
     @Override
     public TestEntity getTestById(ObjectId id) {
@@ -91,55 +91,62 @@ public class TestServiceImpl implements TestService {
     }
 
     @Override
-    public String createTest(TestRequest request) {
+    public String createTest(TestRequest request) throws GenerativeAIException {
+
+
+        var subject = TestSubject.getSubjectByDisplayName(request.getSubject());
+        List<Question> generatedQuestions;
+
         try {
-            var subject = TestSubject.getSubjectByDisplayName(request.getSubject());
-
-            var generatedQuestions = generateQuestions(request);
-
-            TestDetails testDetails = TestDetails.builder()
-                    .userId(request.getUserId())
-                    .testSubject(subject)
-                    .startedAt(LocalDateTime.now())
-                    .totalQuestionCount(request.getCount())
-                    .isCompleted(false)
-                    .build();
-
-            List<TestQuestion> testQuestions = TestQuestionMapper.mapQuestionListToSavedTestQuestionDto(generatedQuestions);
-
-            var newTest = TestEntity.builder()
-                    .testDetails(testDetails)
-                    .testStatus(TestStatus.CREATED)
-                    .questions(testQuestions)
-                    .build();
-
-            return saveTest(newTest).toHexString();
-        } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException("Invalid Subject: " + request.getSubject(), e);
+            generatedQuestions = generateQuestions(request);
+        } catch (GenerativeAIException e) {
+            throw new GenerativeAIException(e.getMessage());
         }
+
+        var _userId = new ObjectId(request.getUserId());
+        TestDetails testDetails = TestDetails.builder()
+                .userId(_userId)
+                .testSubject(subject)
+                .startedAt(LocalDateTime.now())
+                .totalQuestionCount(request.getCount())
+                .isCompleted(false)
+                .build();
+
+        List<TestQuestion> testQuestions = TestQuestionMapper.mapQuestionListToSavedTestQuestionDto(generatedQuestions);
+
+        var newTest = TestEntity.builder()
+                .testDetails(testDetails)
+                .testStatus(TestStatus.CREATED)
+                .questions(testQuestions)
+                .build();
+
+        return saveTest(newTest).toHexString();
+
     }
 
     @Override
-    public List<Question> generateQuestions(TestRequest request) {
+    public List<Question> generateQuestions(TestRequest request) throws GenerativeAIException {
+        TestSubject subject = TestSubject.getSubjectByDisplayName(request.getSubject());
+        var handlerName = HandlerName.getHandlerNameBySubject(subject);
+        var testHandler = handlerFactory.getHandler(handlerName);
 
-        try {
-            TestSubject subject = TestSubject.getSubjectByDisplayName(request.getSubject());
-            var handlerName = HandlerName.getHandlerNameBySubject(subject);
-            var testHandler = handlerFactory.getHandler(handlerName);
+        boolean isTestRequestValid = testHandler.validateRequest(request.getSubject(), request.getModifiers());
+        if (isTestRequestValid) {
             var prompt = testHandler.getPrompt(request);
             var systemInstruction = testHandler.getSystemInstruction();
-            String generatedQuestions = geminiAI.generateQuestions(prompt, systemInstruction);
 
-            logger.info("Response from Gemini: {}", generatedQuestions);
+            try {
+                String generatedQuestions = geminiAI.generateQuestions(prompt, systemInstruction);
 
-            var cleanedQuestions = getQuestionsFromResponse(generatedQuestions);
-
-            var questionsList = testHandler.parseJsonQuestions(cleanedQuestions);
-
-            return saveGeneratedQuestions(questionsList);
-        } catch (Exception e) {
-            throw new RuntimeException("Error occurred while generating questions: ", e);
+                logger.info("Response from Gemini: {}", generatedQuestions);
+                var cleanedQuestions = getQuestionsFromResponse(generatedQuestions);
+                var questionsList = testHandler.parseJsonQuestions(cleanedQuestions);
+                return saveGeneratedQuestions(questionsList);
+            } catch (GenerativeAIException | JsonProcessingException e) {
+                throw new GenerativeAIException(e.getMessage());
+            }
         }
+        throw new GenerativeAIException("Unable to generate questions, check request and try again.");
     }
 
     private String getQuestionsFromResponse(String jsonResponse) throws JsonProcessingException {
@@ -175,13 +182,14 @@ public class TestServiceImpl implements TestService {
     }
 
     @Override
-    public void deleteTest(ObjectId testId) {
-        var test = getTestById(testId);
+    public void deleteTest(String testId) {
+        var _id = new ObjectId(testId);
+        var test = getTestById(_id);
         testRepository.delete(test);
     }
 
     @Override
-    public void deleteAllUserTests(ObjectId userId) {
+    public void deleteAllUserTests(String userId) {
         //TODO
     }
 

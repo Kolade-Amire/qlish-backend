@@ -9,9 +9,7 @@ import com.qlish.qlish_api.enums.english_enums.EnglishQuestionClass;
 import com.qlish.qlish_api.enums.english_enums.EnglishQuestionLevel;
 import com.qlish.qlish_api.enums.english_enums.EnglishQuestionTopic;
 import com.qlish.qlish_api.exception.CustomQlishException;
-import com.qlish.qlish_api.request.NewQuestionRequest;
 import com.qlish.qlish_api.request.TestRequest;
-import org.apache.coyote.BadRequestException;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
@@ -24,22 +22,21 @@ public class EnglishHandler implements Handler {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
-    public String getPrompt(TestRequest request) throws BadRequestException {
-
+    public String getPrompt(TestRequest request) {
         try {
             if (request.isRandom()) {
                 return String.format("Generate %d multiple-choice random english questions", request.getCount());
-            } else {
-                return String.format(
-                        "Generate %d multiple-choice %s questions on %s. The questions should be at a(n) %s difficulty level.",
-                        request.getCount(),
-                        request.getModifiers().get("class"),
-                        request.getModifiers().get("topic"),
-                        request.getModifiers().get("level")
-                );
             }
+            return String.format(
+                    "Generate %d multiple-choice %s questions on %s. The questions should be at a(n) %s difficulty level.",
+                    request.getCount(),
+                    request.getModifiers().get("class"),
+                    request.getModifiers().get("topic"),
+                    request.getModifiers().get("level")
+            );
+
         } catch (Exception e) {
-            throw new BadRequestException("Bad request, try again", e);
+            throw new CustomQlishException("An error occurred while attempting to get english prompt. Check request and try again", e);
         }
 
     }
@@ -166,22 +163,28 @@ public class EnglishHandler implements Handler {
                     .modifiers(modifiers)
                     .correctAnswer(answer)
                     .build();
+
         } catch (Exception e) {
             throw new CustomQlishException("Failed to parse question json object to Question entity: ", e);
         }
     }
 
     @Override
-    public boolean validateNewQuestionRequest(NewQuestionRequest request) {
-        if (!request.getSubject().equalsIgnoreCase(TestSubject.ENGLISH.getDisplayName())) {
+    public boolean validateRequest(String subject, Map<String, String> modifiers) {
+        if (isEnglish(subject)) {
+            var topic = EnglishQuestionTopic.fromTopicName(modifiers.get("topic"));
+            var questionClass = EnglishQuestionClass.fromClassName(modifiers.get("class"));
+            var level = EnglishQuestionLevel.fromLevelName(modifiers.get("level"));
+            return topic != null && questionClass != null && level != null;
+        }
+        return false;
+    }
+
+    private boolean isEnglish(String subject) {
+        if (!subject.equalsIgnoreCase(TestSubject.ENGLISH.getDisplayName())) {
             throw new IllegalArgumentException("Subject is not english, and english handler's method is being called!");
         }
-
-        var topic = EnglishQuestionTopic.fromTopicName(request.getModifiers().get("topic"));
-        var questionClass = EnglishQuestionClass.fromClassName(request.getModifiers().get("class"));
-        var level = EnglishQuestionLevel.fromLevelName(request.getModifiers().get("level"));
-
-        return topic != null && questionClass != null && level != null;
+        return true;
     }
 
 
