@@ -3,7 +3,7 @@ package com.qlish.qlish_api.handler;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.qlish.qlish_api.entity.CustomQuestion;
+import com.qlish.qlish_api.entity.Question;
 import com.qlish.qlish_api.enums.TestSubject;
 import com.qlish.qlish_api.enums.english_enums.EnglishQuestionClass;
 import com.qlish.qlish_api.enums.english_enums.EnglishQuestionLevel;
@@ -129,7 +129,7 @@ public class EnglishHandler implements Handler {
     }
 
     @Override
-    public List<CustomQuestion> parseJsonQuestions(String jsonResponse) throws JsonProcessingException {
+    public List<Question> parseJsonQuestions(String jsonResponse) throws JsonProcessingException {
 
         JsonNode questionsArray = objectMapper.readTree(jsonResponse
         );
@@ -142,7 +142,7 @@ public class EnglishHandler implements Handler {
         }
     }
 
-    private static CustomQuestion parseEnglishQuestion(JsonNode questionJson) {
+    private static Question parseEnglishQuestion(JsonNode questionJson) {
 
         try {
             var questionText = questionJson.get("question").asText();
@@ -159,7 +159,7 @@ public class EnglishHandler implements Handler {
             modifiers.put("level", questionJson.get("level").asText());
             modifiers.put("topic", questionJson.get("topic").asText());
 
-            return CustomQuestion.builder()
+            return Question.builder()
                     .questionText(questionText)
                     .options(options)
                     .subject(subject)

@@ -1,14 +1,11 @@
 package com.qlish.qlish_api.controller;
 
 import com.qlish.qlish_api.constants.AppConstants;
-import com.qlish.qlish_api.enums.TestSubject;
+import com.qlish.qlish_api.dto.QuestionDto;
 import com.qlish.qlish_api.request.AdminQuestionViewRequest;
 import com.qlish.qlish_api.request.NewQuestionRequest;
-import com.qlish.qlish_api.dto.QuestionDto;
-import com.qlish.qlish_api.request.UpdateQuestionRequest;
 import com.qlish.qlish_api.service.QuestionService;
 import lombok.RequiredArgsConstructor;
-import org.bson.types.ObjectId;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -32,36 +29,35 @@ public class QuestionController {
     }
 
     @PreAuthorize("hasAuthority('ADMIN_READ')")
-    @GetMapping("/{subject}/{id}")
-    public ResponseEntity<QuestionDto> getQuestion(@PathVariable ObjectId id, @PathVariable String subject) {
-        var question = questionService.getQuestion(id, subject);
+    @GetMapping("/{id}")
+    public ResponseEntity<QuestionDto> getQuestion(@PathVariable String id) {
+        var question = questionService.getQuestion(id);
         return ResponseEntity.ok(question);
     }
 
     @PreAuthorize("hasAuthority('ADMIN_CREATE')")
-    @PostMapping("/{subject}/new")
+    @PostMapping("/create")
     public ResponseEntity<QuestionDto> createQuestion(@RequestBody NewQuestionRequest request) {
         QuestionDto question = questionService.addNewQuestion(request);
-        var subject = TestSubject.getSubjectByDisplayName(request.getSubject());
         URI newQuestionLocation = ServletUriComponentsBuilder
                 .fromCurrentRequest()
-                .path(AppConstants.BASE_URL + "/questions/{subject}/{id}")
-                .buildAndExpand(subject.getDisplayName().toLowerCase(), question.getId())
+                .path(AppConstants.BASE_URL + "/questions/{id}")
+                .buildAndExpand(question.getId())
                 .toUri();
         return ResponseEntity.created(newQuestionLocation).body(question);
     }
 
     @PreAuthorize("hasAuthority('ADMIN_DELETE')")
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteQuestion(@PathVariable ObjectId id, @RequestBody String subject) {
-        questionService.deleteQuestion(id, subject);
+    public ResponseEntity<Void> deleteQuestion(@PathVariable String id) {
+        questionService.deleteQuestion(id);
         return ResponseEntity.noContent().build();
     }
 
     @PreAuthorize("hasAuthority('ADMIN_UPDATE')")
-    @PutMapping("{id}")
-    public ResponseEntity<QuestionDto> updateQuestion(@PathVariable ObjectId id, @RequestBody UpdateQuestionRequest request) {
-        QuestionDto question = questionService.updateQuestion(id, request);
+    @PutMapping("/{id}")
+    public ResponseEntity<QuestionDto> updateQuestion(@RequestBody QuestionDto request) {
+        QuestionDto question = questionService.updateQuestion(request);
         return ResponseEntity.ok(question);
     }
 

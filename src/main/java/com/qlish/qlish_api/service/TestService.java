@@ -3,7 +3,6 @@ package com.qlish.qlish_api.service;
 import com.qlish.qlish_api.dto.TestQuestionDto;
 import com.qlish.qlish_api.dto.TestDto;
 import com.qlish.qlish_api.entity.*;
-import com.qlish.qlish_api.repository.QuestionRepository;
 import com.qlish.qlish_api.request.TestRequest;
 import com.qlish.qlish_api.request.TestSubmissionRequest;
 import org.bson.types.ObjectId;
@@ -20,7 +19,7 @@ public interface TestService {
 
     String createTest (TestRequest request);
 
-    List<CustomQuestion> generateQuestions(TestRequest request);
+    List<Question> generateQuestions(TestRequest request);
 
     Page<TestQuestionDto> getTestQuestions(ObjectId id, Pageable pageable);
 

@@ -1,6 +1,6 @@
 package com.qlish.qlish_api.handler;
 
-import com.qlish.qlish_api.entity.CustomQuestion;
+import com.qlish.qlish_api.entity.Question;
 import com.qlish.qlish_api.request.NewQuestionRequest;
 import com.qlish.qlish_api.request.TestRequest;
 import org.apache.coyote.BadRequestException;
@@ -26,7 +26,7 @@ public class MathHandler implements Handler {
     }
 
     @Override
-    public List<CustomQuestion> parseJsonQuestions(String jsonResponse) {
+    public List<Question> parseJsonQuestions(String jsonResponse) {
         return List.of();
     }
 }

@@ -3,7 +3,7 @@ package com.qlish.qlish_api.service;
 import com.mongodb.MongoTimeoutException;
 import com.mongodb.MongoWriteException;
 import com.qlish.qlish_api.dto.QuestionDto;
-import com.qlish.qlish_api.entity.CustomQuestion;
+import com.qlish.qlish_api.entity.Question;
 import com.qlish.qlish_api.enums.HandlerName;
 import com.qlish.qlish_api.enums.TestSubject;
 import com.qlish.qlish_api.exception.CustomQlishException;
@@ -60,8 +60,8 @@ public class QuestionServiceImpl implements QuestionService {
             query.with(Sort.by(Sort.Direction.ASC, "_id"));
 
             // Execute query and get total count
-            List<CustomQuestion> questions = mongoTemplate.find(query, CustomQuestion.class);
-            long count = mongoTemplate.count(query.limit(-1).skip(-1), CustomQuestion.class);
+            List<Question> questions = mongoTemplate.find(query, Question.class);
+            long count = mongoTemplate.count(query.limit(-1).skip(-1), Question.class);
 
             // Return results in a Page object
             var resultPage = new PageImpl<>(questions, pageable, count);
@@ -79,7 +79,7 @@ public class QuestionServiceImpl implements QuestionService {
         try {
             var id = new ObjectId(request.getId());
 
-            CustomQuestion question = findQuestionById(id);
+            Question question = findQuestionById(id);
 
             if (request.getQuestionText() != null) question.setQuestionText(question.getQuestionText());
             if (request.getOptions() != null) question.setOptions(request.getOptions());
@@ -119,7 +119,7 @@ public class QuestionServiceImpl implements QuestionService {
                 throw new CustomQlishException("Validation failed for the provided new question request.");
             }
 
-            CustomQuestion newQuestion = CustomQuestion.builder()
+            Question newQuestion = Question.builder()
                     .subject(request.getSubject().toLowerCase())
                     .questionText(request.getQuestionText())
                     .options(request.getOptions())
@@ -147,7 +147,7 @@ public class QuestionServiceImpl implements QuestionService {
 
     @PreAuthorize("hasAuthority('ADMIN_CREATE')")
     @Override
-    public CustomQuestion saveQuestion(CustomQuestion question) {
+    public Question saveQuestion(Question question) {
         try {
             return questionRepository.save(question);
         } catch (MongoWriteException e) {
@@ -166,7 +166,7 @@ public class QuestionServiceImpl implements QuestionService {
 
     }
 
-    private CustomQuestion findQuestionById(ObjectId id) {
+    private Question findQuestionById(ObjectId id) {
         return questionRepository.findById(id).orElseThrow(
                 () -> new EntityNotFoundException("Question not found")
         );

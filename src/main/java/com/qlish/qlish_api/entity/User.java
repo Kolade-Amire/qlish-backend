@@ -22,7 +22,7 @@ import java.util.Set;
 @AllArgsConstructor
 @Data
 @Document(collection = "users")
-public class UserEntity {
+public class User {
 
     @Id
     @Indexed(unique = true)

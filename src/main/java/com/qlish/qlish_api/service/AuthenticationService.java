@@ -3,7 +3,7 @@ package com.qlish.qlish_api.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.qlish.qlish_api.constants.SecurityConstants;
 import com.qlish.qlish_api.entity.TokenEntity;
-import com.qlish.qlish_api.entity.UserEntity;
+import com.qlish.qlish_api.entity.User;
 import com.qlish.qlish_api.entity.UserPrincipal;
 import com.qlish.qlish_api.enums.auth_enums.AuthProvider;
 import com.qlish.qlish_api.enums.auth_enums.Role;
@@ -66,7 +66,7 @@ public class AuthenticationService {
             validateNewUser(request.getEmail());
             var password = doPasswordsMatch(request.getPassword(), request.getConfirmPassword());
 
-            var user = UserEntity.builder()
+            var user = User.builder()
                     .firstname(request.getFirstname())
                     .lastname(request.getLastname())
                     .email(request.getEmail())
@@ -152,7 +152,7 @@ public class AuthenticationService {
 
     }
 
-    private void saveUserRefreshToken(UserEntity user, String token) {
+    private void saveUserRefreshToken(User user, String token) {
 
         var newTokenEntity = TokenEntity.builder()
                 .userId(user.get_id().toHexString())

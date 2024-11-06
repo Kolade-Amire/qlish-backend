@@ -4,7 +4,7 @@ import com.mongodb.MongoTimeoutException;
 import com.mongodb.MongoWriteException;
 import com.qlish.qlish_api.exception.CustomQlishException;
 import com.qlish.qlish_api.constants.AppConstants;
-import com.qlish.qlish_api.entity.UserEntity;
+import com.qlish.qlish_api.entity.User;
 import com.qlish.qlish_api.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -22,13 +22,13 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
 
     @Override
-    public UserEntity getUserByEmail(String email) throws UsernameNotFoundException {
+    public User getUserByEmail(String email) throws UsernameNotFoundException {
         return userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException(AppConstants.USER_NOT_FOUND));
     }
 
 
     @Override
-    public UserEntity saveUser(UserEntity user) {
+    public User saveUser(User user) {
         try {
             return userRepository.save(user);
         } catch (

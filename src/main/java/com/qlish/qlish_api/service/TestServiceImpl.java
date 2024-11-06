@@ -17,7 +17,6 @@ import com.qlish.qlish_api.exception.CustomQlishException;
 import com.qlish.qlish_api.exception.EntityNotFoundException;
 import com.qlish.qlish_api.exception.TestResultException;
 import com.qlish.qlish_api.exception.TestSubmissionException;
-import com.qlish.qlish_api.factory.ResultCalculationFactory;
 import com.qlish.qlish_api.factory.HandlerFactory;
 import com.qlish.qlish_api.generativeAI.GeminiAI;
 import com.qlish.qlish_api.mapper.TestMapper;
@@ -27,6 +26,7 @@ import com.qlish.qlish_api.repository.TestRepository;
 import com.qlish.qlish_api.request.TestQuestionSubmissionRequest;
 import com.qlish.qlish_api.request.TestRequest;
 import com.qlish.qlish_api.request.TestSubmissionRequest;
+import com.qlish.qlish_api.strategy.ResultCalculationStrategy;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.text.StringEscapeUtils;
 import org.bson.types.ObjectId;
@@ -50,7 +50,7 @@ public class TestServiceImpl implements TestService {
     private static final Logger logger = LoggerFactory.getLogger(TestServiceImpl.class);
     private final GeminiAI geminiAI;
     private final HandlerFactory handlerFactory;
-    private final ResultCalculationFactory resultCalculationFactory;
+    private final ResultCalculationStrategy resultCalculationStrategy;
     private final ObjectMapper objectMapper = new ObjectMapper();
     private final TestRepository testRepository;
     private final CustomQuestionRepository customQuestionRepository;
@@ -120,7 +120,7 @@ public class TestServiceImpl implements TestService {
     }
 
     @Override
-    public List<CustomQuestion> generateQuestions(TestRequest request) {
+    public List<Question> generateQuestions(TestRequest request) {
 
         try {
             TestSubject subject = TestSubject.getSubjectByDisplayName(request.getSubject());
@@ -155,7 +155,7 @@ public class TestServiceImpl implements TestService {
                 .trim();
     }
 
-    private List<CustomQuestion> saveGeneratedQuestions(List<CustomQuestion> generatedQuestions) {
+    private List<Question> saveGeneratedQuestions(List<Question> generatedQuestions) {
 
         try {
             var questions = customQuestionRepository.saveAll(generatedQuestions);
@@ -242,9 +242,8 @@ public class TestServiceImpl implements TestService {
     public TestResult getTestResult(ObjectId id) {
         try {
             var test = getTestById(id);
-            var strategy = resultCalculationFactory.getStrategy(test.getTestDetails().getTestSubject());
 
-            return strategy.calculateResult(test.getQuestions());
+            return resultCalculationStrategy.calculateResult(test.getQuestions());
         } catch (Exception e) {
             logger.error(e.getMessage());
             throw new TestResultException(e.getMessage());

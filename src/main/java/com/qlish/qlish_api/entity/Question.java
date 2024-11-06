@@ -1,24 +1,26 @@
 package com.qlish.qlish_api.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.experimental.SuperBuilder;
+import lombok.*;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Field;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Map;
 
-@Data
+@Getter
+@Setter
+@ToString
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@Builder
 @AllArgsConstructor
-@NoArgsConstructor
-public abstract class Question {
-
+@Document(collection = "questions")
+public class Question{
+    @EqualsAndHashCode.Include
     @Id
     private ObjectId id;
-    @Field("question")
     private String questionText;
     private Map<String, String> options;
-    private String answer;
+    private String subject;
+    private Map<String, String> modifiers;
+    private String correctAnswer;
 }

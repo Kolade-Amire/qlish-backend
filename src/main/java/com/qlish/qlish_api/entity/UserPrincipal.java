@@ -14,7 +14,7 @@ import java.util.Map;
 @AllArgsConstructor
 public class UserPrincipal implements OAuth2User, UserDetails {
 
-    private final UserEntity user;
+    private final User user;
     private Map<String, Object> attributes;
 
 
@@ -56,7 +56,7 @@ public class UserPrincipal implements OAuth2User, UserDetails {
     }
 
 
-    public static UserPrincipal create(UserEntity user, Map<String, Object> attributes) {
+    public static UserPrincipal create(User user, Map<String, Object> attributes) {
 
         UserPrincipal userPrincipal = new UserPrincipal(user);
         userPrincipal.setAttributes(attributes);

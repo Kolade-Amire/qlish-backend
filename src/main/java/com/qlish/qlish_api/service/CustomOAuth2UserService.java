@@ -2,7 +2,7 @@ package com.qlish.qlish_api.service;
 
 
 import com.qlish.qlish_api.enums.auth_enums.AuthProvider;
-import com.qlish.qlish_api.entity.UserEntity;
+import com.qlish.qlish_api.entity.User;
 import com.qlish.qlish_api.entity.UserPrincipal;
 import com.qlish.qlish_api.entity.OAuth2UserInfo;
 import com.qlish.qlish_api.enums.auth_enums.Role;
@@ -42,7 +42,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                         .getRegistrationId(), oauth2User.getAttributes()
         );
 
-        UserEntity user;
+        User user;
         try {
             user = userService.getUserByEmail(oAuth2UserInfo.getEmail());
             user = updateExistingUser(user, oAuth2UserInfo);
@@ -53,13 +53,13 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     }
 
 
-    public UserEntity registerUser(OAuth2UserRequest userRequest, OAuth2UserInfo oAuth2UserInfo) throws OAuth2AuthenticationException {
+    public User registerUser(OAuth2UserRequest userRequest, OAuth2UserInfo oAuth2UserInfo) throws OAuth2AuthenticationException {
 
         var user = buildUserFromOAuth2UserInfo(userRequest, oAuth2UserInfo);
         return userService.saveUser(user);
     }
 
-    private UserEntity updateExistingUser(UserEntity existingUser, OAuth2UserInfo oAuth2UserInfo) {
+    private User updateExistingUser(User existingUser, OAuth2UserInfo oAuth2UserInfo) {
         var name = oAuth2UserInfo.getName().split(" ");
         var firstname = name[0];
         var lastname = name[1];
@@ -70,7 +70,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         return  userService.saveUser(existingUser);
     }
 
-    private UserEntity buildUserFromOAuth2UserInfo(OAuth2UserRequest userRequest, OAuth2UserInfo userInfo){
+    private User buildUserFromOAuth2UserInfo(OAuth2UserRequest userRequest, OAuth2UserInfo userInfo){
 
         var name = userInfo.getName().split(" ");
         var firstname = name[0];
@@ -78,7 +78,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
         var emailSplit = userInfo.getEmail().split("@");
 
-        return UserEntity.builder()
+        return User.builder()
                 .firstname(firstname)
                 .lastname(lastname)
                 .profileName(emailSplit[0])

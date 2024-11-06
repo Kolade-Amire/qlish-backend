@@ -1,7 +1,7 @@
 package com.qlish.qlish_api.mapper;
 
 import com.qlish.qlish_api.dto.TestQuestionDto;
-import com.qlish.qlish_api.entity.CustomQuestion;
+import com.qlish.qlish_api.entity.Question;
 import com.qlish.qlish_api.entity.TestQuestion;
 import lombok.RequiredArgsConstructor;
 
@@ -16,7 +16,7 @@ public class TestQuestionMapper {
                 .toList();
     }
 
-    public static List<TestQuestion> mapQuestionListToSavedTestQuestionDto(List<CustomQuestion> questions) {
+    public static List<TestQuestion> mapQuestionListToSavedTestQuestionDto(List<Question> questions) {
         return questions.stream().map(
                 TestQuestionMapper::mapQuestionToSavedTestQuestionDto
         ).toList();
@@ -32,7 +32,7 @@ public class TestQuestionMapper {
     }
 
 
-    public static TestQuestion mapQuestionToSavedTestQuestionDto(CustomQuestion question){
+    public static TestQuestion mapQuestionToSavedTestQuestionDto(Question question){
         return TestQuestion.builder()
                 .id(question.getId())
                 .questionText(question.getQuestionText())

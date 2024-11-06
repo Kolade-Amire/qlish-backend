@@ -1,6 +1,6 @@
 package com.qlish.qlish_api.service;
 
-import com.qlish.qlish_api.entity.UserEntity;
+import com.qlish.qlish_api.entity.User;
 import com.qlish.qlish_api.entity.UserPrincipal;
 import com.qlish.qlish_api.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +17,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        UserEntity user = userRepository.findByEmail(username)
+        User user = userRepository.findByEmail(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
         return new UserPrincipal(user);
     }

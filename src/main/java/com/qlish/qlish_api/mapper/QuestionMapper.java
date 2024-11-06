@@ -1,7 +1,7 @@
 package com.qlish.qlish_api.mapper;
 
 import com.qlish.qlish_api.dto.QuestionDto;
-import com.qlish.qlish_api.entity.CustomQuestion;
+import com.qlish.qlish_api.entity.Question;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -12,7 +12,7 @@ import java.util.List;
 public class QuestionMapper {
 
 
-    public static QuestionDto mapQuestionToQuestionDto(CustomQuestion question) {
+    public static QuestionDto mapQuestionToQuestionDto(Question question) {
 
         return QuestionDto.builder()
                 .id(question.getId().toHexString())
@@ -25,7 +25,7 @@ public class QuestionMapper {
     }
 
 
-    public static Page<QuestionDto> mapToQuestionDtoPage(Page<CustomQuestion> questions, Pageable pageable) {
+    public static Page<QuestionDto> mapToQuestionDtoPage(Page<Question> questions, Pageable pageable) {
         List<QuestionDto> questionDtos = questions.stream().map(
                 QuestionMapper::mapQuestionToQuestionDto
         ).toList();
