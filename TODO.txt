@@ -1,0 +1,5 @@
+TODO List:
+    1. more dynamic test status  implementation
+    2. leaderboard implementation
+    3. test result email/messaging
+    4. permissions and authorities assignment

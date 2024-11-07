@@ -37,7 +37,8 @@ public enum Role {
                     ADMIN_CREATE,
                     ADMIN_DELETE,
                     ADMIN_UPDATE,
-                    DEV_DEFAULT
+                    DEV_DEFAULT,
+                    USER_DEFAULT
             )
     );
     private final Set<Permissions> permissions;

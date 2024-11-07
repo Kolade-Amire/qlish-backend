@@ -1,5 +1,6 @@
 package com.qlish.qlish_api.dto;
 
+import com.qlish.qlish_api.entity.TestQuestion;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.Builder;
@@ -9,6 +10,7 @@ import lombok.EqualsAndHashCode;
 import org.bson.types.ObjectId;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @AllArgsConstructor
 @Getter
@@ -21,6 +23,7 @@ public class TestDto {
     private String id;
     private ObjectId userId;
     private String testSubject;
+    private List<TestQuestion> questions;
     private LocalDateTime startedAt;
     private String testStatus;
     private int totalQuestionCount;

@@ -52,10 +52,6 @@ public class TestServiceImpl implements TestService {
     private final TestRepository testRepository;
     private final CustomQuestionRepository customQuestionRepository;
 
-    //TODO List:
-    // 1. test status  implementation
-    // 2. leaderboard implementation
-    // 3. test result email/messaging
 
     @Override
     public TestEntity getTestById(ObjectId id) {
@@ -65,8 +61,8 @@ public class TestServiceImpl implements TestService {
     }
 
     @Override
-    public TestDto getTestForView(ObjectId id) {
-        var test = getTestById(id);
+    public TestDto getTestForView(String id) {
+        var test = getTestById(returnObjectId(id));
         return TestMapper.mapTestToDto(test);
     }
 
@@ -74,7 +70,7 @@ public class TestServiceImpl implements TestService {
     @Override
     public ObjectId saveTest(TestEntity test) {
         try {
-            return testRepository.save(test).get_id();
+            return testRepository.save(test).getId();
         } catch (MongoWriteException e) {
             logger.error("Mongo write error: {}", e.getMessage());
             throw new CustomQlishException("Error writing to MongoDB: " + e.getMessage(), e);
@@ -93,9 +89,9 @@ public class TestServiceImpl implements TestService {
     @Override
     public String createTest(TestRequest request) throws GenerativeAIException {
 
-
         var subject = TestSubject.getSubjectByDisplayName(request.getSubject());
         List<Question> generatedQuestions;
+
 
         try {
             generatedQuestions = generateQuestions(request);
@@ -103,9 +99,8 @@ public class TestServiceImpl implements TestService {
             throw new GenerativeAIException(e.getMessage());
         }
 
-        var _userId = new ObjectId(request.getUserId());
         TestDetails testDetails = TestDetails.builder()
-                .userId(_userId)
+                .userId(returnObjectId(request.getUserId()))
                 .testSubject(subject)
                 .startedAt(LocalDateTime.now())
                 .totalQuestionCount(request.getCount())
@@ -183,54 +178,46 @@ public class TestServiceImpl implements TestService {
 
     @Override
     public void deleteTest(String testId) {
-        var _id = new ObjectId(testId);
-        var test = getTestById(_id);
+        var test = getTestById(returnObjectId(testId));
         testRepository.delete(test);
     }
 
     @Override
-    public void deleteAllUserTests(String userId) {
-        //TODO
-    }
+    public Page<TestQuestionDto> getTestQuestions(String testId, Pageable pageable) {
 
-
-    @Override
-    public Page<TestQuestionDto> getTestQuestions(ObjectId testId, Pageable pageable) {
-
-        var test = getTestById(testId);
+        var test = getTestById(returnObjectId(testId));
 
         var questions = test.getQuestions();
 
         // Perform pagination over the full list of questions
         int start = (int) pageable.getOffset();
         int end = Math.min(start + pageable.getPageSize(), questions.size());
-        var paginatedQuestions = questions.subList(start, end);
+        var pageQuestionList = questions.subList(start, end);
 
-        // Convert to DTOs for frontend response
-        List<TestQuestionDto> questionDtoList = TestQuestionMapper.mapQuestionListToTestViewDto(paginatedQuestions);
+
+        List<TestQuestionDto> questionDtoList = TestQuestionMapper.mapQuestionListToTestViewDto(pageQuestionList);
 
         // Return the paginated page of questions
         return new PageImpl<>(questionDtoList, pageable, questions.size());
     }
 
     @Override
-    public String submitTest(ObjectId id, TestSubmissionRequest request) {
-
+    public String submitTest(TestSubmissionRequest request) {
         try {
-            var test = getTestById(id);
+            var test = getTestById(returnObjectId(request.getId()));
             var answers = request.getAnswers();
 
             // Process each answer and map it to the corresponding question
             for (TestQuestionSubmissionRequest submission : answers) {
                 // Find the testQuestion in the test
-                var testQuestion = test.getQuestions().stream()
+                TestQuestion testQuestion = test.getQuestions().stream()
                         .filter(q -> q.getId().equals(submission.getQuestionId()))
                         .findFirst()
-                        .orElseThrow(() -> new EntityNotFoundException("Question not found"));
+                        .orElseThrow(() -> new EntityNotFoundException(AppConstants.QUESTION_NOT_FOUND));
 
                 // Store the submission in the corresponding question of the test
                 testQuestion.setSelectedOption(submission.getSelectedOption());
-                testQuestion.setAnswerCorrect(submission.getSelectedOption().equals(testQuestion.getCorrectAnswer()));
+                testQuestion.setAnswerCorrect(submission.getSelectedOption().equalsIgnoreCase(testQuestion.getCorrectAnswer()));
             }
 
             // Mark the test as completed
@@ -238,7 +225,7 @@ public class TestServiceImpl implements TestService {
 
             saveTest(test);
 
-            return test.get_id().toHexString();
+            return test.getId().toHexString();
         } catch (Exception e) {
             logger.error("An unexpected error occurred: {}", e.getMessage());
             throw new TestSubmissionException(AppConstants.TEST_SUBMISSION_ERROR);
@@ -247,15 +234,18 @@ public class TestServiceImpl implements TestService {
     }
 
     @Override
-    public TestResult getTestResult(ObjectId id) {
+    public TestResult getTestResult(String id) {
         try {
-            var test = getTestById(id);
-
+            var test = getTestById(returnObjectId(id));
             return resultCalculationStrategy.calculateResult(test.getQuestions());
         } catch (Exception e) {
             logger.error(e.getMessage());
             throw new TestResultException(e.getMessage());
         }
+    }
+
+    private ObjectId returnObjectId(String idString){
+        return new ObjectId(idString);
     }
 
 

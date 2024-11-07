@@ -9,6 +9,8 @@ public class AppConstants {
     public static final String NO_MAPPING_FOUND = "No mapping found for this url";
     public static final String DATABASE_ERROR = "Unexpected Database Error.";
 
+    public static final String QUESTION_NOT_FOUND = "Question not found.";
+
     public static final String GENERAL_ERROR_MESSAGE = "An unexpected error occurred.";
 
 

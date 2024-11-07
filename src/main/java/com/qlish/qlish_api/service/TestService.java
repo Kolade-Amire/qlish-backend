@@ -14,7 +14,7 @@ import java.util.List;
 
 public interface TestService {
 
-    TestDto getTestForView(ObjectId id);
+    TestDto getTestForView(String id);
 
     ObjectId saveTest(TestEntity testDto);
 
@@ -22,15 +22,13 @@ public interface TestService {
 
     List<Question> generateQuestions(TestRequest request) throws GenerativeAIException;
 
-    Page<TestQuestionDto> getTestQuestions(ObjectId id, Pageable pageable);
+    Page<TestQuestionDto> getTestQuestions(String id, Pageable pageable);
 
     TestEntity getTestById(ObjectId id);
 
-    String submitTest(ObjectId id, TestSubmissionRequest request);
+    String submitTest(TestSubmissionRequest request);
 
-    TestResult getTestResult(ObjectId id);
+    TestResult getTestResult(String id);
 
     void deleteTest(String id);
-
-    void deleteAllUserTests(String userId);
 }

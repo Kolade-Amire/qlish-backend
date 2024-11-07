@@ -25,7 +25,7 @@ public class TestEntity {
     @Id
     @Indexed(unique = true)
     @EqualsAndHashCode.Include
-    private ObjectId _id;
+    private ObjectId id;
     private TestDetails testDetails;
     private List<TestQuestion> questions;
     private TestStatus testStatus;
