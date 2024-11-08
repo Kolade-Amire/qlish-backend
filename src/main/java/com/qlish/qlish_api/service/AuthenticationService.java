@@ -127,7 +127,7 @@ public class AuthenticationService {
             try {
                 tokenService.deleteTokenByUserId(user.get_id().toString());
             } catch (Exception e) {
-                LOGGER.info("Token Expired. Failed to delete user's existing token.", e);
+                LOGGER.info("Token Expired. Failed to delete user's existing token.");
             }
 
 

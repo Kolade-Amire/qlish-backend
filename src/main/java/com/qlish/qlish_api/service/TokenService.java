@@ -15,12 +15,6 @@ public class TokenService {
 
     private final TokenRedisRepository tokenRepository;
 
-    public TokenEntity getTokenByTokenValue(String token) {
-        return tokenRepository.findByToken(token).orElseThrow(
-                () -> new EntityNotFoundException("Token not found.")
-        );
-    }
-
     public TokenEntity findTokenByUserId(String userId) {
         return tokenRepository.findByUserId(userId).orElseThrow(() -> new EntityNotFoundException(String.format("Could not get token for user with id: %s ", userId)));
     }
