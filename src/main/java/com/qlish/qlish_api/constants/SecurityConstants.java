@@ -26,6 +26,8 @@ public class SecurityConstants {
             AppConstants.BASE_URL + "/oauth2/**",
             "/v2/api-docs",
             "/v3/api-docs",
+            "/v3/api-docs.yaml",
+            "/swagger-ui/index.html",
             "/v3/api-docs/**",
             "/swagger-resources",
             "/swagger-resources/**",
@@ -33,8 +35,9 @@ public class SecurityConstants {
             "/configuration/security",
             "/swagger-ui/**",
             "/webjars/**",
-            "/swagger-ui.html"
-    };
+            "/swagger-ui.html",
+
+};
 
     public static String JWT_SECRET_KEY = System.getenv("JWT_SECRET_KEY");
 }

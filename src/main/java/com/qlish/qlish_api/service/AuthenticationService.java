@@ -20,6 +20,8 @@ import io.jsonwebtoken.JwtException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -38,6 +40,7 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 public class AuthenticationService {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(AuthenticationService.class);
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
@@ -119,7 +122,13 @@ public class AuthenticationService {
             var user = userService.getUserByEmail(request.getEmail());
 
             user.setLastLoginAt(LocalDateTime.now());
-            tokenService.deleteTokenByUserId(user.get_id().toString());
+
+
+            try {
+                tokenService.deleteTokenByUserId(user.get_id().toString());
+            } catch (Exception e) {
+                LOGGER.info("Token Expired. Failed to delete user's existing token.", e);
+            }
 
 
             var userPrincipal = new UserPrincipal(user);
