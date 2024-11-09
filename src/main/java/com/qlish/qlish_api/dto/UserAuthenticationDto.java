@@ -1,6 +1,6 @@
 package com.qlish.qlish_api.dto;
 
-import com.qlish.qlish_api.enums.auth_enums.Role;
+import com.qlish.qlish_api.enums.auth.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

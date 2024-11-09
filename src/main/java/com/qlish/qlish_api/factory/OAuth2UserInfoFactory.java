@@ -1,6 +1,6 @@
 package com.qlish.qlish_api.factory;
 
-import com.qlish.qlish_api.enums.auth_enums.AuthProvider;
+import com.qlish.qlish_api.enums.auth.AuthProvider;
 import com.qlish.qlish_api.entity.GoogleOAuth2UserInfo;
 import com.qlish.qlish_api.entity.OAuth2UserInfo;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;

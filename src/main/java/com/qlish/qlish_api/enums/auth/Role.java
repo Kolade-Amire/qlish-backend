@@ -1,4 +1,4 @@
-package com.qlish.qlish_api.enums.auth_enums;
+package com.qlish.qlish_api.enums.auth;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static com.qlish.qlish_api.enums.auth_enums.Permissions.*;
+import static com.qlish.qlish_api.enums.auth.Permissions.*;
 
 @Getter
 @RequiredArgsConstructor

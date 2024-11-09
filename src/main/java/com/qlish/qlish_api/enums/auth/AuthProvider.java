@@ -1,4 +1,4 @@
-package com.qlish.qlish_api.enums.auth_enums;
+package com.qlish.qlish_api.enums.auth;
 
 public enum AuthProvider {
     LOCAL,

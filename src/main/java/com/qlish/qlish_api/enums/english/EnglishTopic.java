@@ -1,11 +1,11 @@
-package com.qlish.qlish_api.enums.english_enums;
+package com.qlish.qlish_api.enums.english;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Getter
-public enum EnglishQuestionTopic {
+public enum EnglishTopic {
 
     ANTONYMS("antonyms"),
     PARAGRAPH("paragraph"),
@@ -17,14 +17,12 @@ public enum EnglishQuestionTopic {
     TENSES("tenses");
 
     private final String topicName;
-
-    public static EnglishQuestionTopic fromTopicName(String topicName) {
-        for (EnglishQuestionTopic topic : EnglishQuestionTopic.values()) {
+    public static EnglishTopic fromTopicName(String topicName) {
+        for (EnglishTopic topic : EnglishTopic.values()) {
             if (topic.getTopicName().equalsIgnoreCase(topicName)) {
                 return topic;
             }
         }
         return null;
     }
-
 }

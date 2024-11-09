@@ -1,19 +1,19 @@
-package com.qlish.qlish_api.enums.english_enums;
+package com.qlish.qlish_api.enums;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public enum EnglishQuestionLevel {
+public enum QuestionLevel {
     ADVANCED("advanced"),
     INTERMEDIATE("intermediate"),
     ELEMENTARY("elementary");
 
     private final String levelName;
 
-    public static EnglishQuestionLevel fromLevelName(String levelName) {
-        for (EnglishQuestionLevel level : EnglishQuestionLevel.values()) {
+    public static QuestionLevel fromLevelName(String levelName) {
+        for (QuestionLevel level : QuestionLevel.values()) {
             if (level.getLevelName().equalsIgnoreCase(levelName)) {
                 return level;
             }
