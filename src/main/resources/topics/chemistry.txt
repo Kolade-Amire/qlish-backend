@@ -1,0 +1,87 @@
+Elementary Level
+    General Chemistry
+        Basic operations with elements and compounds
+        Atomic structure and the periodic table
+        Basic chemical reactions and equations
+        States of matter (solids, liquids, gases)
+        Acids, bases, and pH basics
+        Solutions and solubility fundamentals
+    Basic Organic Chemistry
+        Introduction to hydrocarbons (alkanes, alkenes)
+        Functional groups basics
+        Simple reactions (e.g., combustion, addition reactions)
+        Basic nomenclature of organic compounds
+    Environmental Chemistry
+        Basic concepts of pollution (air and water)
+        Introduction to greenhouse gases
+        Water treatment basics
+        Basic Analytical Chemistry
+Intermediate Level
+    General Chemistry
+        Stoichiometry and mole concepts
+        Chemical bonding (ionic, covalent, metallic)
+        Thermochemistry (enthalpy and energy changes)
+        Advanced states of matter (phase changes and diagrams)
+        Introduction to chemical kinetics
+        Basic electrochemistry (redox reactions)
+    Organic Chemistry
+        Alcohols, ethers, and phenols
+        Carbonyl compounds (aldehydes, ketones)
+        Intro to reaction mechanisms (nucleophilic substitution, addition)
+        Stereochemistry and chirality basics
+    Inorganic Chemistry
+        Periodic trends and element properties
+        Main group element chemistry
+        Coordination compounds basics
+    Physical Chemistry
+        Chemical equilibrium and Le Chatelier’s principle
+        Introduction to quantum chemistry concepts
+        Basic molecular spectroscopy (IR, UV)
+    Biochemistry
+        Structure and function of carbohydrates and proteins
+        Enzyme catalysis basics
+        Introduction to metabolic pathways
+    Environmental Chemistry
+        Acid rain and its effects
+        Basic soil and water chemistry
+        Biogeochemical cycles (carbon, nitrogen)
+        Analytical Chemistry
+Advanced Level
+    General Chemistry
+        Advanced stoichiometry (limiting reagents, complex calculations)
+        Advanced chemical kinetics (rate laws and mechanisms)
+        Thermodynamics (entropy, Gibbs free energy)
+        Advanced electrochemistry (Nernst equation, galvanic cells)
+    Organic Chemistry
+        Advanced reaction mechanisms (SN1, SN2, E1, E2)
+        Multi-step organic synthesis
+        Advanced stereochemistry (optical activity, conformational analysis)
+        Aromatic compounds and electrophilic substitution reactions
+        Polymerization and macromolecules
+    Inorganic Chemistry
+        Advanced coordination chemistry (crystal field theory, ligand field theory)
+        Transition metal complexes and color properties
+        Solid-state chemistry and crystal structures
+    Physical Chemistry
+        Advanced thermodynamics and statistical mechanics
+        Quantum mechanics (wave functions, Schrödinger equation)
+        Advanced molecular spectroscopy (NMR, mass spectrometry)
+        Advanced equilibrium concepts (buffer solutions, complex ions)
+    Biochemistry
+        Detailed enzyme kinetics and regulatory mechanisms
+        Detailed metabolic pathways (glycolysis, citric acid cycle, ETC)
+        Protein folding and structure analysis
+        Advanced bioenergetics (ATP synthesis mechanisms)
+    Analytical Chemistry
+        Advanced spectroscopic techniques (NMR, MS)
+        High-level chromatography (HPLC, advanced GC)
+        Electroanalytical techniques (potentiometry, voltammetry)
+    Nuclear Chemistry
+        Radioactive decay and half-life calculations
+        Nuclear reactions (fission, fusion)
+        Applications of nuclear chemistry (medical, industrial)
+        Radiation safety and nuclear waste management
+    Polymer Chemistry
+        Detailed polymerization processes (step-growth, chain-growth)
+        Advanced properties of polymers (mechanical, thermal)
+        Copolymers and applications in material science
