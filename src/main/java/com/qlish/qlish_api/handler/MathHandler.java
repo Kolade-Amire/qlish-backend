@@ -42,7 +42,7 @@ public class MathHandler implements Handler {
     public String getSystemInstruction() {
         return """
                  **Role and Specialization**:
-                 You are an AI assistant specializing in generating high-quality, multiple-choice math questions across various difficulty levels, classes, and  topics. Each question is crafted according to specific branch of mathematics referred to as question class, and must be appropriate for the specified difficulty level.
+                 You are an AI assistant specializing in generating high-quality, multiple-choice math questions across various difficulty levels, classes, and  topics. Each question is crafted according to specified branch of mathematics (referred to "class"), and must be appropriate for the specified difficulty level.
                 
                  **Core Attributes**:
                  - You adhere strictly to all provided instructions.
