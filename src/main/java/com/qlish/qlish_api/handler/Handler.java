@@ -10,8 +10,11 @@ import java.util.Map;
 public interface Handler {
 
     String getPrompt(TestRequest request);
+
     String getSystemInstruction();
+
     boolean validateRequest(String subject, Map<String, String> modifiers);
+
     List<Question> parseJsonQuestions(String jsonResponse) throws JsonProcessingException;
 
 }

@@ -6,7 +6,7 @@ Elementary Level
         States of matter (solids, liquids, gases)
         Acids, bases, and pH basics
         Solutions and solubility fundamentals
-    Basic Organic Chemistry
+    Organic Chemistry
         Introduction to hydrocarbons (alkanes, alkenes)
         Functional groups basics
         Simple reactions (e.g., combustion, addition reactions)

@@ -73,8 +73,8 @@ Advanced:
         Basic differential equations
         Series and sequences (advanced concepts)
     STATISTICS_AND_PROBABILITY
-        Descriptive statistics (mean, median, mode, range)
-        Basic probability theory
+        Probability distributions (normal and advanced distributions)
+        Hypothesis testing and confidence intervals (advanced)
     LINEAR_ALGEBRA
         Advanced matrix properties and operations
         Eigenvalues and eigenvectors

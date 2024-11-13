@@ -5,20 +5,20 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public enum MathTopic {
+public enum MathClass {
     BASIC_MATH("basic-math"),
     ALGEBRA("algebra"),
     GEOMETRY("geometry"),
     TRIGONOMETRY("trigonometry"),
     CALCULUS("calculus"),
-    STATISTICS_AND_PROBABILITY("statistics-prob"),
+    STATISTICS_AND_PROBABILITY("statistics-and-probability"),
     LINEAR_ALGEBRA("linear-algebra"),
     DISCRETE_MATH("discrete-math");
 
     private final String className;
 
-    public static MathTopic fromClassName(String className) {
-        for (MathTopic item : MathTopic.values()) {
+    public static MathClass fromClassName(String className) {
+        for (MathClass item : MathClass.values()) {
             if (item.getClassName().equalsIgnoreCase(className)) {
                 return item;
             }
