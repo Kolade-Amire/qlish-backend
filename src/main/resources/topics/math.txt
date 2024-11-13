@@ -13,88 +13,73 @@ Elementary:
     STATISTICS_AND_PROBABILITY
         Descriptive statistics (mean, median, mode, range)
         Basic probability theory
-ALGEBRA
+    DISCRETE_MATH
+        Set theory (basic operations, union, intersection, Venn diagrams)
+        Logic and propositional calculus (basic concepts)
 
-
-    Intermediate
+Intermediate:
+    ALGEBRA
         Quadratic equations
         Polynomials and factoring
         Functions and their properties
         Systems of equations
-    Advanced
-        Exponential and logarithmic functions (advanced)
-        Advanced functions and their properties
-GEOMETRY
-    Elementary
-
-    Intermediate
+    GEOMETRY
         Triangles (congruence, similarity)
         Quadrilaterals and polygons
         Circles (properties, chords, tangents)
         Coordinate geometry (basics)
         Transformations (translations, rotations, reflections, dilations)
-    Advanced
-        Advanced coordinate geometry (conics and transformations)
-        Complex properties of circles
-TRIGONOMETRY
-    Elementary
-        N/A
-    Intermediate
+    TRIGONOMETRY
         Trigonometric ratios (sine, cosine, tangent)
         Right triangle trigonometry
         Unit circle and angle measurement (degrees and radians)
         Applications of trigonometry (basic real-world problems)
-    Advanced
-        Trigonometric identities and equations
-        Laws of sines and cosines
-        Advanced applications of trigonometry (complex real-world problems)
-CALCULUS
-    Elementary
-        N/A
-    Intermediate
+    CALCULUS
         Limits and continuity (introductory concepts)
         Derivatives and differentiation techniques (basics)
         Applications of derivatives (basic optimization problems)
-    Advanced
+    STATISTICS_AND_PROBABILITY
+        Variance and standard deviation
+        Probability theory (conditional probability)
+        Combinations and permutations
+        Probability distributions (introduction, binomial)
+    LINEAR_ALGEBRA
+        Vectors and vector spaces (introductory)
+        Matrix operations and properties
+        Determinants and their applications (basic)
+        Systems of linear equations and solutions (basic)
+    DISCRETE_MATH
+        Combinatorics (basic counting principles)
+        Graph theory (vertices, edges, simple paths)
+        Boolean algebra and truth tables (introduction)
+
+
+Advanced:
+    ALGEBRA
+        Exponential and logarithmic functions (advanced)
+        Advanced functions and their properties
+    GEOMETRY
+        Advanced coordinate geometry (conics and transformations)
+        Complex properties of circles
+    TRIGONOMETRY
+        Trigonometric identities and equations
+        Laws of sines and cosines
+        Advanced applications of trigonometry (complex real-world problems)
+    CALCULUS
         Advanced derivatives and differentiation techniques
         Integrals and integration techniques
         Fundamental theorem of calculus
         Applications of integrals (e.g., area under a curve, volume)
         Basic differential equations
         Series and sequences (advanced concepts)
-STATISTICS_AND_PROBABILITY
-     Elementary
+    STATISTICS_AND_PROBABILITY
         Descriptive statistics (mean, median, mode, range)
         Basic probability theory
-     Intermediate
-        Variance and standard deviation
-        Probability theory (conditional probability)
-        Combinations and permutations
-        Probability distributions (introduction, binomial)
-     Advanced
-        Probability distributions (normal and advanced distributions)
-        Hypothesis testing and confidence intervals (advanced)
-LINEAR_ALGEBRA
-    Elementary:
-        N/A
-    Intermediate:
-        Vectors and vector spaces (introductory)
-        Matrix operations and properties
-        Determinants and their applications (basic)
-        Systems of linear equations and solutions (basic)
-    Advanced:
+    LINEAR_ALGEBRA
         Advanced matrix properties and operations
         Eigenvalues and eigenvectors
         Linear transformations and applications in computer science and engineering
-DISCRETE_MATH
-    Elementary:
-        Set theory (basic operations, union, intersection, Venn diagrams)
-        Logic and propositional calculus (basic concepts)
-    Intermediate:
-        Combinatorics (basic counting principles)
-        Graph theory (vertices, edges, simple paths)
-        Boolean algebra and truth tables (introduction)
-    Advanced:
+    DISCRETE_MATH
         Advanced set theory and operations
         Advanced graph theory (complex paths, circuits)
         Algorithms and complexity (introduction to computational complexity)

@@ -19,6 +19,7 @@ import java.util.concurrent.TimeUnit;
 
 @Component
 public class GeminiAI {
+
     private static final Logger logger = LoggerFactory.getLogger(GeminiAI.class);
     private static final int MAX_RETRY_ATTEMPTS = 3;
     private static final long INITIAL_RETRY_DELAY_MS = 1000;
@@ -61,7 +62,7 @@ public class GeminiAI {
         }
     }
 
-    private String buildRequestBody(String prompt, String systemInstruction){
+    private String buildRequestBody(String prompt, String systemInstruction) {
         Map<String, Object> requestBody = new HashMap<>();
 
         //build the system_instructions parts
@@ -82,8 +83,6 @@ public class GeminiAI {
         }
 
     }
-
-
 
     private String executeRequest(Request request) throws IOException {
         int attempt = 0;
