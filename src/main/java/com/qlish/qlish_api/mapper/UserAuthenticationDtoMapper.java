@@ -12,6 +12,7 @@ public class UserAuthenticationDtoMapper {
                 .lastname(user.getLastname())
                 .email(user.getEmail())
                 .profileName(user.getProfileName())
+                .profilePicture(user.getProfilePictureUrl())
                 .role(user.getRole())
                 .authProvider(user.getAuthProvider().toString())
                 .createdAt(user.getCreatedAt())

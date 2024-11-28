@@ -18,6 +18,7 @@ public class UserAuthenticationDto {
     private String lastname;
     private String email;
     private String profileName;
+    private String profilePicture;
     private Role role;
     private String authProvider;
     private LocalDateTime createdAt;

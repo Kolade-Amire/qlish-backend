@@ -31,6 +31,7 @@ public class User {
     private String email;
     private String firstname;
     private String lastname;
+    private String profilePictureUrl;
     @Field("username")
     @Indexed(unique = true)
     private String profileName;
@@ -45,6 +46,7 @@ public class User {
     private LocalDateTime lastLoginAt;
     @DocumentReference
     private Set<TestDetails> tests;
+    private long allTimePoints;
 
     @Override
     public String toString(){
@@ -52,6 +54,7 @@ public class User {
                 "_id=" + _id +
                 ", firstname='" + firstname + '\'' +
                 ", lastname='" + lastname + '\'' +
+                ", profilePicture='" + profilePictureUrl + '\'' +
                 ", email='" + email + '\'' +
                 ", username='" + profileName + '\'' +
                 ", role='" + role.toString() + '\'' +
@@ -59,6 +62,7 @@ public class User {
                 ", isEmailVerified='" + isEmailVerified + '\'' +
                 ", createdAt='" + createdAt + '\'' +
                 ", lastLoginAt='" + lastLoginAt + '\'' +
+                ", totalPoints='" + allTimePoints + '\'' +
                 '}';
     }
 

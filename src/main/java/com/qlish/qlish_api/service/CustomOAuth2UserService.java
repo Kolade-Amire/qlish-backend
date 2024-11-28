@@ -8,6 +8,8 @@ import com.qlish.qlish_api.model.OAuth2UserInfo;
 import com.qlish.qlish_api.enums.auth.Role;
 import com.qlish.qlish_api.factory.OAuth2UserInfoFactory;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
@@ -21,12 +23,13 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     private final UserService userService;
+    private static final Logger LOGGER = LoggerFactory.getLogger(CustomOAuth2UserService.class);
 
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
         OAuth2User oauth2User = super.loadUser(userRequest);
-        System.out.println("OAuth2 User Attributes: " + oauth2User.getAttributes());
+        LOGGER.info("OAuth2 User Attributes: {}", oauth2User.getAttributes());
 
         try {
             return processOAuth2User(userRequest, oauth2User);
@@ -67,6 +70,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         existingUser.setFirstname(firstname);
         existingUser.setLastname(lastname);
         existingUser.setLastLoginAt(LocalDateTime.now());
+        existingUser.setProfilePictureUrl(oAuth2UserInfo.getImageUrl());
         return  userService.saveUser(existingUser);
     }
 
@@ -83,6 +87,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                 .lastname(lastname)
                 .profileName(emailSplit[0])
                 .email(userInfo.getEmail())
+                .profilePictureUrl(userInfo.getImageUrl())
                 .authProvider(AuthProvider.valueOf(userRequest.getClientRegistration().getRegistrationId().toUpperCase()))
                 .role(Role.USER)
                 .isBlocked(false)
