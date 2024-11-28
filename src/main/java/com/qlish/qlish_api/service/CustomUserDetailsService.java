@@ -1,7 +1,7 @@
 package com.qlish.qlish_api.service;
 
-import com.qlish.qlish_api.entity.User;
-import com.qlish.qlish_api.entity.UserPrincipal;
+import com.qlish.qlish_api.model.User;
+import com.qlish.qlish_api.model.UserPrincipal;
 import com.qlish.qlish_api.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;

@@ -1,6 +1,6 @@
 package com.qlish.qlish_api.dto;
 
-import com.qlish.qlish_api.entity.TestQuestion;
+import com.qlish.qlish_api.model.TestQuestion;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.Builder;

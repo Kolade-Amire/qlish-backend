@@ -1,8 +1,8 @@
 package com.qlish.qlish_api.mapper;
 
 import com.qlish.qlish_api.dto.TestQuestionDto;
-import com.qlish.qlish_api.entity.Question;
-import com.qlish.qlish_api.entity.TestQuestion;
+import com.qlish.qlish_api.model.Question;
+import com.qlish.qlish_api.model.TestQuestion;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;

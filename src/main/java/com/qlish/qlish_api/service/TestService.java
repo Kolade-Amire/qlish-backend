@@ -2,7 +2,7 @@ package com.qlish.qlish_api.service;
 
 import com.qlish.qlish_api.dto.TestQuestionDto;
 import com.qlish.qlish_api.dto.TestDto;
-import com.qlish.qlish_api.entity.*;
+import com.qlish.qlish_api.model.*;
 import com.qlish.qlish_api.exception.GenerativeAIException;
 import com.qlish.qlish_api.request.TestRequest;
 import com.qlish.qlish_api.request.TestSubmissionRequest;

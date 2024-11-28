@@ -2,9 +2,9 @@ package com.qlish.qlish_api.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.qlish.qlish_api.constants.SecurityConstants;
-import com.qlish.qlish_api.entity.TokenEntity;
-import com.qlish.qlish_api.entity.User;
-import com.qlish.qlish_api.entity.UserPrincipal;
+import com.qlish.qlish_api.model.TokenEntity;
+import com.qlish.qlish_api.model.User;
+import com.qlish.qlish_api.model.UserPrincipal;
 import com.qlish.qlish_api.enums.auth.AuthProvider;
 import com.qlish.qlish_api.enums.auth.Role;
 import com.qlish.qlish_api.exception.CustomQlishException;

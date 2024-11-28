@@ -1,7 +1,7 @@
 package com.qlish.qlish_api.mapper;
 
 import com.qlish.qlish_api.dto.QuestionDto;
-import com.qlish.qlish_api.entity.Question;
+import com.qlish.qlish_api.model.Question;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;

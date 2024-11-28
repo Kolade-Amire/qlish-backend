@@ -3,7 +3,7 @@ package com.qlish.qlish_api.handler;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.qlish.qlish_api.entity.Question;
+import com.qlish.qlish_api.model.Question;
 import com.qlish.qlish_api.enums.TestSubject;
 import com.qlish.qlish_api.enums.english.EnglishClass;
 import com.qlish.qlish_api.enums.QuestionLevel;

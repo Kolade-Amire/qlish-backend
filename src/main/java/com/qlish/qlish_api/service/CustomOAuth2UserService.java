@@ -2,9 +2,9 @@ package com.qlish.qlish_api.service;
 
 
 import com.qlish.qlish_api.enums.auth.AuthProvider;
-import com.qlish.qlish_api.entity.User;
-import com.qlish.qlish_api.entity.UserPrincipal;
-import com.qlish.qlish_api.entity.OAuth2UserInfo;
+import com.qlish.qlish_api.model.User;
+import com.qlish.qlish_api.model.UserPrincipal;
+import com.qlish.qlish_api.model.OAuth2UserInfo;
 import com.qlish.qlish_api.enums.auth.Role;
 import com.qlish.qlish_api.factory.OAuth2UserInfoFactory;
 import lombok.RequiredArgsConstructor;

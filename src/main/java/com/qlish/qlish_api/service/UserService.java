@@ -1,6 +1,6 @@
 package com.qlish.qlish_api.service;
 
-import com.qlish.qlish_api.entity.User;
+import com.qlish.qlish_api.model.User;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 

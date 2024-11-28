@@ -1,4 +1,4 @@
-package com.qlish.qlish_api.entity;
+package com.qlish.qlish_api.model;
 
 public interface TestState {
     void handleContext();

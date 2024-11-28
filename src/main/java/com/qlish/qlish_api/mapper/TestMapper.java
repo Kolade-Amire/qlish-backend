@@ -1,7 +1,7 @@
 package com.qlish.qlish_api.mapper;
 
 import com.qlish.qlish_api.dto.TestDto;
-import com.qlish.qlish_api.entity.TestEntity;
+import com.qlish.qlish_api.model.TestEntity;
 
 public class TestMapper {
 

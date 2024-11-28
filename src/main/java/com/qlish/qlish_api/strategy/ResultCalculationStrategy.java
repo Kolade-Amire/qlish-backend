@@ -1,7 +1,7 @@
 package com.qlish.qlish_api.strategy;
 
-import com.qlish.qlish_api.entity.TestQuestion;
-import com.qlish.qlish_api.entity.TestResult;
+import com.qlish.qlish_api.model.TestQuestion;
+import com.qlish.qlish_api.model.TestResult;
 
 import java.util.List;
 

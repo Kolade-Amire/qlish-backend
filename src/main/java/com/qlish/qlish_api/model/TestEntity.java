@@ -1,4 +1,4 @@
-package com.qlish.qlish_api.entity;
+package com.qlish.qlish_api.model;
 
 import com.qlish.qlish_api.enums.TestStatus;
 import lombok.Getter;

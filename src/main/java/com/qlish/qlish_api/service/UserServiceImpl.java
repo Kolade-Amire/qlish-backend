@@ -4,7 +4,7 @@ import com.mongodb.MongoTimeoutException;
 import com.mongodb.MongoWriteException;
 import com.qlish.qlish_api.exception.CustomQlishException;
 import com.qlish.qlish_api.constants.AppConstants;
-import com.qlish.qlish_api.entity.User;
+import com.qlish.qlish_api.model.User;
 import com.qlish.qlish_api.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;

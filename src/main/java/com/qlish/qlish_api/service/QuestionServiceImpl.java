@@ -3,7 +3,7 @@ package com.qlish.qlish_api.service;
 import com.mongodb.MongoTimeoutException;
 import com.mongodb.MongoWriteException;
 import com.qlish.qlish_api.dto.QuestionDto;
-import com.qlish.qlish_api.entity.Question;
+import com.qlish.qlish_api.model.Question;
 import com.qlish.qlish_api.enums.HandlerName;
 import com.qlish.qlish_api.enums.TestSubject;
 import com.qlish.qlish_api.exception.CustomQlishException;

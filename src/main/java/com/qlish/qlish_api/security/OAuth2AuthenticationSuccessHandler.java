@@ -1,10 +1,10 @@
 package com.qlish.qlish_api.security;
 
 
-import com.qlish.qlish_api.entity.TokenEntity;
+import com.qlish.qlish_api.model.TokenEntity;
 import com.qlish.qlish_api.service.JwtService;
 import com.qlish.qlish_api.service.TokenService;
-import com.qlish.qlish_api.entity.UserPrincipal;
+import com.qlish.qlish_api.model.UserPrincipal;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

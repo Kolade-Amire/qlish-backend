@@ -1,7 +1,7 @@
 package com.qlish.qlish_api.mapper;
 
 import com.qlish.qlish_api.dto.UserAuthenticationDto;
-import com.qlish.qlish_api.entity.User;
+import com.qlish.qlish_api.model.User;
 
 public class UserAuthenticationDtoMapper {
 

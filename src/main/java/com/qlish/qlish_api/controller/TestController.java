@@ -3,7 +3,7 @@ package com.qlish.qlish_api.controller;
 import com.qlish.qlish_api.constants.AppConstants;
 import com.qlish.qlish_api.dto.TestDto;
 import com.qlish.qlish_api.dto.TestQuestionDto;
-import com.qlish.qlish_api.entity.TestResult;
+import com.qlish.qlish_api.model.TestResult;
 import com.qlish.qlish_api.exception.GenerativeAIException;
 import com.qlish.qlish_api.request.TestRequest;
 import com.qlish.qlish_api.request.TestSubmissionRequest;

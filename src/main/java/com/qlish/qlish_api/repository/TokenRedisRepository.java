@@ -1,6 +1,6 @@
 package com.qlish.qlish_api.repository;
 
-import com.qlish.qlish_api.entity.TokenEntity;
+import com.qlish.qlish_api.model.TokenEntity;
 import org.springframework.data.repository.ListCrudRepository;
 import org.springframework.stereotype.Repository;
 

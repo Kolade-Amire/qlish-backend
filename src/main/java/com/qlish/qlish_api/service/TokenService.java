@@ -1,13 +1,11 @@
 package com.qlish.qlish_api.service;
 
-import com.qlish.qlish_api.entity.TokenEntity;
+import com.qlish.qlish_api.model.TokenEntity;
 import com.qlish.qlish_api.exception.CustomQlishException;
 import com.qlish.qlish_api.exception.EntityNotFoundException;
 import com.qlish.qlish_api.repository.TokenRedisRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor

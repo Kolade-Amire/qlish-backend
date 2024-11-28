@@ -1,7 +1,7 @@
 package com.qlish.qlish_api.service;
 
 import com.qlish.qlish_api.dto.QuestionDto;
-import com.qlish.qlish_api.entity.Question;
+import com.qlish.qlish_api.model.Question;
 import com.qlish.qlish_api.request.AdminQuestionViewRequest;
 import com.qlish.qlish_api.request.NewQuestionRequest;
 import org.springframework.data.domain.Page;

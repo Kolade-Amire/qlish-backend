@@ -9,7 +9,7 @@ import com.mongodb.MongoWriteException;
 import com.qlish.qlish_api.constants.AppConstants;
 import com.qlish.qlish_api.dto.TestDto;
 import com.qlish.qlish_api.dto.TestQuestionDto;
-import com.qlish.qlish_api.entity.*;
+import com.qlish.qlish_api.model.*;
 import com.qlish.qlish_api.enums.HandlerName;
 import com.qlish.qlish_api.enums.TestStatus;
 import com.qlish.qlish_api.enums.TestSubject;
