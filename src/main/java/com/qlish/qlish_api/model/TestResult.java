@@ -14,4 +14,5 @@ public class TestResult {
     private int totalCorrectAnswers;
     private int totalIncorrectAnswers;
     private int scorePercentage;
+    private int pointsEarned;
 }
