@@ -28,4 +28,8 @@ public class ResulCalculationStrategyImpl implements ResultCalculationStrategy {
                 .scorePercentage(scorePercentage)
                 .build();
     }
+
+    public int calculatePoints (int scorePercentage, String difficultyLevel, String testClass){
+        return 0;
+    }
 }
