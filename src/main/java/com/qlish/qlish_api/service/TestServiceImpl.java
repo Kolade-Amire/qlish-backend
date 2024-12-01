@@ -103,7 +103,7 @@ public class TestServiceImpl implements TestService {
                 .userId(returnObjectId(request.getUserId()))
                 .testSubject(subject)
                 .startedAt(LocalDateTime.now())
-                .totalQuestionCount(request.getCount())
+                .totalQuestions(request.getCount())
                 .isCompleted(false)
                 .build();
 
@@ -187,6 +187,7 @@ public class TestServiceImpl implements TestService {
 
         var test = getTestById(returnObjectId(testId));
 
+
         var questions = test.getQuestions();
 
         // Perform pagination over the full list of questions
@@ -196,6 +197,8 @@ public class TestServiceImpl implements TestService {
 
 
         List<TestQuestionDto> questionDtoList = TestQuestionMapper.mapQuestionListToTestViewDto(pageQuestionList);
+
+        test.setTestStatus(TestStatus.STARTED);
 
         // Return the paginated page of questions
         return new PageImpl<>(questionDtoList, pageable, questions.size());
@@ -222,6 +225,7 @@ public class TestServiceImpl implements TestService {
 
             // Mark the test as completed
             test.getTestDetails().setCompleted(true);
+            test.setTestStatus(TestStatus.COMPLETED);
 
             saveTest(test);
 
@@ -237,7 +241,11 @@ public class TestServiceImpl implements TestService {
     public TestResult getTestResult(String id) {
         try {
             var test = getTestById(returnObjectId(id));
-            return resultCalculationStrategy.calculateResult(test.getQuestions());
+            TestResult result =  resultCalculationStrategy.calculateResult(test.getQuestions());
+            if (result != null){
+                test.setTestStatus(TestStatus.GRADED);
+            }
+            return result;
         } catch (Exception e) {
             logger.error(e.getMessage());
             throw new TestResultException(e.getMessage());

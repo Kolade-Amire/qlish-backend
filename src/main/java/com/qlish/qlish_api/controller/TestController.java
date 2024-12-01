@@ -37,8 +37,8 @@ public class TestController {
     @GetMapping("/new/{id}")
     public ResponseEntity<Page<TestQuestionDto>> startTest(@PathVariable String id, @RequestParam(defaultValue = "0") int pageNumber, @RequestParam(defaultValue = "10") int pageSize) {
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
-        var test = testService.getTestQuestions(id, pageable);
-        return ResponseEntity.ok(test);
+        var testQuestions = testService.getTestQuestions(id, pageable);
+        return ResponseEntity.ok(testQuestions);
     }
 
     @PostMapping("/submit/{id}")

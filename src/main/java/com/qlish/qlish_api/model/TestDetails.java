@@ -16,9 +16,10 @@ public class TestDetails {
     private ObjectId userId;
     private TestSubject testSubject;
     private LocalDateTime startedAt;
-    private int totalQuestionCount;
-    private int totalCorrectAnswers;
-    private int totalIncorrectAnswers;
+    private int totalQuestions;
+    private int totalCorrect;
+    private int totalIncorrect;
     private int scorePercentage;
+    private int testPoints;
     private boolean isCompleted;
 }

@@ -10,12 +10,10 @@ import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.DocumentReference;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Set;
 
 @Builder
 @NoArgsConstructor
@@ -44,8 +42,6 @@ public class User {
     private boolean isEmailVerified;
     private LocalDateTime createdAt;
     private LocalDateTime lastLoginAt;
-    @DocumentReference
-    private Set<TestDetails> tests;
     private long allTimePoints;
 
     @Override

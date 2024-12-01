@@ -12,9 +12,9 @@ public class TestMapper {
                 .questions(test.getQuestions())
                 .testSubject(test.getTestDetails().getTestSubject().getDisplayName())
                 .startedAt(test.getTestDetails().getStartedAt())
-                .totalQuestionCount(test.getTestDetails().getTotalQuestionCount())
-                .totalCorrectAnswers(test.getTestDetails().getTotalCorrectAnswers())
-                .totalIncorrectAnswers(test.getTestDetails().getTotalIncorrectAnswers())
+                .totalQuestionCount(test.getTestDetails().getTotalQuestions())
+                .totalCorrectAnswers(test.getTestDetails().getTotalCorrect())
+                .totalIncorrectAnswers(test.getTestDetails().getTotalIncorrect())
                 .scorePercentage(test.getTestDetails().getScorePercentage())
                 .build();
     }
