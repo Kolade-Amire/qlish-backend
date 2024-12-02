@@ -11,6 +11,7 @@ import com.qlish.qlish_api.exception.CustomQlishException;
 import com.qlish.qlish_api.exception.EntityAlreadyExistException;
 import com.qlish.qlish_api.exception.PasswordsDoNotMatchException;
 import com.qlish.qlish_api.mapper.UserAuthenticationDtoMapper;
+import com.qlish.qlish_api.security.JwtService;
 import com.qlish.qlish_api.security.data.AuthenticationRequest;
 import com.qlish.qlish_api.security.data.AuthenticationResponse;
 import com.qlish.qlish_api.security.data.RegistrationRequest;

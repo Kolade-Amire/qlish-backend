@@ -1,4 +1,4 @@
-package com.qlish.qlish_api.service;
+package com.qlish.qlish_api.security;
 
 import com.qlish.qlish_api.constants.SecurityConstants;
 import io.jsonwebtoken.Claims;
