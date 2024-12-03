@@ -8,7 +8,8 @@ import lombok.RequiredArgsConstructor;
 public enum QuestionLevel {
     ADVANCED("advanced"),
     INTERMEDIATE("intermediate"),
-    ELEMENTARY("elementary");
+    ELEMENTARY("elementary"),
+    RANDOM("random");
 
     private final String levelName;
 
