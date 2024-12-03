@@ -5,7 +5,8 @@ import com.qlish.qlish_api.model.TestResult;
 
 import java.util.List;
 
-public interface ResultCalculationStrategy {
+public interface GradingStrategy {
 
     TestResult calculateResult(List<TestQuestion> questions);
+
 }

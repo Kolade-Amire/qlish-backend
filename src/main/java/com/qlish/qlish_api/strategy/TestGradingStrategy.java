@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-public class ResulCalculationStrategyImpl implements ResultCalculationStrategy {
+public class TestGradingStrategy implements GradingStrategy {
     @Override
     public TestResult calculateResult(List<TestQuestion> questions) {
         int correctAnswers = 0;

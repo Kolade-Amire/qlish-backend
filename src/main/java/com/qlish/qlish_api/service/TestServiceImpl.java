@@ -23,7 +23,7 @@ import com.qlish.qlish_api.repository.TestRepository;
 import com.qlish.qlish_api.request.TestQuestionSubmissionRequest;
 import com.qlish.qlish_api.request.TestRequest;
 import com.qlish.qlish_api.request.TestSubmissionRequest;
-import com.qlish.qlish_api.strategy.ResultCalculationStrategy;
+import com.qlish.qlish_api.strategy.GradingStrategy;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.text.StringEscapeUtils;
 import org.bson.types.ObjectId;
@@ -47,7 +47,7 @@ public class TestServiceImpl implements TestService {
     private static final Logger logger = LoggerFactory.getLogger(TestServiceImpl.class);
     private final GeminiAI geminiAI;
     private final HandlerFactory handlerFactory;
-    private final ResultCalculationStrategy resultCalculationStrategy;
+    private final GradingStrategy gradingStrategy;
     private final ObjectMapper objectMapper = new ObjectMapper();
     private final TestRepository testRepository;
     private final CustomQuestionRepository customQuestionRepository;
@@ -227,6 +227,7 @@ public class TestServiceImpl implements TestService {
             test.getTestDetails().setCompleted(true);
             test.setTestStatus(TestStatus.COMPLETED);
 
+            //TODO:grade test
             saveTest(test);
 
             return test.getId().toHexString();
@@ -241,7 +242,9 @@ public class TestServiceImpl implements TestService {
     public TestResult getTestResult(String id) {
         try {
             var test = getTestById(returnObjectId(id));
-            TestResult result =  resultCalculationStrategy.calculateResult(test.getQuestions());
+            TestResult result =  gradingStrategy.calculateResult(test.getQuestions());
+
+            ;
             if (result != null){
                 test.setTestStatus(TestStatus.GRADED);
             }
