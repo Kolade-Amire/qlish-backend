@@ -9,6 +9,7 @@ import com.mongodb.MongoWriteException;
 import com.qlish.qlish_api.constants.AppConstants;
 import com.qlish.qlish_api.dto.TestDto;
 import com.qlish.qlish_api.dto.TestQuestionDto;
+import com.qlish.qlish_api.enums.DifficultyLevel;
 import com.qlish.qlish_api.model.*;
 import com.qlish.qlish_api.enums.HandlerName;
 import com.qlish.qlish_api.enums.TestStatus;
@@ -24,6 +25,8 @@ import com.qlish.qlish_api.request.TestQuestionSubmissionRequest;
 import com.qlish.qlish_api.request.TestRequest;
 import com.qlish.qlish_api.request.TestSubmissionRequest;
 import com.qlish.qlish_api.strategy.GradingStrategy;
+import com.qlish.qlish_api.strategy.PointsGradingStrategy;
+import com.qlish.qlish_api.strategy.TestGradingStrategy;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.text.StringEscapeUtils;
 import org.bson.types.ObjectId;
@@ -242,10 +245,19 @@ public class TestServiceImpl implements TestService {
     public TestResult getTestResult(String id) {
         try {
             var test = getTestById(returnObjectId(id));
-            TestResult result =  gradingStrategy.calculateResult(test.getQuestions());
+            TestResult result = TestGradingStrategy.calculateTestScore().apply(test.getQuestions());
 
-            ;
-            if (result != null){
+            //TODO: quiz/test definition
+            var totalPoints = test.isQuiz() ?
+                    PointsGradingStrategy.calculateQuizPoints()
+                            .apply(result.getScorePercentage(), test.getDifficultyLevel())
+                    :
+                    PointsGradingStrategy.calculateTestPoints()
+                            .apply(result.getScorePercentage(), test.getDifficultyLevel());
+
+            test.getTestDetails().setTestPoints(totalPoints);
+
+            if (result != null) {
                 test.setTestStatus(TestStatus.GRADED);
             }
             return result;
@@ -255,7 +267,7 @@ public class TestServiceImpl implements TestService {
         }
     }
 
-    private ObjectId returnObjectId(String idString){
+    private ObjectId returnObjectId(String idString) {
         return new ObjectId(idString);
     }
 

@@ -5,16 +5,17 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public enum QuestionLevel {
+public enum DifficultyLevel {
     ADVANCED("advanced"),
     INTERMEDIATE("intermediate"),
     ELEMENTARY("elementary"),
-    RANDOM("random");
+    RANDOM("random"),
+    QUIZ("quiz");
 
     private final String levelName;
 
-    public static QuestionLevel fromLevelName(String levelName) {
-        for (QuestionLevel level : QuestionLevel.values()) {
+    public static DifficultyLevel fromLevelName(String levelName) {
+        for (DifficultyLevel level : DifficultyLevel.values()) {
             if (level.getLevelName().equalsIgnoreCase(levelName)) {
                 return level;
             }

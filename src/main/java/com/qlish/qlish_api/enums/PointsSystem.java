@@ -34,13 +34,13 @@ public class PointsSystem {
         return calculatePoints(scorePercentage);
     }
 
-    public static int getTotalPoints(int scorePercentage, QuestionLevel difficultyLevel){
+    public static int getTotalPoints(int scorePercentage, DifficultyLevel difficultyLevel){
          var gradedPoints = calculatePoints(scorePercentage);
-        Map<QuestionLevel, Integer> multiplierMapping = Map.of(
-                QuestionLevel.ELEMENTARY, 1,
-                QuestionLevel.INTERMEDIATE, 2,
-                QuestionLevel.ADVANCED, 3,
-                QuestionLevel.RANDOM, 2
+        Map<DifficultyLevel, Integer> multiplierMapping = Map.of(
+                DifficultyLevel.ELEMENTARY, 1,
+                DifficultyLevel.INTERMEDIATE, 2,
+                DifficultyLevel.ADVANCED, 3,
+                DifficultyLevel.RANDOM, 2
         );
         return (multiplierMapping.get(difficultyLevel) * gradedPoints);
     }

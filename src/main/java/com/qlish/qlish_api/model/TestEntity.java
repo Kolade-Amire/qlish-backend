@@ -1,5 +1,6 @@
 package com.qlish.qlish_api.model;
 
+import com.qlish.qlish_api.enums.DifficultyLevel;
 import com.qlish.qlish_api.enums.TestStatus;
 import lombok.Getter;
 import lombok.Setter;
@@ -29,4 +30,6 @@ public class TestEntity {
     private TestDetails testDetails;
     private List<TestQuestion> questions;
     private TestStatus testStatus;
+    private boolean isQuiz; //validate across
+    private DifficultyLevel difficultyLevel; //validate across
 }

@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.qlish.qlish_api.model.Question;
 import com.qlish.qlish_api.enums.TestSubject;
 import com.qlish.qlish_api.enums.english.EnglishClass;
-import com.qlish.qlish_api.enums.QuestionLevel;
+import com.qlish.qlish_api.enums.DifficultyLevel;
 import com.qlish.qlish_api.exception.CustomQlishException;
 import com.qlish.qlish_api.request.TestRequest;
 import org.springframework.stereotype.Component;
@@ -274,7 +274,7 @@ public class EnglishHandler implements Handler {
     public boolean validateRequest(String subject, Map<String, String> modifiers) {
         if (isEnglish(subject)) {
             var questionClass = EnglishClass.fromClassName(modifiers.get("class"));
-            var level = QuestionLevel.fromLevelName(modifiers.get("level"));
+            var level = DifficultyLevel.fromLevelName(modifiers.get("level"));
             return questionClass != null && level != null;
         }
         return false;

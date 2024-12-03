@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.qlish.qlish_api.model.Question;
-import com.qlish.qlish_api.enums.QuestionLevel;
+import com.qlish.qlish_api.enums.DifficultyLevel;
 import com.qlish.qlish_api.enums.TestSubject;
 import com.qlish.qlish_api.enums.chemistry.ChemistryClass;
 import com.qlish.qlish_api.request.TestRequest;
@@ -237,7 +237,7 @@ public class ChemistryHandler implements Handler {
     public boolean validateRequest(String subject, Map<String, String> modifiers) {
         if (isChemistry(subject)) {
             var questionClass = ChemistryClass.fromClassName(modifiers.get("class"));
-            var level = QuestionLevel.fromLevelName(modifiers.get("level"));
+            var level = DifficultyLevel.fromLevelName(modifiers.get("level"));
             return questionClass != null && level != null;
         }
         return false;

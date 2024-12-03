@@ -2,34 +2,24 @@ package com.qlish.qlish_api.strategy;
 
 import com.qlish.qlish_api.model.TestQuestion;
 import com.qlish.qlish_api.model.TestResult;
-import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.function.Function;
 
-@Component
-public class TestGradingStrategy implements GradingStrategy {
-    @Override
-    public TestResult calculateResult(List<TestQuestion> questions) {
-        int correctAnswers = 0;
-        int incorrectAnswers = 0;
-        for (TestQuestion question : questions) {
-            if(question.isAnswerCorrect()){
-                correctAnswers++;
-            }else {
-                incorrectAnswers++;
-            }
-        }
-        int scorePercentage = 100 * (correctAnswers/questions.size());
+@FunctionalInterface
+public interface TestGradingStrategy extends Function<List<TestQuestion>, TestResult> {
 
-        return TestResult.builder()
-                .totalQuestions(questions.size())
-                .totalCorrectAnswers(correctAnswers)
-                .totalIncorrectAnswers(incorrectAnswers)
-                .scorePercentage(scorePercentage)
-                .build();
-    }
-
-    public int calculatePoints (int scorePercentage, String difficultyLevel, String testClass){
-        return 0;
+    static TestGradingStrategy calculateTestScore() {
+        return testQuestions -> {
+            var correctAnswers = (int) testQuestions.stream().filter(TestQuestion::isAnswerCorrect).count();
+            var incorrectAnswers = testQuestions.size() - correctAnswers;
+            int scorePercentage = 100 * (correctAnswers / testQuestions.size());
+            return TestResult.builder()
+                    .totalQuestions(testQuestions.size())
+                    .totalCorrectAnswers(correctAnswers)
+                    .totalIncorrectAnswers(incorrectAnswers)
+                    .scorePercentage(scorePercentage)
+                    .build();
+        };
     }
 }
