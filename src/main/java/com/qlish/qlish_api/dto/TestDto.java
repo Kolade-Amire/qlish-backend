@@ -1,5 +1,7 @@
 package com.qlish.qlish_api.dto;
 
+import com.qlish.qlish_api.enums.TestStatus;
+import com.qlish.qlish_api.enums.TestSubject;
 import com.qlish.qlish_api.model.TestQuestion;
 import lombok.Getter;
 import lombok.Setter;
@@ -22,10 +24,10 @@ public class TestDto {
     @EqualsAndHashCode.Include
     private String id;
     private ObjectId userId;
-    private String testSubject;
+    private TestSubject testSubject;
     private List<TestQuestion> questions;
     private LocalDateTime startedAt;
-    private String testStatus;
+    private TestStatus testStatus;
     private int totalQuestionCount;
     private int totalCorrectAnswers;
     private int totalIncorrectAnswers;

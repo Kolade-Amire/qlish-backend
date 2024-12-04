@@ -1,5 +1,6 @@
 package com.qlish.qlish_api.dto;
 
+import com.qlish.qlish_api.enums.TestSubject;
 import lombok.*;
 import org.bson.types.ObjectId;
 
@@ -15,7 +16,7 @@ public class QuestionDto {
     private String questionText;
     private Map<String, String> options;
     private String answer;
-    private String subject;
+    private TestSubject subject;
     private Map<String, String> modifiers;
 
 }

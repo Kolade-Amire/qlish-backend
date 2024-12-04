@@ -100,7 +100,7 @@ public class TestServiceImpl implements TestService {
         DifficultyLevel difficultyLevel;
         try {
             var requestLevel = request.getModifiers().get("level");
-            difficultyLevel = DifficultyLevel.fromLevelName(requestLevel);
+             difficultyLevel = DifficultyLevel.fromLevelName(requestLevel);
         } catch (Exception e) {
             throw new RuntimeException("Unable to process difficulty level from request. Add a 'level' field with a valid value and try again.");
         }
@@ -223,13 +223,14 @@ public class TestServiceImpl implements TestService {
 
             var answers = request.getAnswers();
 
-            validateTestSubmission(answers, testQuestions);
+            markTestSubmission(answers, testQuestions);
+
+            gradeTest(test);
 
             // Mark the test as completed
             test.getTestDetails().setCompleted(true);
             test.setTestStatus(TestStatus.COMPLETED);
 
-            gradeTest(test);
             saveTest(test);
 
             return test.getId().toHexString();
@@ -240,7 +241,7 @@ public class TestServiceImpl implements TestService {
 
     }
 
-    private void validateTestSubmission(List<TestQuestionSubmissionRequest> answers, List<TestQuestion> testQuestions) {
+    private void markTestSubmission(List<TestQuestionSubmissionRequest> answers, List<TestQuestion> testQuestions) {
         // Process each answer and map it to the corresponding question
         for (TestQuestionSubmissionRequest submission : answers) {
             // Find the testQuestion in the test
@@ -255,7 +256,7 @@ public class TestServiceImpl implements TestService {
         }
     }
 
-    private void gradeTest(TestEntity test) {
+    private void gradeTest(TestEntity test){
 
         try {
             TestResult result = TestGradingStrategy.calculateTestScore().apply(test.getQuestions());
@@ -280,14 +281,14 @@ public class TestServiceImpl implements TestService {
 
     @Override
     public TestResult getTestResult(String id) {
-        var test = getTestById(returnObjectId(id));
-        var testDetails = test.getTestDetails();
-        return TestResult.builder()
-                .totalQuestions(testDetails.getTotalQuestions())
-                .totalCorrectAnswers(testDetails.getTotalCorrect())
-                .scorePercentage(testDetails.getScorePercentage())
-                .pointsEarned(testDetails.getPointsEarned())
-                .build();
+            var test = getTestById(returnObjectId(id));
+            var testDetails = test.getTestDetails();
+            return  TestResult.builder()
+                    .totalQuestions(testDetails.getTotalQuestions())
+                    .totalCorrectAnswers(testDetails.getTotalCorrect())
+                    .scorePercentage(testDetails.getScorePercentage())
+                    .pointsEarned(testDetails.getPointsEarned())
+                    .build();
     }
 
     private boolean isTestResultValid(TestResult result) {

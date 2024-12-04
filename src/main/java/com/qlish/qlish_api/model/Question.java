@@ -1,5 +1,6 @@
 package com.qlish.qlish_api.model;
 
+import com.qlish.qlish_api.enums.TestSubject;
 import lombok.*;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
@@ -20,7 +21,7 @@ public class Question{
     private ObjectId id;
     private String questionText;
     private Map<String, String> options;
-    private String subject;
+    private TestSubject subject;
     private Map<String, String> modifiers;
     private String correctAnswer;
 }

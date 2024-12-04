@@ -110,17 +110,17 @@ public class QuestionServiceImpl implements QuestionService {
     @Override
     public QuestionDto addNewQuestion(NewQuestionRequest request) {
         try {
-            TestSubject subject = TestSubject.getSubjectByDisplayName(request.getSubject());
+            TestSubject subject = request.getSubject();
             Handler handler = handlerFactory.getHandler(HandlerName.getHandlerNameBySubject(subject));
 
-            boolean isValid = handler.validateRequest(request.getSubject(), request.getModifiers());
+            boolean isValid = handler.validateRequest(subject.toString(), request.getModifiers());
 
             if (!isValid) {
                 throw new CustomQlishException("Validation failed for the provided new question request.");
             }
 
             Question newQuestion = Question.builder()
-                    .subject(request.getSubject().toLowerCase())
+                    .subject(subject)
                     .questionText(request.getQuestionText())
                     .options(request.getOptions())
                     .correctAnswer(request.getAnswer())

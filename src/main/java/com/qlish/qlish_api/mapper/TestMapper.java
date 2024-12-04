@@ -10,7 +10,7 @@ public class TestMapper {
                 .id(test.getId().toHexString())
                 .userId(test.getTestDetails().getUserId())
                 .questions(test.getQuestions())
-                .testSubject(test.getTestDetails().getTestSubject().getDisplayName())
+                .testSubject(test.getTestDetails().getTestSubject())
                 .startedAt(test.getTestDetails().getStartedAt())
                 .totalQuestionCount(test.getTestDetails().getTotalQuestions())
                 .totalCorrectAnswers(test.getTestDetails().getTotalCorrect())
