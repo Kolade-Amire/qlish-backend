@@ -244,24 +244,24 @@ public class TestServiceImpl implements TestService {
             var test = getTestById(returnObjectId(id));
             TestResult result = TestGradingStrategy.calculateTestScore().apply(test.getQuestions());
 
-            //TODO: quiz/test definition
-            var totalPoints = test.isQuiz() ?
-                    PointsGradingStrategy.calculateQuizPoints()
-                            .apply(result.getScorePercentage(), test.getDifficultyLevel())
-                    :
-                    PointsGradingStrategy.calculateTestPoints()
-                            .apply(result.getScorePercentage(), test.getDifficultyLevel());
+            var testPoints = PointsGradingStrategy.calculatePoints().apply(result.getScorePercentage(), test.getTestDetails().getDifficultyLevel());
 
-            test.getTestDetails().setTestPoints(totalPoints);
+            test.getTestDetails().setPointsEarned(testPoints);
+            result.setPointsEarned(testPoints);
 
-            if (result != null) {
+            if (isTestResultValid(result)) {
                 test.setTestStatus(TestStatus.GRADED);
             }
+
             return result;
         } catch (Exception e) {
             logger.error(e.getMessage());
             throw new TestResultException(e.getMessage());
         }
+    }
+
+    private boolean isTestResultValid(TestResult result) {
+        return result.getScorePercentage() >= 0 && result.getPointsEarned() >= 0;
     }
 
     private ObjectId returnObjectId(String idString) {

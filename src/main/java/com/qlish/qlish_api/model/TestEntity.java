@@ -1,13 +1,7 @@
 package com.qlish.qlish_api.model;
 
-import com.qlish.qlish_api.enums.DifficultyLevel;
 import com.qlish.qlish_api.enums.TestStatus;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.Builder;
-import lombok.ToString;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
@@ -28,8 +22,6 @@ public class TestEntity {
     @EqualsAndHashCode.Include
     private ObjectId id;
     private TestDetails testDetails;
-    private List<TestQuestion> questions;
     private TestStatus testStatus;
-    private boolean isQuiz; //validate across
-    private DifficultyLevel difficultyLevel; //validate across
+    private List<TestQuestion> questions;
 }

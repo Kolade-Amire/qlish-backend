@@ -13,7 +13,7 @@ public enum TestSubject {
     PHYSICS("Physics"),
     CHEMISTRY("Chemistry"),
     HISTORY("History"),
-    GENERAL_QUIZ("Quiz");
+    QUIZ("Quiz");
 
     private final String displayName;
 

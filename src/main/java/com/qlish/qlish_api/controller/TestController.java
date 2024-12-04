@@ -53,4 +53,11 @@ public class TestController {
         return ResponseEntity.ok().body(result);
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteTest(@PathVariable String id){
+        testService.deleteTest(id);
+        return ResponseEntity.noContent().build();
+    }
+
+
 }

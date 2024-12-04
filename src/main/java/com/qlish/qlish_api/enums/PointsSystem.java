@@ -30,10 +30,6 @@ public class PointsSystem {
         return gradedPoints.get();
     }
 
-    public static int getTotalPoints(int scorePercentage){
-        return calculatePoints(scorePercentage);
-    }
-
     public static int getTotalPoints(int scorePercentage, DifficultyLevel difficultyLevel){
          var gradedPoints = calculatePoints(scorePercentage);
         Map<DifficultyLevel, Integer> multiplierMapping = Map.of(
