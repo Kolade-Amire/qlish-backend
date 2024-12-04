@@ -23,9 +23,9 @@ public class TestDetails {
     private DifficultyLevel difficultyLevel;
     private LocalDateTime startedAt;
     private int totalQuestions;
-    private int totalCorrect;
-    private int totalIncorrect;
-    private int scorePercentage;
-    private int pointsEarned;
+    private Integer totalCorrect;
+    private Integer totalIncorrect;
+    private Integer scorePercentage;
+    private Integer pointsEarned;
     private boolean isCompleted;
 }

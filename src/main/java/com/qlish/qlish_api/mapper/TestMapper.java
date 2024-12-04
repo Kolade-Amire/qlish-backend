@@ -4,19 +4,19 @@ import com.qlish.qlish_api.dto.TestDto;
 import com.qlish.qlish_api.model.TestEntity;
 
 public class TestMapper {
-
     public static TestDto mapTestToDto(TestEntity test) {
+        var testDetails = test.getTestDetails();
         return TestDto.builder()
                 .id(test.getId().toHexString())
-                .userId(test.getTestDetails().getUserId())
+                .userId(testDetails.getUserId())
                 .questions(test.getQuestions())
-                .testSubject(test.getTestDetails().getTestSubject())
-                .startedAt(test.getTestDetails().getStartedAt())
-                .totalQuestionCount(test.getTestDetails().getTotalQuestions())
-                .totalCorrectAnswers(test.getTestDetails().getTotalCorrect())
-                .totalIncorrectAnswers(test.getTestDetails().getTotalIncorrect())
-                .pointEarned(test.getTestDetails().getPointsEarned())
-                .scorePercentage(test.getTestDetails().getScorePercentage())
+                .testSubject(testDetails.getTestSubject())
+                .startedAt(testDetails.getStartedAt())
+                .totalQuestionCount(testDetails.getTotalQuestions())
+                .totalCorrectAnswers(testDetails.getTotalCorrect())
+                .totalIncorrectAnswers(testDetails.getTotalIncorrect())
+                .pointEarned(testDetails.getPointsEarned())
+                .scorePercentage(testDetails.getScorePercentage())
                 .build();
     }
 }

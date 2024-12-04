@@ -47,6 +47,7 @@ public class TestServiceImpl implements TestService {
 
     private static final Logger logger = LoggerFactory.getLogger(TestServiceImpl.class);
     private final GeminiAI geminiAI;
+    private final UserService userService;
     private final HandlerFactory handlerFactory;
     private final ObjectMapper objectMapper = new ObjectMapper();
     private final TestRepository testRepository;
@@ -272,11 +273,25 @@ public class TestServiceImpl implements TestService {
             if (isTestResultValid(result)) {
                 test.setTestStatus(TestStatus.GRADED);
             }
+
+            //update user's all-time points
+            var userId = test.getTestDetails().getUserId();
+            updateUserPoints(userId, testPoints);
         } catch (Exception e) {
             logger.error(e.getMessage());
             throw new TestResultException(e.getMessage());
         }
 
+    }
+
+    private void updateUserPoints(ObjectId id, int pointsEarned){
+        try {
+            User user = userService.findUserById(id);
+            var existingPoints = user.getAllTimePoints();
+            user.setAllTimePoints(existingPoints + pointsEarned);
+        } catch (Exception e) {
+            throw new UserPointsUpdateException(AppConstants.UPDATE_USER_POINTS_ERROR);
+        }
     }
 
     @Override

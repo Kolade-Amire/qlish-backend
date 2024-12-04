@@ -218,6 +218,17 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(problemDetail, HttpStatusCode.valueOf(problemDetail.getStatus()));
     }
 
+    @ExceptionHandler(UserPointsUpdateException.class)
+    public ResponseEntity<ProblemDetail> handleUserPointsUpdateException(UserPointsUpdateException exception, HttpServletRequest request){
+        LOGGER.error(exception.getMessage());
+
+        var problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.INTERNAL_SERVER_ERROR, AppConstants.UPDATE_USER_POINTS_ERROR);
+        problemDetail.setTitle("User Points Update Error");
+        problemDetail.setInstance(URI.create(request.getRequestURI()));
+
+        return new ResponseEntity<>(problemDetail, HttpStatusCode.valueOf(problemDetail.getStatus()));
+    }
+
     @ExceptionHandler(BadRequestException.class)
     public ResponseEntity<ProblemDetail> handleBadRequestException(BadRequestException exception, HttpServletRequest request) {
         LOGGER.error(exception.getMessage());

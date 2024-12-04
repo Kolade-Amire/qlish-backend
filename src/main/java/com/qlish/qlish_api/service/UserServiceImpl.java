@@ -4,9 +4,11 @@ import com.mongodb.MongoTimeoutException;
 import com.mongodb.MongoWriteException;
 import com.qlish.qlish_api.exception.CustomQlishException;
 import com.qlish.qlish_api.constants.AppConstants;
+import com.qlish.qlish_api.exception.EntityNotFoundException;
 import com.qlish.qlish_api.model.User;
 import com.qlish.qlish_api.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
@@ -24,6 +26,13 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getUserByEmail(String email) throws UsernameNotFoundException {
         return userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException(AppConstants.USER_NOT_FOUND));
+    }
+
+    @Override
+    public User findUserById(ObjectId id) {
+        return userRepository.findById(id).orElseThrow(
+                ()-> new EntityNotFoundException(String.format("User with ID: %s not found", id.toHexString())
+        ));
     }
 
 
