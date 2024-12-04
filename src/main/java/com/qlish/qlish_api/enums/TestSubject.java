@@ -8,12 +8,12 @@ import java.util.Arrays;
 @RequiredArgsConstructor
 @Getter
 public enum TestSubject {
-    ENGLISH("English"),
-    MATHEMATICS("Math"),
-    PHYSICS("Physics"),
-    CHEMISTRY("Chemistry"),
-    HISTORY("History"),
-    QUIZ("Quiz");
+    ENGLISH("english"),
+    MATHEMATICS("math"),
+    PHYSICS("physics"),
+    CHEMISTRY("chemistry"),
+    HISTORY("history"),
+    QUIZ("quiz");
 
     private final String displayName;
 

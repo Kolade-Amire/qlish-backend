@@ -30,4 +30,5 @@ public class TestDto {
     private int totalCorrectAnswers;
     private int totalIncorrectAnswers;
     private int scorePercentage;
+    private int pointEarned;
 }

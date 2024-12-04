@@ -15,6 +15,7 @@ public class TestMapper {
                 .totalQuestionCount(test.getTestDetails().getTotalQuestions())
                 .totalCorrectAnswers(test.getTestDetails().getTotalCorrect())
                 .totalIncorrectAnswers(test.getTestDetails().getTotalIncorrect())
+                .pointEarned(test.getTestDetails().getPointsEarned())
                 .scorePercentage(test.getTestDetails().getScorePercentage())
                 .build();
     }

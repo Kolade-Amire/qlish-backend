@@ -9,8 +9,7 @@ public enum DifficultyLevel {
     ADVANCED("advanced"),
     INTERMEDIATE("intermediate"),
     ELEMENTARY("elementary"),
-    RANDOM("random"),
-    QUIZ("quiz");
+    RANDOM("random");
 
     private final String levelName;
 

@@ -9,9 +9,9 @@ import com.mongodb.MongoWriteException;
 import com.qlish.qlish_api.constants.AppConstants;
 import com.qlish.qlish_api.dto.TestDto;
 import com.qlish.qlish_api.dto.TestQuestionDto;
+import com.qlish.qlish_api.enums.DifficultyLevel;
 import com.qlish.qlish_api.enums.HandlerName;
 import com.qlish.qlish_api.enums.TestStatus;
-import com.qlish.qlish_api.enums.TestSubject;
 import com.qlish.qlish_api.exception.*;
 import com.qlish.qlish_api.factory.HandlerFactory;
 import com.qlish.qlish_api.generativeAI.GeminiAI;
@@ -89,9 +89,7 @@ public class TestServiceImpl implements TestService {
     @Override
     public String createTest(TestRequest request) throws GenerativeAIException {
 
-        var subject = TestSubject.getSubjectByDisplayName(request.getSubject());
         List<Question> generatedQuestions;
-
 
         try {
             generatedQuestions = generateQuestions(request);
@@ -99,13 +97,26 @@ public class TestServiceImpl implements TestService {
             throw new GenerativeAIException(e.getMessage());
         }
 
-        TestDetails testDetails = TestDetails.builder()
-                .userId(returnObjectId(request.getUserId()))
-                .testSubject(subject)
-                .startedAt(LocalDateTime.now())
-                .totalQuestions(request.getCount())
-                .isCompleted(false)
-                .build();
+        DifficultyLevel difficultyLevel;
+        try {
+            var requestLevel = request.getModifiers().get("level");
+            difficultyLevel = DifficultyLevel.fromLevelName(requestLevel);
+        } catch (Exception e) {
+            throw new RuntimeException("Unable to process difficulty level from request. Add a 'level' field with a valid value and try again.");
+        }
+
+        TestDetails testDetails = null;
+        if (difficultyLevel != null) {
+            testDetails = TestDetails.builder()
+                    .userId(returnObjectId(request.getUserId()))
+                    .testSubject(request.getSubject())
+                    .testType(request.getTestType())
+                    .difficultyLevel(difficultyLevel)
+                    .startedAt(LocalDateTime.now())
+                    .totalQuestions(request.getCount())
+                    .isCompleted(false)
+                    .build();
+        }
 
         List<TestQuestion> testQuestions = TestQuestionMapper.mapQuestionListToSavedTestQuestionDto(generatedQuestions);
 
@@ -121,11 +132,11 @@ public class TestServiceImpl implements TestService {
 
     @Override
     public List<Question> generateQuestions(TestRequest request) throws GenerativeAIException {
-        TestSubject subject = TestSubject.getSubjectByDisplayName(request.getSubject());
-        var handlerName = HandlerName.getHandlerNameBySubject(subject);
+
+        var handlerName = HandlerName.getHandlerNameBySubject(request.getSubject());
         var testHandler = handlerFactory.getHandler(handlerName);
 
-        boolean isTestRequestValid = testHandler.validateRequest(request.getSubject(), request.getModifiers());
+        boolean isTestRequestValid = testHandler.validateRequest(request.getSubject().toString(), request.getModifiers());
         if (isTestRequestValid) {
             var prompt = testHandler.getPrompt(request);
             var systemInstruction = testHandler.getSystemInstruction();
@@ -208,26 +219,17 @@ public class TestServiceImpl implements TestService {
     public String submitTest(TestSubmissionRequest request) {
         try {
             var test = getTestById(returnObjectId(request.getId()));
+            List<TestQuestion> testQuestions = test.getQuestions();
+
             var answers = request.getAnswers();
 
-            // Process each answer and map it to the corresponding question
-            for (TestQuestionSubmissionRequest submission : answers) {
-                // Find the testQuestion in the test
-                TestQuestion testQuestion = test.getQuestions().stream()
-                        .filter(q -> q.getId().equals(submission.getQuestionId()))
-                        .findFirst()
-                        .orElseThrow(() -> new EntityNotFoundException(AppConstants.QUESTION_NOT_FOUND));
-
-                // Store the submission in the corresponding question of the test
-                testQuestion.setSelectedOption(submission.getSelectedOption());
-                testQuestion.setAnswerCorrect(submission.getSelectedOption().equalsIgnoreCase(testQuestion.getCorrectAnswer()));
-            }
+            validateTestSubmission(answers, testQuestions);
 
             // Mark the test as completed
             test.getTestDetails().setCompleted(true);
             test.setTestStatus(TestStatus.COMPLETED);
 
-            //TODO:grade test
+            gradeTest(test);
             saveTest(test);
 
             return test.getId().toHexString();
@@ -238,26 +240,54 @@ public class TestServiceImpl implements TestService {
 
     }
 
-    @Override
-    public TestResult getTestResult(String id) {
-        try {
-            var test = getTestById(returnObjectId(id));
-            TestResult result = TestGradingStrategy.calculateTestScore().apply(test.getQuestions());
+    private void validateTestSubmission(List<TestQuestionSubmissionRequest> answers, List<TestQuestion> testQuestions) {
+        // Process each answer and map it to the corresponding question
+        for (TestQuestionSubmissionRequest submission : answers) {
+            // Find the testQuestion in the test
+            TestQuestion testQuestion = testQuestions.stream()
+                    .filter(q -> q.getId().equals(submission.getQuestionId()))
+                    .findFirst()
+                    .orElseThrow(() -> new EntityNotFoundException(AppConstants.QUESTION_NOT_FOUND));
 
+            // Store the submission in the corresponding question of the test
+            testQuestion.setSelectedOption(submission.getSelectedOption());
+            testQuestion.setAnswerCorrect(submission.getSelectedOption().equalsIgnoreCase(testQuestion.getCorrectAnswer()));
+        }
+    }
+
+    private void gradeTest(TestEntity test) {
+
+        try {
+            TestResult result = TestGradingStrategy.calculateTestScore().apply(test.getQuestions());
             var testPoints = PointsGradingStrategy.calculatePoints().apply(result.getScorePercentage(), test.getTestDetails().getDifficultyLevel());
 
             test.getTestDetails().setPointsEarned(testPoints);
+            test.getTestDetails().setScorePercentage(result.getScorePercentage());
+            test.getTestDetails().setTotalCorrect(result.getTotalCorrectAnswers());
+            test.getTestDetails().setTotalIncorrect(result.getTotalIncorrectAnswers());
+
             result.setPointsEarned(testPoints);
 
             if (isTestResultValid(result)) {
                 test.setTestStatus(TestStatus.GRADED);
             }
-
-            return result;
         } catch (Exception e) {
             logger.error(e.getMessage());
             throw new TestResultException(e.getMessage());
         }
+
+    }
+
+    @Override
+    public TestResult getTestResult(String id) {
+        var test = getTestById(returnObjectId(id));
+        var testDetails = test.getTestDetails();
+        return TestResult.builder()
+                .totalQuestions(testDetails.getTotalQuestions())
+                .totalCorrectAnswers(testDetails.getTotalCorrect())
+                .scorePercentage(testDetails.getScorePercentage())
+                .pointsEarned(testDetails.getPointsEarned())
+                .build();
     }
 
     private boolean isTestResultValid(TestResult result) {
