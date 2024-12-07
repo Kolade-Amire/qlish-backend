@@ -1,8 +1,12 @@
-package com.qlish.qlish_api.security;
+package com.qlish.qlish_api.config;
 
 import com.qlish.qlish_api.constants.AppConstants;
 import com.qlish.qlish_api.constants.SecurityConstants;
 import com.qlish.qlish_api.enums.auth.Role;
+import com.qlish.qlish_api.security.CustomAuthenticationProvider;
+import com.qlish.qlish_api.security.JwtAccessDeniedHandler;
+import com.qlish.qlish_api.security.JwtAuthenticationEntryPoint;
+import com.qlish.qlish_api.security.JwtAuthenticationFilter;
 import com.qlish.qlish_api.service.CustomOAuth2UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;

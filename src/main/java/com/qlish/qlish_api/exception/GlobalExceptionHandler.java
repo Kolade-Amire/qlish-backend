@@ -179,7 +179,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         LOGGER.error(exception.getMessage());
 
         var problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.INTERNAL_SERVER_ERROR, AppConstants.GENERAL_ERROR_MESSAGE + ":\n" + exception.getLocalizedMessage());
-        problemDetail.setTitle("Qlish Exception");
+        problemDetail.setTitle("Application Exception");
         problemDetail.setInstance(URI.create(request.getRequestURI()));
 
         return new ResponseEntity<>(problemDetail, HttpStatusCode.valueOf(problemDetail.getStatus()));
@@ -243,6 +243,18 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(GenerativeAIException.class)
     public ResponseEntity<ProblemDetail> handleGenerativeAIException(GenerativeAIException exception, HttpServletRequest request){
+        LOGGER.error(exception.getMessage());
+
+        var problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.INTERNAL_SERVER_ERROR, exception.getLocalizedMessage());
+
+        problemDetail.setTitle("Question Generation Error");
+        problemDetail.setInstance(URI.create(request.getRequestURI()));
+
+        return new ResponseEntity<>(problemDetail, HttpStatusCode.valueOf(problemDetail.getStatus()));
+    }
+
+    @ExceptionHandler(GenerativeAIException.class)
+    public ResponseEntity<ProblemDetail> handleLeaderboardException(GenerativeAIException exception, HttpServletRequest request){
         LOGGER.error(exception.getMessage());
 
         var problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.INTERNAL_SERVER_ERROR, exception.getLocalizedMessage());

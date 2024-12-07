@@ -1,4 +1,4 @@
-package com.qlish.qlish_api.security.data;
+package com.qlish.qlish_api.dto.auth;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

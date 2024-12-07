@@ -1,10 +1,7 @@
 package com.qlish.qlish_api.model;
 
 import com.qlish.qlish_api.enums.TokenType;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
 import org.springframework.data.redis.core.index.Indexed;
@@ -13,7 +10,9 @@ import org.springframework.data.redis.core.index.Indexed;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@Getter
+@Setter
 @RedisHash("token")
 public class TokenEntity {
 

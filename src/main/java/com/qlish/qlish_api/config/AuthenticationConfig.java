@@ -1,5 +1,7 @@
-package com.qlish.qlish_api.security;
+package com.qlish.qlish_api.config;
 
+import com.qlish.qlish_api.security.CustomAuthenticationFailureHandler;
+import com.qlish.qlish_api.security.JwtService;
 import com.qlish.qlish_api.service.TokenService;
 import com.qlish.qlish_api.service.CustomUserDetailsService;
 import com.qlish.qlish_api.service.UserService;
@@ -14,7 +16,7 @@ import org.springframework.security.web.authentication.AuthenticationFailureHand
 
 @Configuration
 @RequiredArgsConstructor
-public class SecurityUtils {
+public class AuthenticationConfig {
 
     private final CustomUserDetailsService userDetailsService;
     private final UserService userService;

@@ -1,4 +1,6 @@
-package com.qlish.qlish_api.enums;
+package com.qlish.qlish_api.util;
+
+import com.qlish.qlish_api.enums.DifficultyLevel;
 
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
