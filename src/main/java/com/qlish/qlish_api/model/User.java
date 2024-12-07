@@ -23,8 +23,7 @@ import java.time.LocalDateTime;
 public class User {
 
     @Id
-    @Indexed(unique = true)
-    private ObjectId _id;
+    private ObjectId id;
     @Indexed(unique = true)
     private String email;
     private String firstname;
@@ -47,7 +46,7 @@ public class User {
     @Override
     public String toString(){
         return "User{" +
-                "_id=" + _id +
+                "_id=" + id +
                 ", firstname='" + firstname + '\'' +
                 ", lastname='" + lastname + '\'' +
                 ", profilePicture='" + profilePictureUrl + '\'' +

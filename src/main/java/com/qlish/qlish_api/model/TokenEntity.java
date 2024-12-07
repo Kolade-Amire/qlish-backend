@@ -19,7 +19,7 @@ public class TokenEntity {
 
     @Id
     private Integer id;
-    @Indexed// Creates an index on this field for faster lookups
+    @Indexed
     private String userId;
     @Indexed
     private String token;

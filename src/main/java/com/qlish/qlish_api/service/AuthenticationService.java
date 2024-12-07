@@ -126,7 +126,7 @@ public class AuthenticationService {
 
 
             try {
-                tokenService.deleteTokenByUserId(user.get_id().toString());
+                tokenService.deleteTokenByUserId(user.getId().toString());
             } catch (Exception e) {
                 LOGGER.info("Token Expired. Failed to delete user's existing token.");
             }
@@ -165,7 +165,7 @@ public class AuthenticationService {
     private void saveUserRefreshToken(User user, String token) {
 
         var newTokenEntity = TokenEntity.builder()
-                .userId(user.get_id().toHexString())
+                .userId(user.getId().toHexString())
                 .token(token)
                 .tokenType(OAuth2AccessToken.TokenType.BEARER.getValue())
                 .isExpired(false)
@@ -196,7 +196,7 @@ public class AuthenticationService {
             if (userEmail != null) {
                 var user = this.userService.getUserByEmail(userEmail);
                 var userPrincipal = new UserPrincipal(user);
-                var refreshToken = tokenService.findTokenByUserId(user.get_id().toHexString());
+                var refreshToken = tokenService.findTokenByUserId(user.getId().toHexString());
 
                 if (jwtService.isTokenValid(refreshToken.getToken(), userPrincipal)) {
                     var newAccessToken = jwtService.generateAccessToken(userPrincipal);

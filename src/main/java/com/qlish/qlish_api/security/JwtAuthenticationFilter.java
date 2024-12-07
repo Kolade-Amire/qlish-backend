@@ -1,6 +1,6 @@
 package com.qlish.qlish_api.security;
 
-import com.qlish.qlish_api.repository.TokenRedisRepository;
+import com.qlish.qlish_api.repository.RedisTokenRepository;
 import com.qlish.qlish_api.constants.AppConstants;
 import com.qlish.qlish_api.constants.SecurityConstants;
 import jakarta.servlet.FilterChain;
@@ -26,7 +26,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
-    private final TokenRedisRepository tokenRepository;
+    private final RedisTokenRepository tokenRepository;
 
     @Override
     protected void doFilterInternal(

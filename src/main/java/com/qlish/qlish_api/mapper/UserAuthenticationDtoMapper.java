@@ -7,7 +7,7 @@ public class UserAuthenticationDtoMapper {
 
     public static UserAuthenticationDto mapUserToUserAuthDto(User user) {
         return UserAuthenticationDto.builder()
-                .id(user.get_id())
+                .id(user.getId())
                 .firstname(user.getFirstname())
                 .lastname(user.getLastname())
                 .email(user.getEmail())

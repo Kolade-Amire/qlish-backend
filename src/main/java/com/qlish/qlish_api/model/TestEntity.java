@@ -18,7 +18,6 @@ import java.util.List;
 @Document(collection = "tests")
 public class TestEntity {
     @Id
-    @Indexed(unique = true)
     @EqualsAndHashCode.Include
     private ObjectId id;
     private TestDetails testDetails;

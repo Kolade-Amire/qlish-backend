@@ -20,7 +20,7 @@ public class UserPrincipal implements OAuth2User, UserDetails {
 
 
     public ObjectId getUserId() {
-        return this.user.get_id();
+        return this.user.getId();
     }
 
     @Override

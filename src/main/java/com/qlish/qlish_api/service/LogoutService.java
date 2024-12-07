@@ -1,6 +1,6 @@
 package com.qlish.qlish_api.service;
 
-import com.qlish.qlish_api.repository.TokenRedisRepository;
+import com.qlish.qlish_api.repository.RedisTokenRepository;
 import com.qlish.qlish_api.constants.SecurityConstants;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class LogoutService implements LogoutHandler {
 
-    private final TokenRedisRepository tokenRepository;
+    private final RedisTokenRepository tokenRepository;
 
     @Override
     @Transactional

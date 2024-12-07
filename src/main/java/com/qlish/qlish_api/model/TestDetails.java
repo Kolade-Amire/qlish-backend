@@ -23,7 +23,7 @@ public class TestDetails {
     private DifficultyLevel difficultyLevel;
     private LocalDateTime startedAt;
     private int totalQuestions;
-    private Integer totalCorrect;
+    private Integer totalCorrect; 
     private Integer totalIncorrect;
     private Integer scorePercentage;
     private Integer pointsEarned;

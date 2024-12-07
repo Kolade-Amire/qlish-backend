@@ -3,7 +3,7 @@ package com.qlish.qlish_api.service;
 import com.qlish.qlish_api.model.TokenEntity;
 import com.qlish.qlish_api.exception.CustomQlishException;
 import com.qlish.qlish_api.exception.EntityNotFoundException;
-import com.qlish.qlish_api.repository.TokenRedisRepository;
+import com.qlish.qlish_api.repository.RedisTokenRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class TokenService {
 
-    private final TokenRedisRepository tokenRepository;
+    private final RedisTokenRepository tokenRepository;
 
     public TokenEntity findTokenByUserId(String userId) {
         return tokenRepository.findByUserId(userId).orElseThrow(() -> new EntityNotFoundException(String.format("Could not get token for user with id: %s ", userId)));
