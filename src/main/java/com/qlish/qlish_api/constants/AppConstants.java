@@ -31,4 +31,7 @@ public class AppConstants {
     public static final String NOT_ENOUGH_PERMISSIONS = "You do not have sufficient permissions to access this resource.";
     public static final String ERROR_PATH = "/error";
 
+    public static final String ALL_TIME_LEADERBOARD_KEY = "all_time_leaderboard";
+    public static final String DAILY_LEADERBOARD_KEY_PREFIX = "daily_leaderboard:";
+
 }

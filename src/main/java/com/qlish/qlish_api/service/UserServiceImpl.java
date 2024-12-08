@@ -59,6 +59,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void updateUserAllTimePoints(ObjectId id, int testPoints) {
+        var user = findUserById(id);
+        var currentTotal = user.getAllTimePoints();
+        user.setAllTimePoints(currentTotal + testPoints);
+    }
+
+    @Override
     public boolean userExists(String email) {
         return userRepository.findByEmail(email).isPresent();
     }

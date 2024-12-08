@@ -253,13 +253,13 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(problemDetail, HttpStatusCode.valueOf(problemDetail.getStatus()));
     }
 
-    @ExceptionHandler(GenerativeAIException.class)
-    public ResponseEntity<ProblemDetail> handleLeaderboardException(GenerativeAIException exception, HttpServletRequest request){
+    @ExceptionHandler(LeaderboardException.class)
+    public ResponseEntity<ProblemDetail> handleLeaderboardException(LeaderboardException exception, HttpServletRequest request){
         LOGGER.error(exception.getMessage());
 
         var problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.INTERNAL_SERVER_ERROR, exception.getLocalizedMessage());
 
-        problemDetail.setTitle("Question Generation Error");
+        problemDetail.setTitle("Leaderboard Error");
         problemDetail.setInstance(URI.create(request.getRequestURI()));
 
         return new ResponseEntity<>(problemDetail, HttpStatusCode.valueOf(problemDetail.getStatus()));

@@ -41,6 +41,7 @@ public class User {
     private boolean isEmailVerified;
     private LocalDateTime createdAt;
     private LocalDateTime lastLoginAt;
+    @Indexed
     private long allTimePoints;
 
     @Override

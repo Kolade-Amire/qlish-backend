@@ -13,5 +13,7 @@ public interface UserService {
 
     User saveUser(User user);
 
+    void updateUserAllTimePoints(ObjectId id, int testPoints);
+
     boolean userExists(String email);
 }
