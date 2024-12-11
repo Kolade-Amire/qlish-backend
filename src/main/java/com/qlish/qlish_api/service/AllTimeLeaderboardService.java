@@ -1,7 +1,6 @@
 package com.qlish.qlish_api.service;
 
 import com.qlish.qlish_api.model.User;
-import com.qlish.qlish_api.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.data.redis.core.RedisTemplate;
