@@ -43,7 +43,7 @@ public class DailyLeaderboardService {
         String key = getDailyLeaderboardKey();
 
         try {
-            Set<ZSetOperations.TypedTuple<Object>> topEntries = redisTemplate.opsForZSet().reverseRangeWithScores(key, 0, 9);
+            Set<ZSetOperations.TypedTuple<Object>> topEntries = redisTemplate.opsForZSet().reverseRangeWithScores(key, 0, 19);
 
             if (topEntries == null) {
                 throw new NullPointerException("Cannot retrieve daily leaderboard. Leaderboard set is null.");
@@ -56,7 +56,7 @@ public class DailyLeaderboardService {
                                     if (tuple.getValue() != null && tuple.getScore() != null) {
                                         return new LeaderboardEntry(
                                                 tuple.getValue().toString(),
-                                                tuple.getScore().longValue()
+                                                tuple.getScore().intValue()
                                         );
                                     }
                                     throw new RuntimeException("Error occurred while trying to retrieve daily leaderboard entry.");

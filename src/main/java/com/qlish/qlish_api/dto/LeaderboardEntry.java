@@ -9,5 +9,5 @@ import lombok.Setter;
 @AllArgsConstructor
 public class LeaderboardEntry {
     private String profileName;
-    private Long points;
+    private Integer points;
 }
