@@ -15,6 +15,8 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
@@ -63,6 +65,11 @@ public class UserServiceImpl implements UserService {
         var user = findUserById(id);
         var currentTotal = user.getAllTimePoints();
         user.setAllTimePoints(currentTotal + testPoints);
+    }
+
+    @Override
+    public List<User> getUsersWithTop20Points() {
+        return List.of();
     }
 
     @Override

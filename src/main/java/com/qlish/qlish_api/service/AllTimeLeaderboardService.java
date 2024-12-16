@@ -1,13 +1,14 @@
 package com.qlish.qlish_api.service;
 
-import com.qlish.qlish_api.model.User;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ZSetOperations;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Set;
 
 import static com.qlish.qlish_api.constants.AppConstants.ALL_TIME_LEADERBOARD_KEY;
@@ -17,45 +18,34 @@ import static com.qlish.qlish_api.constants.AppConstants.ALL_TIME_LEADERBOARD_KE
 public class AllTimeLeaderboardService {
 
     private final RedisTemplate<String, Object> redisTemplate;
+    private static final Logger LOGGER = LoggerFactory.getLogger(AllTimeLeaderboardService.class);
 
     private final UserService userService;
 
 
-    public void updateAllTimePoints(String userId, int points){
-        var _id = new ObjectId(userId);
-        userService.updateUserAllTimePoints(_id, points);
-        refreshLeaderboardCache();
-    }
+    public void updateLeaderboard(String userId, String profileName, long newPoint) {
 
-    public void updateAllTimeLeaderboard(String userId, String profileName, long newPoints) {
-        // Step 1: Get the 20th user's score
         Double minScore = getMinimumScore();
 
-        if (minScore == null || newPoints > minScore) {
-            // Step 2: Update MongoDB
-            userRepository.incrementAllTimePoints(userId, newPoints);
+        if (minScore == null || newPoint > minScore) {
 
-            // Step 3: Check if user exists in Redis leaderboard
+            // Check if user exists in Redis leaderboard
             Double existingScore = redisTemplate.opsForZSet().score(ALL_TIME_LEADERBOARD_KEY, profileName);
 
             if (existingScore != null) {
                 // If user already exists, increment their score
-                redisTemplate.opsForZSet().incrementScore(ALL_TIME_LEADERBOARD_KEY, profileName, newPoints);
+                redisTemplate.opsForZSet().incrementScore(ALL_TIME_LEADERBOARD_KEY, profileName, newPoint);
             } else {
-                // If user doesn't exist, add to Redis leaderboard
-                redisTemplate.opsForZSet().add(ALL_TIME_LEADERBOARD_KEY, profileName, newPoints);
+                // If user doesn't exist, add to leaderboard
+                redisTemplate.opsForZSet().add(ALL_TIME_LEADERBOARD_KEY, profileName, newPoint);
 
                 // Remove the lowest-ranked user if the leaderboard exceeds 20 entries
-                trimLeaderboardToTopN(20);
+                trimLeaderboard();
             }
         }
     }
 
-    /**
-     * Retrieves the top 20 users from the all-time leaderboard.
-     *
-     * @return a set of leaderboard entries with scores
-     */
+    //Retrieves the top 20 users from the all-time leaderboard.
     public Set<ZSetOperations.TypedTuple<Object>> getAllTimeLeaderboard() {
         return redisTemplate.opsForZSet().reverseRangeWithScores(ALL_TIME_LEADERBOARD_KEY, 0, 19);
     }
@@ -66,7 +56,7 @@ public class AllTimeLeaderboardService {
      */
     @Scheduled(cron = "0 0 * * * ?") // Run hourly
     public void synchronizeLeaderboardWithDatabase() {
-        log.info("Synchronizing Redis leaderboard with MongoDB...");
+        LOGGER.info("Synchronizing Redis leaderboard with MongoDB...");
 
         // Fetch top 20 users from MongoDB
         var topUsersFromDB = userService.findTop20ByOrderByAllTimePointsDesc();
@@ -95,15 +85,12 @@ public class AllTimeLeaderboardService {
         return null;
     }
 
-    /**
-     * Trims the Redis leaderboard to retain only the top N users.
-     *
-     * @param topN the number of top users to retain
-     */
-    private void trimLeaderboardToTopN(int topN) {
+
+     //Trims the Redis leaderboard to retain only the top 20 users
+    private void trimLeaderboard() {
         Long leaderboardSize = redisTemplate.opsForZSet().size(ALL_TIME_LEADERBOARD_KEY);
-        if (leaderboardSize != null && leaderboardSize > topN) {
-            redisTemplate.opsForZSet().removeRange(ALL_TIME_LEADERBOARD_KEY, 0, leaderboardSize - topN - 1);
+        if (leaderboardSize != null && leaderboardSize > 20) {
+            redisTemplate.opsForZSet().popMin(ALL_TIME_LEADERBOARD_KEY);
         }
     }
 }
