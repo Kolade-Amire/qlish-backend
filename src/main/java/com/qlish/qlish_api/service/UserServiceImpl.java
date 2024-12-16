@@ -2,9 +2,12 @@ package com.qlish.qlish_api.service;
 
 import com.mongodb.MongoTimeoutException;
 import com.mongodb.MongoWriteException;
+import com.qlish.qlish_api.dto.UserDto;
 import com.qlish.qlish_api.exception.CustomQlishException;
 import com.qlish.qlish_api.constants.AppConstants;
 import com.qlish.qlish_api.exception.EntityNotFoundException;
+import com.qlish.qlish_api.exception.UserPointsUpdateException;
+import com.qlish.qlish_api.mapper.UserMapper;
 import com.qlish.qlish_api.model.User;
 import com.qlish.qlish_api.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -62,14 +65,19 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void updateUserAllTimePoints(ObjectId id, int testPoints) {
-        var user = findUserById(id);
-        var currentTotal = user.getAllTimePoints();
-        user.setAllTimePoints(currentTotal + testPoints);
+        try {
+            User user = findUserById(id);
+            var existingPoints = user.getAllTimePoints();
+            user.setAllTimePoints(existingPoints + testPoints);
+        } catch (Exception e) {
+            throw new UserPointsUpdateException(AppConstants.UPDATE_USER_POINTS_ERROR);
+        }
     }
 
     @Override
-    public List<User> getUsersWithTop20Points() {
-        return List.of();
+    public List<UserDto> getUsersWithTop20Points() {
+        var topUsers = userRepository.findTop20ByOrderByAllTimePointsDesc();
+        return UserMapper.mapUserListToDto(topUsers);
     }
 
     @Override

@@ -1,7 +1,7 @@
 package com.qlish.qlish_api.service;
 
+import com.qlish.qlish_api.exception.CustomQlishException;
 import lombok.RequiredArgsConstructor;
-import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -24,7 +24,6 @@ public class AllTimeLeaderboardService {
 
 
     public void updateLeaderboard(String userId, String profileName, long newPoint) {
-
         Double minScore = getMinimumScore();
 
         if (minScore == null || newPoint > minScore) {
@@ -56,29 +55,27 @@ public class AllTimeLeaderboardService {
      */
     @Scheduled(cron = "0 0 * * * ?") // Run hourly
     public void synchronizeLeaderboardWithDatabase() {
-        LOGGER.info("Synchronizing Redis leaderboard with MongoDB...");
+        try {
+            LOGGER.info("Synchronizing Redis leaderboard with MongoDB...");
 
-        // Fetch top 20 users from MongoDB
-        var topUsersFromDB = userService.findTop20ByOrderByAllTimePointsDesc();
+            var topUsersFromDB = userService.getUsersWithTop20Points();
 
-        // Clear Redis leaderboard
-        redisTemplate.delete(ALL_TIME_LEADERBOARD_KEY);
+            // Clear Redis leaderboard
+            redisTemplate.delete(ALL_TIME_LEADERBOARD_KEY);
 
-        // Repopulate Redis leaderboard with top users from MongoDB
-        for (var user : topUsersFromDB) {
-            redisTemplate.opsForZSet().add(ALL_TIME_LEADERBOARD_KEY, user.getProfileName(), user.getAllTimePoints());
+            // Repopulate Redis leaderboard with top users from MongoDB
+            for (var user : topUsersFromDB) {
+                redisTemplate.opsForZSet().add(ALL_TIME_LEADERBOARD_KEY, user.getProfileName(), user.getAllTimePoints());
+            }
+
+            LOGGER.info("Redis leaderboard synchronized successfully.");
+        } catch (Exception e) {
+            throw new CustomQlishException("An error occurred while synchronizing leaderboard", e);
         }
-
-        log.info("Redis leaderboard synchronized successfully.");
     }
 
-    /**
-     * Retrieves the minimum score (20th rank) in the leaderboard.
-     *
-     * @return the minimum score or null if the leaderboard is empty
-     */
     private Double getMinimumScore() {
-        Set<ZSetOperations.TypedTuple<Object>> entries = redisTemplate.opsForZSet().rangeWithScores(ALL_TIME_LEADERBOARD_KEY, 19, 19);
+        Set<ZSetOperations.TypedTuple<Object>> entries = redisTemplate.opsForZSet().rangeWithScores(ALL_TIME_LEADERBOARD_KEY, 0,0);
         if (entries != null && !entries.isEmpty()) {
             return entries.iterator().next().getScore();
         }
@@ -95,4 +92,4 @@ public class AllTimeLeaderboardService {
     }
 }
 
-}
+

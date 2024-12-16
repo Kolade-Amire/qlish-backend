@@ -3,6 +3,8 @@ package com.qlish.qlish_api.mapper;
 import com.qlish.qlish_api.dto.UserDto;
 import com.qlish.qlish_api.model.User;
 
+import java.util.List;
+
 public class UserMapper {
 
     public static UserDto mapUserToDto(User user){
@@ -14,5 +16,11 @@ public class UserMapper {
                 .allTimePoints(user.getAllTimePoints())
                 .profilePictureUrl(user.getProfilePictureUrl())
                 .build();
+    }
+
+    public static List<UserDto> mapUserListToDto(List<User> users){
+        return users.stream().map(
+                UserMapper::mapUserToDto
+        ).toList();
     }
 }

@@ -285,13 +285,7 @@ public class TestServiceImpl implements TestService {
     }
 
     private void updateUserPoints(ObjectId id, int pointsEarned){
-        try {
-            User user = userService.findUserById(id);
-            var existingPoints = user.getAllTimePoints();
-            user.setAllTimePoints(existingPoints + pointsEarned);
-        } catch (Exception e) {
-            throw new UserPointsUpdateException(AppConstants.UPDATE_USER_POINTS_ERROR);
-        }
+        userService.updateUserAllTimePoints(id, pointsEarned);
     }
 
     @Override

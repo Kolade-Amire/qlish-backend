@@ -12,7 +12,6 @@ import java.util.Optional;
 public interface UserRepository extends MongoRepository<User, ObjectId> {
 
     Optional<User> findByEmail(String email);
-//    Optional<User> findUserByProfileNameIgnoreCase(String profileName);
     List<User> findTop20ByOrderByAllTimePointsDesc();
 
 }
