@@ -1,5 +1,6 @@
 package com.qlish.qlish_api.service;
 
+import com.qlish.qlish_api.dto.LeaderboardEntry;
 import com.qlish.qlish_api.exception.CustomQlishException;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -23,20 +24,20 @@ public class AllTimeLeaderboardService {
     private final UserService userService;
 
 
-    public void updateLeaderboard(String userId, String profileName, long newPoint) {
+    public void updateLeaderboard(LeaderboardEntry entry) {
         Double minScore = getMinimumScore();
 
-        if (minScore == null || newPoint > minScore) {
+        if (minScore == null || entry.getPoints() > minScore) {
 
             // Check if user exists in Redis leaderboard
-            Double existingScore = redisTemplate.opsForZSet().score(ALL_TIME_LEADERBOARD_KEY, profileName);
+            Double existingScore = redisTemplate.opsForZSet().score(ALL_TIME_LEADERBOARD_KEY, entry.getProfileName());
 
             if (existingScore != null) {
                 // If user already exists, increment their score
-                redisTemplate.opsForZSet().incrementScore(ALL_TIME_LEADERBOARD_KEY, profileName, newPoint);
+                redisTemplate.opsForZSet().incrementScore(ALL_TIME_LEADERBOARD_KEY, entry.getProfileName(), entry.getPoints());
             } else {
                 // If user doesn't exist, add to leaderboard
-                redisTemplate.opsForZSet().add(ALL_TIME_LEADERBOARD_KEY, profileName, newPoint);
+                redisTemplate.opsForZSet().add(ALL_TIME_LEADERBOARD_KEY, entry.getProfileName(), entry.getPoints());
 
                 // Remove the lowest-ranked user if the leaderboard exceeds 20 entries
                 trimLeaderboard();

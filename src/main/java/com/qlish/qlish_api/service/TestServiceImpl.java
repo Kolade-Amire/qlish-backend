@@ -7,6 +7,7 @@ import com.mongodb.MongoBulkWriteException;
 import com.mongodb.MongoTimeoutException;
 import com.mongodb.MongoWriteException;
 import com.qlish.qlish_api.constants.AppConstants;
+import com.qlish.qlish_api.dto.LeaderboardEntry;
 import com.qlish.qlish_api.dto.TestDto;
 import com.qlish.qlish_api.dto.TestQuestionDto;
 import com.qlish.qlish_api.enums.DifficultyLevel;
@@ -52,6 +53,8 @@ public class TestServiceImpl implements TestService {
     private final ObjectMapper objectMapper = new ObjectMapper();
     private final TestRepository testRepository;
     private final CustomQuestionRepository customQuestionRepository;
+    private final AllTimeLeaderboardService allTimeLeaderboardService;
+    private final DailyLeaderboardService dailyLeaderboardService;
 
 
     @Override
@@ -233,6 +236,18 @@ public class TestServiceImpl implements TestService {
             test.setTestStatus(TestStatus.COMPLETED);
 
             saveTest(test);
+
+            var user = userService.findUserById(test.getTestDetails().getUserId());
+
+            var leaderboardEntry = LeaderboardEntry.builder()
+                    .points(test.getTestDetails().getPointsEarned())
+                    .profileName(user.getProfileName())
+                    .build();
+
+            allTimeLeaderboardService.updateLeaderboard(leaderboardEntry);
+
+
+            dailyLeaderboardService.updateDailyScore(leaderboardEntry);
 
             return test.getId().toHexString();
         } catch (Exception e) {
