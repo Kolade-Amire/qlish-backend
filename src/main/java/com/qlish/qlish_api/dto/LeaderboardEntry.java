@@ -11,5 +11,5 @@ import lombok.Setter;
 @Builder
 public class LeaderboardEntry {
     private String profileName;
-    private Integer points;
+    private Long points;
 }

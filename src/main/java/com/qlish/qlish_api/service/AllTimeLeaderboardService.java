@@ -2,6 +2,7 @@ package com.qlish.qlish_api.service;
 
 import com.qlish.qlish_api.dto.LeaderboardEntry;
 import com.qlish.qlish_api.exception.CustomQlishException;
+import com.qlish.qlish_api.exception.LeaderboardException;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,6 +11,8 @@ import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 
 import static com.qlish.qlish_api.constants.AppConstants.ALL_TIME_LEADERBOARD_KEY;
@@ -46,8 +49,29 @@ public class AllTimeLeaderboardService {
     }
 
     //Retrieves the top 20 users from the all-time leaderboard.
-    public Set<ZSetOperations.TypedTuple<Object>> getAllTimeLeaderboard() {
-        return redisTemplate.opsForZSet().reverseRangeWithScores(ALL_TIME_LEADERBOARD_KEY, 0, 19);
+    public List<LeaderboardEntry> getAllTimeLeaderboard() {
+        try {
+            var leaderboardSet = redisTemplate.opsForZSet().reverseRangeWithScores(ALL_TIME_LEADERBOARD_KEY, 0, 19);
+
+            if (leaderboardSet == null || leaderboardSet.isEmpty()) {
+                return Collections.emptyList();
+            }
+            return leaderboardSet.stream()
+                    .filter(entry -> entry.getValue() != null && entry.getScore() != null)
+                    .map(
+                            entry -> LeaderboardEntry.builder()
+                                    .profileName(entry.getValue().toString())
+                                    .points(entry.getScore().longValue())
+                                    .build()
+                    ).toList();
+
+
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage());
+            throw new LeaderboardException("Error occurred. Unable to retrieve all-time leaderboard", e);
+        }
+
+
     }
 
     /**
@@ -76,7 +100,7 @@ public class AllTimeLeaderboardService {
     }
 
     private Double getMinimumScore() {
-        Set<ZSetOperations.TypedTuple<Object>> entries = redisTemplate.opsForZSet().rangeWithScores(ALL_TIME_LEADERBOARD_KEY, 0,0);
+        Set<ZSetOperations.TypedTuple<Object>> entries = redisTemplate.opsForZSet().rangeWithScores(ALL_TIME_LEADERBOARD_KEY, 0, 0);
         if (entries != null && !entries.isEmpty()) {
             return entries.iterator().next().getScore();
         }
@@ -84,7 +108,7 @@ public class AllTimeLeaderboardService {
     }
 
 
-     //Trims the Redis leaderboard to retain only the top 20 users
+    //Trims the Redis leaderboard to retain only the top 20 users
     private void trimLeaderboard() {
         Long leaderboardSize = redisTemplate.opsForZSet().size(ALL_TIME_LEADERBOARD_KEY);
         if (leaderboardSize != null && leaderboardSize > 20) {

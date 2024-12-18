@@ -25,13 +25,13 @@ public class TestController {
     @GetMapping("/{id}")
     public ResponseEntity<TestDto> getTest(@PathVariable String id) {
         var test = testService.getTestForView(id);
-        return ResponseEntity.ok().body(test);
+        return ResponseEntity.ok(test);
     }
 
     @PostMapping("/new")
     public ResponseEntity<String> createTest(@RequestBody TestRequest testRequest) throws GenerativeAIException {
         var testId = testService.createTest(testRequest);
-        return ResponseEntity.ok().body(testId);
+        return ResponseEntity.ok(testId);
     }
 
     @GetMapping("/new/{id}")
@@ -44,13 +44,13 @@ public class TestController {
     @PostMapping("/submit/{id}")
     public ResponseEntity<String> submitTest(@RequestBody TestSubmissionRequest request) {
         var testId = testService.submitTest(request);
-        return ResponseEntity.ok().body(testId);
+        return ResponseEntity.ok(testId);
     }
 
     @GetMapping("result/{id}")
     public ResponseEntity<TestResult> getTestResult(@PathVariable String id) {
         var result = testService.getTestResult(id);
-        return ResponseEntity.ok().body(result);
+        return ResponseEntity.ok(result);
     }
 
     @DeleteMapping("/{id}")

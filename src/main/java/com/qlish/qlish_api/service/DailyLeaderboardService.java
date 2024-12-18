@@ -17,7 +17,6 @@ import java.time.ZoneOffset;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -33,7 +32,7 @@ public class DailyLeaderboardService {
         Boolean isKeyPresent = redisTemplate.hasKey(key);
         redisTemplate.opsForZSet().incrementScore(key, entry.getProfileName(), entry.getPoints());
 
-        if(Boolean.FALSE.equals(isKeyPresent)) {
+        if (Boolean.FALSE.equals(isKeyPresent)) {
             setLeaderboardKeyExpiration(key);
         }
     }
@@ -50,41 +49,31 @@ public class DailyLeaderboardService {
             }
             //map results to leaderboard entry objects
             return topEntries.stream()
-                    .map(tuple ->
-                            {
-                                try {
-                                    if (tuple.getValue() != null && tuple.getScore() != null) {
-                                        return new LeaderboardEntry(
-                                                tuple.getValue().toString(),
-                                                tuple.getScore().intValue()
-                                        );
-                                    }
-                                    throw new RuntimeException("Error occurred while trying to retrieve daily leaderboard entry.");
-                                } catch (Exception e) {
-                                    LOGGER.error(e.getMessage());
-                                    throw new LeaderboardException(e.getMessage());
-                                }
-                            }
-                    )
-                    .collect(Collectors.toList());
+                    .filter(entry -> entry.getValue() != null && entry.getScore() != null)
+                    .map(entry ->
+                            LeaderboardEntry.builder()
+                                    .points(entry.getScore().longValue())
+                                    .profileName(entry.getValue().toString())
+                                    .build()
+                    ).toList();
+
         } catch (Exception e) {
             LOGGER.error(e.getMessage());
-            throw new LeaderboardException("An error occurred. Unable to retrieve daily leaderboard.");
+            throw new LeaderboardException("Error occurred. Unable to retrieve daily leaderboard", e);
         }
-
     }
 
-    private String getDailyLeaderboardKey() {
-        String date = LocalDate.now(ZoneOffset.ofHours(1)).toString();
-        return AppConstants.DAILY_LEADERBOARD_KEY_PREFIX + date;
-    }
+private String getDailyLeaderboardKey() {
+    String date = LocalDate.now(ZoneOffset.ofHours(1)).toString();
+    return AppConstants.DAILY_LEADERBOARD_KEY_PREFIX + date;
+}
 
-    public void setLeaderboardKeyExpiration(String key) {
-        // Calculate time to midnight
-        LocalDateTime now = LocalDateTime.now(ZoneOffset.ofHours(1));
-        LocalDateTime midnight = now.toLocalDate().atStartOfDay().plusDays(1);
-        long secondsToMidnight = Duration.between(now, midnight).getSeconds();
-        redisTemplate.expire(key, secondsToMidnight, TimeUnit.SECONDS);
-    }
+public void setLeaderboardKeyExpiration(String key) {
+    // Calculate time to midnight
+    LocalDateTime now = LocalDateTime.now(ZoneOffset.ofHours(1));
+    LocalDateTime midnight = now.toLocalDate().atStartOfDay().plusDays(1);
+    long secondsToMidnight = Duration.between(now, midnight).getSeconds();
+    redisTemplate.expire(key, secondsToMidnight, TimeUnit.SECONDS);
+}
 
 }
