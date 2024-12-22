@@ -3,11 +3,10 @@ package com.qlish.qlish_api.util;
 import com.qlish.qlish_api.enums.DifficultyLevel;
 
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class PointsSystem {
 
-     private static int calculatePoints(int scorePercentage) {
+    private static int calculatePoints(int scorePercentage) {
         Map<Integer, Integer> pointsMapping = Map.of(
                 0, 5,
                 10, 10,
@@ -21,25 +20,25 @@ public class PointsSystem {
                 90, 80
         );
 
-        AtomicInteger gradedPoints = new AtomicInteger();
-
-        pointsMapping.forEach((key, value) -> {
+        for (Map.Entry<Integer, Integer> entry : pointsMapping.entrySet()) {
+            int key = entry.getKey();
+            int value = entry.getValue();
             if (scorePercentage >= key && scorePercentage < key + 10) {
-                gradedPoints.set(value);
+                return value;
             }
-        });
+        }
+         throw new IllegalArgumentException("Error: Invalid Score Percentage!");
 
-        return gradedPoints.get();
-    }
+}
 
-    public static int getTotalPoints(int scorePercentage, DifficultyLevel difficultyLevel){
-         var gradedPoints = calculatePoints(scorePercentage);
-        Map<DifficultyLevel, Integer> multiplierMapping = Map.of(
-                DifficultyLevel.ELEMENTARY, 1,
-                DifficultyLevel.INTERMEDIATE, 2,
-                DifficultyLevel.ADVANCED, 3,
-                DifficultyLevel.RANDOM, 2
-        );
-        return (multiplierMapping.get(difficultyLevel) * gradedPoints);
-    }
+public static int getTotalPoints(int scorePercentage, DifficultyLevel difficultyLevel) {
+    var gradedPoints = calculatePoints(scorePercentage);
+    Map<DifficultyLevel, Integer> multiplierMapping = Map.of(
+            DifficultyLevel.ELEMENTARY, 1,
+            DifficultyLevel.INTERMEDIATE, 2,
+            DifficultyLevel.ADVANCED, 3,
+            DifficultyLevel.RANDOM, 2
+    );
+    return (multiplierMapping.get(difficultyLevel) * gradedPoints);
+}
 }

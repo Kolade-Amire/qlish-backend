@@ -240,15 +240,12 @@ public class TestServiceImpl implements TestService {
             var user = userService.findUserById(test.getTestDetails().getUserId());
 
             var leaderboardEntry = LeaderboardEntry.builder()
-                    .points(test.getTestDetails().getPointsEarned())
+                    .points(test.getTestDetails().getPointsEarned().longValue())
                     .profileName(user.getProfileName())
                     .build();
 
             allTimeLeaderboardService.updateLeaderboard(leaderboardEntry);
-
-
             dailyLeaderboardService.updateDailyScore(leaderboardEntry);
-
             return test.getId().toHexString();
         } catch (Exception e) {
             logger.error("An unexpected error occurred: {}", e.getMessage());
@@ -293,7 +290,7 @@ public class TestServiceImpl implements TestService {
             var userId = test.getTestDetails().getUserId();
             updateUserPoints(userId, testPoints);
         } catch (Exception e) {
-            logger.error(e.getMessage());
+            logger.error("An error occurred: {}", e.getMessage());
             throw new TestResultException(e.getMessage());
         }
 
