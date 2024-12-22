@@ -32,7 +32,7 @@ public class AllTimeLeaderboardService {
 
         if (minScore == null || entry.getPoints() > minScore) {
 
-            // Check if user exists in Redis leaderboard
+            // Check if user exists in leaderboard
             Double existingScore = redisTemplate.opsForZSet().score(ALL_TIME_LEADERBOARD_KEY, entry.getProfileName());
 
             if (existingScore != null) {
@@ -78,7 +78,7 @@ public class AllTimeLeaderboardService {
      * Periodic task to synchronize Redis leaderboard with MongoDB.
      * Ensures consistency and handles edge cases like missed updates.
      */
-    @Scheduled(cron = "0 0 * * * ?") // Run hourly
+    @Scheduled(cron = "0 0 0,12 * * ?", zone = "UTC") // Runs twice daily, at 12 morning and noon
     public void synchronizeLeaderboardWithDatabase() {
         try {
             LOGGER.info("Synchronizing Redis leaderboard with MongoDB...");
@@ -107,8 +107,7 @@ public class AllTimeLeaderboardService {
         return null;
     }
 
-
-    //Trims the Redis leaderboard to retain only the top 20 users
+    //Trims the leaderboard to retain only the top 20 users
     private void trimLeaderboard() {
         Long leaderboardSize = redisTemplate.opsForZSet().size(ALL_TIME_LEADERBOARD_KEY);
         if (leaderboardSize != null && leaderboardSize > 20) {
