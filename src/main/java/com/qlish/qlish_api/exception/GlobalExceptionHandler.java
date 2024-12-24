@@ -178,7 +178,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<ProblemDetail> handleGeneralException(CustomQlishException exception, HttpServletRequest request) {
         LOGGER.error(exception.getMessage());
 
-        var problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.INTERNAL_SERVER_ERROR, AppConstants.GENERAL_ERROR_MESSAGE + ":\n" + exception.getLocalizedMessage());
+        var problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.INTERNAL_SERVER_ERROR, AppConstants.GENERAL_ERROR_MESSAGE + ": " + exception.getLocalizedMessage());
         problemDetail.setTitle("Application Exception");
         problemDetail.setInstance(URI.create(request.getRequestURI()));
 

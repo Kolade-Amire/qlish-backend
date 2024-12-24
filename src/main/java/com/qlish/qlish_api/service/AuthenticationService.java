@@ -154,12 +154,13 @@ public class AuthenticationService {
                     .httpResponse(response)
                     .user(userDto)
                     .build();
+
         } catch (BadCredentialsException e){
-            throw new CustomQlishException("Invalid Email or Password.");
+            throw new BadCredentialsException("Invalid Email or Password.");
         } catch (AuthenticationException e) {
-            throw new CustomQlishException("Error Authenticating user {} ", e);
+            throw new CustomQlishException("Error Authenticating user: " + e);
         } catch (Exception e){
-            throw new CustomQlishException("User Authentication failed {} ", e);
+            throw new CustomQlishException("User Authentication failed:  " + e);
         }
 
 
