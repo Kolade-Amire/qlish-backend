@@ -254,6 +254,7 @@ public class MathHandler implements Handler {
         try {
             var questionText = questionJson.get("question").asText();
             var subject = questionJson.get("subject").asText();
+            var testSubject = TestSubject.getSubjectByDisplayName(subject);
             var answer = questionJson.get("correctAnswer").asText();
 
             //extract options using the fields() iterator and pass them into a map
@@ -269,7 +270,7 @@ public class MathHandler implements Handler {
             return Question.builder()
                     .questionText(questionText)
                     .options(options)
-                    .subject(subject)
+                    .subject(testSubject)
                     .modifiers(modifiers)
                     .correctAnswer(answer)
                     .build();

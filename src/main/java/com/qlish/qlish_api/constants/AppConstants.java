@@ -24,7 +24,7 @@ public class AppConstants {
 
     public static final String ACCOUNT_LOCKED = "Your account has been locked. Please contact administration";
     public static final String METHOD_IS_NOT_ALLOWED = "This request method is not allowed on this endpoint. Please send a '%s' request";
-    public static final String INCORRECT_CREDENTIALS = "Username/password incorrect, please try again.";
+    public static final String INCORRECT_CREDENTIALS = "Invalid Email/Password, please try again.";
     public static final String UPDATE_USER_POINTS_ERROR = "Error occurred while updating user points.";
     public static  final String UNSUPPORTED_TEST_TYPE = "Test type is not supported.";
     public static final String ACCOUNT_DISABLED = "Your account has been disabled. If this is an error, please contact administration.";

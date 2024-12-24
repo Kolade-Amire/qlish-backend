@@ -5,7 +5,6 @@ import com.qlish.qlish_api.dto.auth.AuthenticationResponse;
 import com.qlish.qlish_api.dto.auth.RegistrationRequest;
 import com.qlish.qlish_api.dto.auth.RegistrationResponse;
 import com.qlish.qlish_api.exception.CustomQlishException;
-import com.qlish.qlish_api.security.auth.*;
 import com.qlish.qlish_api.service.LogoutService;
 import com.qlish.qlish_api.constants.AppConstants;
 import com.qlish.qlish_api.service.AuthenticationService;

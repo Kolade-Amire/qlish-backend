@@ -26,6 +26,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -153,10 +154,12 @@ public class AuthenticationService {
                     .httpResponse(response)
                     .user(userDto)
                     .build();
+        } catch (BadCredentialsException e){
+            throw new CustomQlishException("Invalid Email or Password.");
         } catch (AuthenticationException e) {
-            throw new CustomQlishException("Error Authenticating user: ", e);
+            throw new CustomQlishException("Error Authenticating user {} ", e);
         } catch (Exception e){
-            throw new CustomQlishException("User Authentication failed: ", e);
+            throw new CustomQlishException("User Authentication failed {} ", e);
         }
 
 
