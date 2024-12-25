@@ -10,7 +10,7 @@ import java.util.Arrays;
 @RequiredArgsConstructor
 public enum HandlerName {
     ENGLISH("englishHandler"),
-    MATHEMATICS("mathHandler"),
+    MATH("mathHandler"),
     PHYSICS("physicsHandler"),
     CHEMISTRY("chemistryHandler"),
     HISTORY("historyHandler"),

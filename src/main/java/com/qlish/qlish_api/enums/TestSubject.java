@@ -9,7 +9,7 @@ import java.util.Arrays;
 @Getter
 public enum TestSubject {
     ENGLISH("english"),
-    MATHEMATICS("math"),
+    MATH("math"),
     PHYSICS("physics"),
     CHEMISTRY("chemistry"),
     HISTORY("history"),

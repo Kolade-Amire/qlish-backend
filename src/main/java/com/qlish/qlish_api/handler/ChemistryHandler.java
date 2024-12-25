@@ -3,6 +3,7 @@ package com.qlish.qlish_api.handler;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.qlish.qlish_api.exception.HandlerException;
 import com.qlish.qlish_api.model.Question;
 import com.qlish.qlish_api.enums.DifficultyLevel;
 import com.qlish.qlish_api.enums.TestSubject;
@@ -21,7 +22,19 @@ public class ChemistryHandler implements Handler {
 
     @Override
     public String getPrompt(TestRequest request) {
-        return "";
+        try {
+            if (request.isRandom()) {
+                return String.format("Generate %d multiple-choice random chemistry questions.", request.getCount());
+            }
+
+            return String.format("Generate %d multiple-choice questions on %s. The questions should be at a(n) %s difficulty level.",
+                    request.getCount(),
+                    request.getModifiers().get("class"),
+                    request.getModifiers().get("level")
+            );
+        } catch (Exception e) {
+            throw new HandlerException("An error occurred while attempting to get chemistry prompt. Check request and try again", e);
+        }
     }
 
     @Override
@@ -259,7 +272,7 @@ public class ChemistryHandler implements Handler {
                     .map(ChemistryHandler::parseChemistryQuestion)
                     .toList();
         } catch (Exception e) {
-            throw new RuntimeException("Error occurred while parsing questions json list: ", e);
+            throw new HandlerException("Error occurred while parsing questions json list: ", e);
         }
     }
 
@@ -267,9 +280,9 @@ public class ChemistryHandler implements Handler {
 
         try {
             var questionText = questionJson.get("question").asText();
+            var answer = questionJson.get("correctAnswer").asText();
             var subject = questionJson.get("subject").asText();
             var testSubject = TestSubject.getSubjectByDisplayName(subject);
-            var answer = questionJson.get("correctAnswer").asText();
 
             //extract options using the fields() iterator and pass them into a map
             Map<String, String> options = new HashMap<>();
@@ -290,7 +303,7 @@ public class ChemistryHandler implements Handler {
                     .build();
 
         } catch (Exception e) {
-            throw new RuntimeException("Failed to parse question json object to Question entity: ", e);
+            throw new HandlerException("Failed to parse question json object to Question entity: ", e);
         }
     }
 }

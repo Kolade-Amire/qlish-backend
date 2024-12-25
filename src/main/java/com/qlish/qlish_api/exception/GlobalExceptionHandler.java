@@ -265,5 +265,19 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(problemDetail, HttpStatusCode.valueOf(problemDetail.getStatus()));
     }
 
+    @ExceptionHandler(HandlerException.class)
+    public ResponseEntity<ProblemDetail> handleHandlerException(HandlerException exception, HttpServletRequest request){
+        LOGGER.error(exception.getMessage());
+
+        var problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.INTERNAL_SERVER_ERROR, exception.getLocalizedMessage());
+
+        problemDetail.setTitle("Test Handler Error");
+        problemDetail.setInstance(URI.create(request.getRequestURI()));
+
+        return new ResponseEntity<>(problemDetail, HttpStatusCode.valueOf(problemDetail.getStatus()));
+    }
+
+
+
 
 }
