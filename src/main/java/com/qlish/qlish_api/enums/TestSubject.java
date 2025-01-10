@@ -12,6 +12,7 @@ public enum TestSubject {
     MATH("math"),
     PHYSICS("physics"),
     CHEMISTRY("chemistry"),
+    BIOLOGY("biology"),
     HISTORY("history"),
     QUIZ("quiz");
 

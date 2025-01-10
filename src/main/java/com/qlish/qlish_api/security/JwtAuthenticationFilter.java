@@ -73,6 +73,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected boolean isTokenExpired(String token) {
         return tokenRepository.findByToken(token)
                 .map(t -> t.isExpired() && t.isRevoked())
-                .orElse(false);
+                .orElse(true);
     }
 }
