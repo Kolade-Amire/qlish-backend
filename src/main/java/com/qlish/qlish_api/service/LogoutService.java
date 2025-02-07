@@ -1,7 +1,7 @@
 package com.qlish.qlish_api.service;
 
-import com.qlish.qlish_api.repository.RedisTokenRepository;
 import com.qlish.qlish_api.constants.SecurityConstants;
+import com.qlish.qlish_api.model.UserPrincipal;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -15,27 +15,21 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 public class LogoutService implements LogoutHandler {
-
-    private final RedisTokenRepository tokenRepository;
+    private final TokenService tokenService;
 
     @Override
     @Transactional
     public void logout(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
 
         final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
-        final String token;
+//        final String token;
         if (authHeader == null || !authHeader.startsWith(SecurityConstants.TOKEN_PREFIX)) {
             return;
         }
-        token = authHeader.substring(SecurityConstants.TOKEN_PREFIX.length());
-        var savedToken = tokenRepository.findByToken(token)
-                .orElse(null);
-        if (savedToken != null) {
-            savedToken.setExpired(true);
-            savedToken.setRevoked(true);
-            tokenRepository.save(savedToken);
-            SecurityContextHolder.clearContext();
-        }
+        UserPrincipal principal = (UserPrincipal) authentication.getPrincipal();
+//        token = authHeader.substring(SecurityConstants.TOKEN_PREFIX.length());
+        tokenService.deleteTokenByUserId(principal.getUserId().toString());
+        SecurityContextHolder.clearContext();
 
     }
 }

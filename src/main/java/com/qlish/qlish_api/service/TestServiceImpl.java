@@ -148,7 +148,6 @@ public class TestServiceImpl implements TestService {
             try {
                 String generatedQuestions = geminiAI.generateQuestions(prompt, systemInstruction);
 
-                logger.info("Response from Gemini: {}", generatedQuestions);
                 var cleanedQuestions = getQuestionsFromResponse(generatedQuestions);
                 var questionsList = testHandler.parseJsonQuestions(cleanedQuestions);
                 return saveGeneratedQuestions(questionsList);
@@ -175,9 +174,7 @@ public class TestServiceImpl implements TestService {
     private List<Question> saveGeneratedQuestions(List<Question> generatedQuestions) {
 
         try {
-            var questions = customQuestionRepository.saveAll(generatedQuestions);
-            questions.forEach(question -> logger.info(question.toString()));
-            return questions;
+            return customQuestionRepository.saveAll(generatedQuestions);
         } catch (CustomQlishException e) {
             throw new RuntimeException(e.getMessage(), e);
         } catch (MongoTimeoutException e) {
