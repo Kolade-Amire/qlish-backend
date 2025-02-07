@@ -1,13 +1,15 @@
 package com.qlish.qlish_api.security;
 
-import com.qlish.qlish_api.repository.RedisTokenRepository;
 import com.qlish.qlish_api.constants.AppConstants;
 import com.qlish.qlish_api.constants.SecurityConstants;
+import com.qlish.qlish_api.repository.RedisTokenRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -24,9 +26,9 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(JwtAuthenticationFilter.class);
     private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
-    private final RedisTokenRepository tokenRepository;
 
     @Override
     protected void doFilterInternal(
@@ -49,10 +51,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             return;
         }
         token = authHeader.substring(SecurityConstants.TOKEN_PREFIX.length());
+
         userEmail = jwtService.extractUsername(token);
         if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userPrincipal = this.userDetailsService.loadUserByUsername(userEmail);
-            if (jwtService.isTokenValid(token, userPrincipal) && !isTokenExpired(token)) {
+            boolean isValid = jwtService.isTokenValid(token, userPrincipal);
+            if (isValid) {
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                         userPrincipal,
                         null,
@@ -70,9 +74,4 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     }
 
-    protected boolean isTokenExpired(String token) {
-        return tokenRepository.findByToken(token)
-                .map(t -> t.isExpired() && t.isRevoked())
-                .orElse(true);
-    }
 }
